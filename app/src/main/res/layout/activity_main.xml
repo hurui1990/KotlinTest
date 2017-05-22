@@ -5,18 +5,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.hurui.kotlintest.MainActivity">
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    tools:context="com.example.hurui.kotlintest.view.MainActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="?attr/colorPrimaryDark"
+        android:background="@color/colorPrimary"
         app:navigationIcon="@drawable/ic_arrow_back"
         app:theme="@style/ToolbarTheme"
         app:popupTheme="@style/ToolbarPopupTheme"
         >
     </android.support.v7.widget.Toolbar>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?android:attr/actionBarSize">
+    </android.support.v7.widget.RecyclerView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
