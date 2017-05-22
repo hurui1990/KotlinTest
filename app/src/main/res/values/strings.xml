@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">KotlinTest</string>
+    <string name="action_setting">Setting</string>
+    <string name="action_about">About</string>
 </resources>
