@@ -2,5 +2,5 @@
     <string name="app_name">KotlinTest</string>
     <string name="action_setting">设置</string>
     <string name="action_about">关于</string>
-    <string name="first_page">首页</string>
+    <string name="main_title">新闻世界</string>
 </resources>

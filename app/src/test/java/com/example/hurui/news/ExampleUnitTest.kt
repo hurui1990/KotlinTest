@@ -1,4 +1,4 @@
-package com.example.hurui.kotlintest
+package com.example.hurui.news
 
 import org.junit.Test
 

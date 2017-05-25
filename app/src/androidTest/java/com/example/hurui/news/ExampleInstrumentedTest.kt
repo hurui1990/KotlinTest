@@ -1,4 +1,4 @@
-package com.example.hurui.kotlintest
+package com.example.hurui.news
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
