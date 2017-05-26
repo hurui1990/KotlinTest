@@ -2,6 +2,7 @@ package com.example.hurui.news.activity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.widget.TextView
 import android.widget.Toast
@@ -74,6 +75,10 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
 
     override fun setLoadNews(result: ArrayList<NewsDetail>) {
         //成功获取到新闻信息
+        for (i in result.indices){
+            val news : NewsDetail = result.get(i)
+            Log.i("===============", "newsname:"+news.title)
+        }
     }
 
     override fun loadNewsError(errorType: Int) {

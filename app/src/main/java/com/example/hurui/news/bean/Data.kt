@@ -17,3 +17,14 @@ data class NewsDetail(
     val type : String, /*类型一*/
     val realtype : String/*类型二*/
 )
+
+data class Data(
+        val stat:String,
+        val data:ArrayList<NewsDetail>
+)
+
+data class Result(
+        val reason:String,
+        val result:Data
+)
+

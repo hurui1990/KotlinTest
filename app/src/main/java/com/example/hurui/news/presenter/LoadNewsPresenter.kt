@@ -10,20 +10,15 @@ import com.example.hurui.news.view.LoadNewsView
  */
 class LoadNewsPresenter(loadNewsView: LoadNewsView) : OnLoadNewsListener{
 
-    var mLoadNewsView : LoadNewsView? = null
-    var mLoadNewsModel : LoadNewsModelImlp? = null
-
-    init {
-        mLoadNewsView = loadNewsView
-        mLoadNewsModel = LoadNewsModelImlp(this)
-    }
+    var mLoadNewsView : LoadNewsView = loadNewsView
+    var mLoadNewsModel : LoadNewsModelImlp = LoadNewsModelImlp(this)
 
     public fun loadNews(type:String) {
         mLoadNewsModel!!.loadNews(type)
     }
 
     override fun onLoadSuccess(result: ArrayList<NewsDetail>) {
-
+        mLoadNewsView!!.setLoadNews(result)
     }
 
     override fun onLoadFailed(errorType: Int) {
