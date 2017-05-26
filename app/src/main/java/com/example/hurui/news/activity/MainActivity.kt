@@ -75,10 +75,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
 
     override fun setLoadNews(result: ArrayList<NewsDetail>) {
         //成功获取到新闻信息
-        for (i in result.indices){
-            val news : NewsDetail = result.get(i)
-            Log.i("===============", "newsname:"+news.title)
-        }
+        Log.i("===============", result.toString())
     }
 
     override fun loadNewsError(errorType: Int) {
