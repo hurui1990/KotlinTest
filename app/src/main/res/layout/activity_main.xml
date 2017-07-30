@@ -38,9 +38,59 @@
     </HorizontalScrollView>
 
     <View
+        android:id="@+id/divide"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#44888888">
     </View>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_below="@+id/divide">
+    </android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:id="@+id/foot_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:background="@color/colorPrimaryDark"
+            android:orientation="vertical">
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:background="#00ffee"
+            android:orientation="vertical">
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:background="#eeff00"
+            android:orientation="vertical">
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:background="#ee0000"
+            android:orientation="vertical">
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

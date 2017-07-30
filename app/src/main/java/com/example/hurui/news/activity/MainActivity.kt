@@ -2,11 +2,12 @@ package com.example.hurui.news.activity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
 import android.widget.TextView
 import android.widget.Toast
 import com.example.hurui.news.R
+import com.example.hurui.news.adapter.RecyclerAdapter
 import com.example.hurui.news.bean.NewType
 import com.example.hurui.news.bean.NewsDetail
 import com.example.hurui.news.presenter.LoadNewsPresenter
@@ -18,6 +19,9 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
     var newTypes : ArrayList<NewType>? = null
     var mLoadNewsPresenter : LoadNewsPresenter? = null
 
+    var dataAdapter : RecyclerAdapter? = null
+    var dataList : ArrayList<NewsDetail>? =null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -25,6 +29,13 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
         mLoadNewsPresenter = LoadNewsPresenter(this)
 
         initScrollView()
+
+        dataList = ArrayList<NewsDetail>()
+        recycler_content.layoutManager = LinearLayoutManager(this)
+        dataAdapter = RecyclerAdapter(this)
+        dataAdapter!!.setData(dataList!!)
+        recycler_content.adapter = dataAdapter
+        OnClickNewType(NewType("头条","top"))
     }
 
     //动态添加头部的新闻类型标签的布局
@@ -63,8 +74,8 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
 
     fun OnClickNewType(oldType: NewType){
         for (i in newTypes!!.indices){
-            val newType : NewType = newTypes!!.get(i)
-            if(newType === oldType){
+            val newType = newTypes!!.get(i)
+            if(newType.type == oldType.type){
                 (title_view.getChildAt(i) as TextView).setTextColor(resources.getColor(R.color.select_text_color))
             }else{
                 (title_view.getChildAt(i) as TextView).setTextColor(resources.getColor(R.color.text_color))
@@ -75,7 +86,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
 
     override fun setLoadNews(result: ArrayList<NewsDetail>) {
         //成功获取到新闻信息
-        Log.i("===============", result.toString())
+        dataAdapter?.setData(result)
     }
 
     override fun loadNewsError(errorType: Int) {
