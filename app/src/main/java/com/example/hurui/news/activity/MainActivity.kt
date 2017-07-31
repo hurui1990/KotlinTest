@@ -1,26 +1,39 @@
 package com.example.hurui.news.activity
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
 import android.widget.TextView
 import android.widget.Toast
 import com.example.hurui.news.R
+import com.example.hurui.news.adapter.DrawerListAdapter
 import com.example.hurui.news.adapter.RecyclerAdapter
+import com.example.hurui.news.bean.MenuType
 import com.example.hurui.news.bean.NewType
 import com.example.hurui.news.bean.NewsDetail
+import com.example.hurui.news.bean.Result
 import com.example.hurui.news.presenter.LoadNewsPresenter
 import com.example.hurui.news.utils.Utils
 import com.example.hurui.news.view.LoadNewsView
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
 
 class MainActivity : AppCompatActivity() ,LoadNewsView{
     var newTypes : ArrayList<NewType>? = null
+    var drawerItemTypes : ArrayList<MenuType>? =null
     var mLoadNewsPresenter : LoadNewsPresenter? = null
 
     var dataAdapter : RecyclerAdapter? = null
     var dataList : ArrayList<NewsDetail>? =null
+
+    var drawerAdapter : DrawerListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +42,8 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
         mLoadNewsPresenter = LoadNewsPresenter(this)
 
         initScrollView()
+        initDrawerMenu()
+
 
         dataList = ArrayList<NewsDetail>()
         recycler_content.layoutManager = LinearLayoutManager(this)
@@ -56,7 +71,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
         val screenWidth : Int = Utils.getScreenWidth(this)
 
         for (i in newTypes!!.indices){
-            val newType : NewType = newTypes!!.get(i)
+            val newType : NewType = newTypes!![i]
             val textView : TextView = TextView(this)
             textView.text = newType.name
             textView.gravity = Gravity.START
@@ -74,7 +89,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
 
     fun OnClickNewType(oldType: NewType){
         for (i in newTypes!!.indices){
-            val newType = newTypes!!.get(i)
+            val newType = newTypes!![i]
             if(newType.type == oldType.type){
                 (title_view.getChildAt(i) as TextView).setTextColor(resources.getColor(R.color.select_text_color))
             }else{
@@ -85,12 +100,66 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
     }
 
     override fun setLoadNews(result: ArrayList<NewsDetail>) {
-        //成功获取到新闻信息
-        dataAdapter?.setData(result)
+        //模拟数据
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            // 没有权限，申请权限。
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE),20)
+        }else{
+            // 有权限了，去放肆吧。
+            var gson : Gson = Gson()
+            var resultStr : Result = gson.fromJson(getDataFromLocal(), Result::class.java)
+            //成功获取到新闻信息
+            dataAdapter?.setData(resultStr.result.data)
+        }
+
+    }
+
+    //获取模拟数据
+    fun getDataFromLocal() : String{
+        var path = Environment.getExternalStorageDirectory().toString()+"/data.json"
+        var file = File(path)
+        var line = file.readText()
+        return line
     }
 
     override fun loadNewsError(errorType: Int) {
         //获取新闻信息失败
         Toast.makeText(this,errorType.toString(),Toast.LENGTH_SHORT).show()
+    }
+
+    fun initDrawerMenu(){
+        drawerItemTypes = ArrayList<MenuType>()
+        drawerItemTypes!!.add(MenuType(R.drawable.ic_news, "新闻咨询"))
+        drawerItemTypes!!.add(MenuType(R.drawable.ic_picture, "本地图片"))
+        drawerItemTypes!!.add(MenuType(R.drawable.ic_user, "关于我"))
+        drawerItemTypes!!.add(MenuType(R.drawable.ic_settings, "设置"))
+
+        drawerAdapter = DrawerListAdapter(this, drawerItemTypes!!)
+        drawer_menu.layoutManager = LinearLayoutManager(this)
+        drawer_menu.adapter = drawerAdapter
+        drawerAdapter!!.notifyDataSetChanged()
+    }
+
+    //权限管理
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            20 -> {
+                if (grantResults.size > 0 && grantResults[0] === PackageManager.PERMISSION_GRANTED) {
+                    // 权限被用户同意，可以去放肆了。
+                    var gson : Gson = Gson()
+                    var resultStr : Result = gson.fromJson(getDataFromLocal(), Result::class.java)
+                    //成功获取到新闻信息
+                    dataAdapter?.setData(resultStr.result.data)
+                } else {
+                    // 权限被用户拒绝了，洗洗睡吧。
+                    Toast.makeText(this,"你拒绝了权限，不能使用该应用",Toast.LENGTH_SHORT).show()
+                }
+                return
+            }
+        }
     }
 }

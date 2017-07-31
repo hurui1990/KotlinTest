@@ -28,3 +28,5 @@ data class Result(
         val result:Data
 )
 
+data class MenuType(var image:Int, var itemtext:String)
+
