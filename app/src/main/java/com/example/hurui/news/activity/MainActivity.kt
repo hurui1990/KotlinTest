@@ -7,8 +7,10 @@ import android.os.Bundle
 import android.os.Environment
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
+import android.view.Window
 import android.widget.TextView
 import android.widget.Toast
 import com.example.hurui.news.R
@@ -22,7 +24,8 @@ import com.example.hurui.news.presenter.LoadNewsPresenter
 import com.example.hurui.news.utils.Utils
 import com.example.hurui.news.view.LoadNewsView
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.drawerlayout.*
+import kotlinx.android.synthetic.main.main_toolbar.*
 import java.io.File
 
 class MainActivity : AppCompatActivity() ,LoadNewsView{
@@ -39,16 +42,23 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        toolbar.title = "新闻世界"
+        toolbar.setTitleTextColor(resources.getColor(R.color.white))
+        toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_arrow_back)
+        setSupportActionBar(toolbar)
+        supportActionBar!!.setHomeButtonEnabled(true)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
         mLoadNewsPresenter = LoadNewsPresenter(this)
 
         initScrollView()
         initDrawerMenu()
 
-
         dataList = ArrayList<NewsDetail>()
-        recycler_content.layoutManager = LinearLayoutManager(this)
         dataAdapter = RecyclerAdapter(this)
         dataAdapter!!.setData(dataList!!)
+        recycler_content.layoutManager = LinearLayoutManager(this)
+        recycler_content.addItemDecoration(DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
         recycler_content.adapter = dataAdapter
         OnClickNewType(NewType("头条","top"))
     }
