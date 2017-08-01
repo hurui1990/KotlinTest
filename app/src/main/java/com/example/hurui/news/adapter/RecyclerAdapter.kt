@@ -26,34 +26,34 @@ class RecyclerAdapter(context:Context)
     var type3 = 3
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
-        var item: NewsDetail = mDataList!![position]
+        var item: NewsDetail = mDataList[position]
         when(getItemViewType(position)){
             type0 -> {
                 holder!!.itemView.visibility = View.GONE
             }
             type1 -> {
                 var holderOne : ItemViewHolderOne = holder as ItemViewHolderOne
-                holderOne?.title?.text = item.title
-                holderOne?.author?.text = item.author_name
-                holderOne?.datatime?.text = item.date
-                Glide.with(mContext).load(item.thumbnail_pic_s).into(holderOne?.img)
+                holderOne.title.text = item.title
+                holderOne.author.text = item.author_name
+                holderOne.datatime.text = item.date
+                Glide.with(mContext).load(item.thumbnail_pic_s).into(holderOne.img)
             }
             type2 -> {
                 var holderTwo : ItemViewHolderTwo = holder as ItemViewHolderTwo
-                holderTwo?.title?.text = item.title
-                holderTwo?.author?.text = item.author_name
-                holderTwo?.datatime?.text = item.date
-                Glide.with(mContext).load(item.thumbnail_pic_s).into(holderTwo?.img)
-                Glide.with(mContext).load(item.thumbnail_pic_s02).into(holderTwo?.img2)
+                holderTwo.title.text = item.title
+                holderTwo.author.text = item.author_name
+                holderTwo.datatime.text = item.date
+                Glide.with(mContext).load(item.thumbnail_pic_s).into(holderTwo.img)
+                Glide.with(mContext).load(item.thumbnail_pic_s02).into(holderTwo.img2)
             }
             type3 -> {
                 var holderThree : ItemViewHolderThree = holder as ItemViewHolderThree
-                holderThree?.title?.text = item.title
-                holderThree?.author?.text = item.author_name
-                holderThree?.datatime?.text = item.date
-                Glide.with(mContext).load(item.thumbnail_pic_s).into(holderThree?.img)
-                Glide.with(mContext).load(item.thumbnail_pic_s02).into(holderThree?.img2)
-                Glide.with(mContext).load(item.thumbnail_pic_s03).into(holderThree?.img3)
+                holderThree.title.text = item.title
+                holderThree.author.text = item.author_name
+                holderThree.datatime.text = item.date
+                Glide.with(mContext).load(item.thumbnail_pic_s).into(holderThree.img)
+                Glide.with(mContext).load(item.thumbnail_pic_s02).into(holderThree.img2)
+                Glide.with(mContext).load(item.thumbnail_pic_s03).into(holderThree.img3)
             }
         }
     }
@@ -103,26 +103,26 @@ class RecyclerAdapter(context:Context)
     }
 
     class ItemViewHolderThree(itemView: View?) : RecyclerView.ViewHolder(itemView) {
-        var title : TextView = itemView?.findViewById(R.id.title) as TextView
-        var author : TextView = itemView?.findViewById(R.id.author) as TextView
-        var img : ImageView = itemView?.findViewById(R.id.itemImg) as ImageView
-        var img2 : ImageView = itemView?.findViewById(R.id.itemImg2) as ImageView
-        var img3 : ImageView = itemView?.findViewById(R.id.itemImg3) as ImageView
-        var datatime : TextView = itemView?.findViewById(R.id.data_time) as TextView
+        var title : TextView = itemView!!.findViewById(R.id.title) as TextView
+        var author : TextView = itemView!!.findViewById(R.id.author) as TextView
+        var img : ImageView = itemView!!.findViewById(R.id.itemImg) as ImageView
+        var img2 : ImageView = itemView!!.findViewById(R.id.itemImg2) as ImageView
+        var img3 : ImageView = itemView!!.findViewById(R.id.itemImg3) as ImageView
+        var datatime : TextView = itemView!!.findViewById(R.id.data_time) as TextView
     }
 
     class ItemViewHolderTwo(itemView: View?) : RecyclerView.ViewHolder(itemView) {
-        var title : TextView = itemView?.findViewById(R.id.title) as TextView
-        var author : TextView = itemView?.findViewById(R.id.author) as TextView
-        var img : ImageView = itemView?.findViewById(R.id.itemImg) as ImageView
-        var img2 : ImageView = itemView?.findViewById(R.id.itemImg2) as ImageView
-        var datatime : TextView = itemView?.findViewById(R.id.data_time) as TextView
+        var title : TextView = itemView!!.findViewById(R.id.title) as TextView
+        var author : TextView = itemView!!.findViewById(R.id.author) as TextView
+        var img : ImageView = itemView!!.findViewById(R.id.itemImg) as ImageView
+        var img2 : ImageView = itemView!!.findViewById(R.id.itemImg2) as ImageView
+        var datatime : TextView = itemView!!.findViewById(R.id.data_time) as TextView
     }
 
     class ItemViewHolderOne(itemView: View?) : RecyclerView.ViewHolder(itemView) {
-        var title : TextView = itemView?.findViewById(R.id.title) as TextView
-        var author : TextView = itemView?.findViewById(R.id.author) as TextView
-        var img : ImageView = itemView?.findViewById(R.id.itemImg) as ImageView
-        var datatime : TextView = itemView?.findViewById(R.id.data_time) as TextView
+        var title : TextView = itemView!!.findViewById(R.id.title) as TextView
+        var author : TextView = itemView!!.findViewById(R.id.author) as TextView
+        var img : ImageView = itemView!!.findViewById(R.id.itemImg) as ImageView
+        var datatime : TextView = itemView!!.findViewById(R.id.data_time) as TextView
     }
 }

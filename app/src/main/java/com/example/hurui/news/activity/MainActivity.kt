@@ -7,12 +7,14 @@ import android.os.Bundle
 import android.os.Environment
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
-import android.view.Window
+import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
+import com.amap.api.location.AMapLocationClient
 import com.example.hurui.news.R
 import com.example.hurui.news.adapter.DrawerListAdapter
 import com.example.hurui.news.adapter.RecyclerAdapter
@@ -27,8 +29,12 @@ import com.google.gson.Gson
 import kotlinx.android.synthetic.main.drawerlayout.*
 import kotlinx.android.synthetic.main.main_toolbar.*
 import java.io.File
+import com.amap.api.location.AMapLocationClientOption
+import com.amap.api.location.AMapLocationListener
+import java.util.*
 
 class MainActivity : AppCompatActivity() ,LoadNewsView{
+
     var newTypes : ArrayList<NewType>? = null
     var drawerItemTypes : ArrayList<MenuType>? =null
     var mLoadNewsPresenter : LoadNewsPresenter? = null
@@ -37,6 +43,10 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
     var dataList : ArrayList<NewsDetail>? =null
 
     var drawerAdapter : DrawerListAdapter? = null
+    var drawerTogger : ActionBarDrawerToggle? = null
+    var mLocationListener : AMapLocationListener? = null
+    var mLocationOption: AMapLocationClientOption? = null
+    var mLocationClient : AMapLocationClient? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,10 +54,14 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
 
         toolbar.title = "新闻世界"
         toolbar.setTitleTextColor(resources.getColor(R.color.white))
-        toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_arrow_back)
+        toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_open)
+
         setSupportActionBar(toolbar)
         supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+        drawerTogger = ActionBarDrawerToggle(this, drawerlayout, toolbar ,R.string.back, R.string.main_title)
+        drawerlayout.setDrawerListener(drawerTogger)
 
         mLoadNewsPresenter = LoadNewsPresenter(this)
 
@@ -61,6 +75,31 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
         recycler_content.addItemDecoration(DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
         recycler_content.adapter = dataAdapter
         OnClickNewType(NewType("头条","top"))
+
+        setLocationOption()
+    }
+
+    fun setLocationOption(){
+        mLocationClient = AMapLocationClient(applicationContext)
+        mLocationListener = AMapLocationListener { aMapLocation -> run{
+            city_name.text = aMapLocation.city
+        } }
+        //初始化AMapLocationClientOption对象
+        mLocationOption = AMapLocationClientOption()
+        //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
+        mLocationOption!!.locationMode = AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
+        //获取最近3s内精度最高的一次定位结果：
+        mLocationOption!!.isOnceLocationLatest = true
+        //设置是否返回地址信息（默认返回地址信息）
+        mLocationOption!!.isNeedAddress = true
+        //设置超时事件
+        mLocationOption!!.httpTimeOut = 2000
+        //设置定义的属性
+        mLocationClient!!.setLocationOption(mLocationOption)
+        //设置监听事件
+        mLocationClient!!.setLocationListener(mLocationListener)
+        //开始定位
+        mLocationClient!!.startLocation()
     }
 
     //动态添加头部的新闻类型标签的布局
@@ -76,7 +115,6 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
         newTypes!!.add(NewType("科技","keji"))
         newTypes!!.add(NewType("财经","caijing"))
         newTypes!!.add(NewType("时尚","shishang"))
-
 
         val screenWidth : Int = Utils.getScreenWidth(this)
 
@@ -110,8 +148,6 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
     }
 
     override fun setLoadNews(result: ArrayList<NewsDetail>) {
-        //模拟数据
-
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -119,13 +155,18 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
             // 没有权限，申请权限。
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE),20)
         }else{
-            // 有权限了，去放肆吧。
-            var gson : Gson = Gson()
-            var resultStr : Result = gson.fromJson(getDataFromLocal(), Result::class.java)
-            //成功获取到新闻信息
-            dataAdapter?.setData(resultStr.result.data)
+            // 有权限
+            setData()
         }
 
+    }
+
+    //设置RecyclerView的数据
+    fun setData(){
+        var gson : Gson = Gson()
+        var resultStr : Result = gson.fromJson(getDataFromLocal(), Result::class.java)
+        //成功获取到新闻信息
+        dataAdapter?.setData(resultStr.result.data)
     }
 
     //获取模拟数据
@@ -141,10 +182,25 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
         Toast.makeText(this,errorType.toString(),Toast.LENGTH_SHORT).show()
     }
 
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        drawerTogger!!.syncState()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item!!.itemId){
+            android.R.id.home -> {
+
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     fun initDrawerMenu(){
         drawerItemTypes = ArrayList<MenuType>()
         drawerItemTypes!!.add(MenuType(R.drawable.ic_news, "新闻咨询"))
         drawerItemTypes!!.add(MenuType(R.drawable.ic_picture, "本地图片"))
+        drawerItemTypes!!.add(MenuType(R.drawable.ic_map, "地图"))
         drawerItemTypes!!.add(MenuType(R.drawable.ic_user, "关于我"))
         drawerItemTypes!!.add(MenuType(R.drawable.ic_settings, "设置"))
 
@@ -154,16 +210,19 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
         drawerAdapter!!.notifyDataSetChanged()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        mLocationClient!!.stopLocation()
+        mLocationClient!!.onDestroy()
+    }
+
     //权限管理
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {
             20 -> {
                 if (grantResults.size > 0 && grantResults[0] === PackageManager.PERMISSION_GRANTED) {
                     // 权限被用户同意，可以去放肆了。
-                    var gson : Gson = Gson()
-                    var resultStr : Result = gson.fromJson(getDataFromLocal(), Result::class.java)
-                    //成功获取到新闻信息
-                    dataAdapter?.setData(resultStr.result.data)
+                    setData()
                 } else {
                     // 权限被用户拒绝了，洗洗睡吧。
                     Toast.makeText(this,"你拒绝了权限，不能使用该应用",Toast.LENGTH_SHORT).show()
