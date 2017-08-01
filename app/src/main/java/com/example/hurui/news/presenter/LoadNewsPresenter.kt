@@ -1,6 +1,7 @@
 package com.example.hurui.news.presenter
 
 import com.example.hurui.news.bean.NewsDetail
+import com.example.hurui.news.bean.WeatherData
 import com.example.hurui.news.model.OnLoadNewsListener
 import com.example.hurui.news.model.imlp.LoadNewsModelImlp
 import com.example.hurui.news.view.LoadNewsView
@@ -13,7 +14,11 @@ class LoadNewsPresenter(loadNewsView: LoadNewsView) : OnLoadNewsListener{
     var mLoadNewsView : LoadNewsView = loadNewsView
     var mLoadNewsModel : LoadNewsModelImlp = LoadNewsModelImlp(this)
 
-    public fun loadNews(type:String) {
+    fun loadWeather(city:String){
+        mLoadNewsModel!!.loadWeather(city)
+    }
+
+    fun loadNews(type:String) {
         mLoadNewsModel!!.loadNews(type)
     }
 
@@ -23,6 +28,14 @@ class LoadNewsPresenter(loadNewsView: LoadNewsView) : OnLoadNewsListener{
 
     override fun onLoadFailed(errorType: Int) {
         mLoadNewsView!!.loadNewsError(errorType)
+    }
+
+    override fun onLoadWeatherSuccess(retult: WeatherData) {
+        mLoadNewsView!!.loadWeather(retult)
+    }
+
+    override fun onLoadWeatherFailed(errorType: Int) {
+
     }
 
 }

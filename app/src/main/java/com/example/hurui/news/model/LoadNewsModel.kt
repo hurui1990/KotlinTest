@@ -5,4 +5,5 @@ package com.example.hurui.news.model
  */
 interface LoadNewsModel {
     fun loadNews(type:String)
+    fun loadWeather(city:String)
 }

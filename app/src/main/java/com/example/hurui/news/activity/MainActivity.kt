@@ -1,6 +1,8 @@
 package com.example.hurui.news.activity
 
 import android.Manifest
+import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -10,6 +12,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
 import android.widget.TextView
@@ -18,10 +21,6 @@ import com.amap.api.location.AMapLocationClient
 import com.example.hurui.news.R
 import com.example.hurui.news.adapter.DrawerListAdapter
 import com.example.hurui.news.adapter.RecyclerAdapter
-import com.example.hurui.news.bean.MenuType
-import com.example.hurui.news.bean.NewType
-import com.example.hurui.news.bean.NewsDetail
-import com.example.hurui.news.bean.Result
 import com.example.hurui.news.presenter.LoadNewsPresenter
 import com.example.hurui.news.utils.Utils
 import com.example.hurui.news.view.LoadNewsView
@@ -31,6 +30,7 @@ import kotlinx.android.synthetic.main.main_toolbar.*
 import java.io.File
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
+import com.example.hurui.news.bean.*
 import java.util.*
 
 class MainActivity : AppCompatActivity() ,LoadNewsView{
@@ -47,6 +47,9 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
     var mLocationListener : AMapLocationListener? = null
     var mLocationOption: AMapLocationClientOption? = null
     var mLocationClient : AMapLocationClient? = null
+    var sharePre : SharedPreferences? = null
+    var editor : SharedPreferences.Editor? = null
+    var cityname : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +85,14 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
     fun setLocationOption(){
         mLocationClient = AMapLocationClient(applicationContext)
         mLocationListener = AMapLocationListener { aMapLocation -> run{
-            city_name.text = aMapLocation.city
+            Log.i("======", "返回值："+aMapLocation.city)
+            if(aMapLocation.city!!.length > 0){
+                cityname = aMapLocation.city
+                city_name.text = cityname
+            }
+            editor = sharePre!!.edit()
+            editor!!.putString("cityname", cityname)
+            mLoadNewsPresenter!!.loadWeather(cityname!!)
         } }
         //初始化AMapLocationClientOption对象
         mLocationOption = AMapLocationClientOption()
@@ -182,6 +192,26 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
         Toast.makeText(this,errorType.toString(),Toast.LENGTH_SHORT).show()
     }
 
+    override fun loadWeather(result: WeatherData) {
+        var nowWeather : HeWeather5Bean = result.HeWeather5[0]
+        Log.i("天气情况:","天气情况:"+ nowWeather.status)
+        Log.i("天气情况:","天气情况:"+ nowWeather.aqi)
+        Log.i("天气情况:","天气情况:"+ nowWeather.basic)
+        Log.i("天气情况:","天气情况:"+ nowWeather.now)
+        Log.i("天气情况:","天气情况:"+ nowWeather.suggestion)
+        Log.i("天气情况:","天气情况:"+ nowWeather.daily_forecast)
+        Log.i("天气情况:","天气情况:"+ nowWeather.hourly_forecast)
+        if(nowWeather.status == "unknown city"){
+            return
+        }
+        now_temp.text = nowWeather!!.now!!.tmp!! + "°C"
+        now_weather.text = nowWeather!!.now!!.cond!!.txt!!
+    }
+
+    override fun loadWeatherError(errorType: Int) {
+
+    }
+
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         drawerTogger!!.syncState()
@@ -197,6 +227,11 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
     }
 
     fun initDrawerMenu(){
+        sharePre = getSharedPreferences("city",Context.MODE_PRIVATE)
+        cityname = sharePre!!.getString("cityname", "成都市")
+        Log.i("=========","初始值："+cityname)
+        city_name.text = cityname
+
         drawerItemTypes = ArrayList<MenuType>()
         drawerItemTypes!!.add(MenuType(R.drawable.ic_news, "新闻咨询"))
         drawerItemTypes!!.add(MenuType(R.drawable.ic_picture, "本地图片"))
