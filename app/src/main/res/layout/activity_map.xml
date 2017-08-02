@@ -6,4 +6,10 @@
 
     <include layout="@layout/main_toolbar" />
 
+    <com.amap.api.maps.MapView
+        android:id="@+id/mMapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.amap.api.maps.MapView>
+
 </LinearLayout>

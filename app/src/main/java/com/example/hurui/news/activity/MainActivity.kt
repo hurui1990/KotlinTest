@@ -2,6 +2,7 @@ package com.example.hurui.news.activity
 
 import android.Manifest
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -11,14 +12,17 @@ import android.os.Environment
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Gravity
+import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.example.hurui.news.R
 import com.example.hurui.news.adapter.DrawerListAdapter
@@ -52,6 +56,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
     var sharePre : SharedPreferences? = null
     var editor : SharedPreferences.Editor? = null
     var cityname : String? = null
+    var mMapLoaction : AMapLocation? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,6 +95,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
         mLocationClient = AMapLocationClient(applicationContext)
         mLocationListener = AMapLocationListener { aMapLocation -> run{
             Log.i("======", "返回值："+aMapLocation.city)
+            mMapLoaction = aMapLocation
             if(aMapLocation.city!!.length > 0){
                 cityname = aMapLocation.city
                 city_name.text = cityname
@@ -252,7 +258,6 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
     }
 
     override fun onItemClick(view: View, position: Int) {
-        drawerlayout.closeDrawers()
         var menuType : MenuType = drawerItemTypes!![position]
         when(menuType.itemtext){
             "新闻咨询" -> { }
@@ -262,6 +267,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
             "地图" -> {
                 var intent : Intent = Intent(this, MapActivity::class.java)
                 startActivity(intent)
+                overridePendingTransition(R.anim.activity_enter,R.anim.activity_out)
             }
             "关于我" -> {
                 //TODO: 跳转到关于我页面
@@ -272,10 +278,37 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
         }
     }
 
+    override fun onRestart() {
+        super.onRestart()
+        drawerlayout.closeDrawer(Gravity.START)
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         mLocationClient!!.stopLocation()
         mLocationClient!!.onDestroy()
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        var build = AlertDialog.Builder(this)
+        build.setTitle("提示")
+        build.setMessage("客官不再耍一会儿？")
+        build.setPositiveButton("确定", DialogInterface.OnClickListener { dialog, which -> run{
+            finish()
+        } })
+        build.setNegativeButton("取消", DialogInterface.OnClickListener { dialog, which -> run{
+
+        } })
+        build.create().show()
+        return super.onKeyDown(keyCode, event)
     }
 
     //权限管理
