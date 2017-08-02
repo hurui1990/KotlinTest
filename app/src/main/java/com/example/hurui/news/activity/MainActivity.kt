@@ -260,7 +260,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
     override fun onItemClick(view: View, position: Int) {
         var menuType : MenuType = drawerItemTypes!![position]
         when(menuType.itemtext){
-            "新闻咨询" -> { }
+            "新闻咨询" -> { drawerlayout.closeDrawer(Gravity.START) }
             "本地图片" -> {
                 //TODO: 跳转到本地图片页面
             }
