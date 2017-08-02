@@ -49,6 +49,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="com.example.hurui.news.activity.MapActivity"></activity>
+
         <!--service-->
         <service android:name="com.amap.api.location.APSService"></service>
 

@@ -64,16 +64,13 @@ class LoadNewsModelImlp(internal var onLoadNewsListener: OnLoadNewsListener) : L
         val loadNewsService = retrofit.create(LoadNewsService::class.java)
         val callback = loadNewsService.getWeather(city, weatherCode)
 
-        callback.enqueue(object : Callback<ResponseBody>{
-            override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
+        callback.enqueue(object : Callback<WeatherData>{
+            override fun onFailure(call: Call<WeatherData>, t: Throwable) {
                 Log.i("===============", "错误信息"+t!!.message)
             }
 
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                var jsonStr : String = String(response!!.body()!!.bytes())
-                var gson : Gson = Gson()
-                var result : WeatherData = gson.fromJson(jsonStr,WeatherData::class.java)
-                mOnLoadNewsListener.onLoadWeatherSuccess(result)
+            override fun onResponse(call: Call<WeatherData>, response: Response<WeatherData>) {
+                mOnLoadNewsListener.onLoadWeatherSuccess(response!!.body()!!)
             }
         })
 

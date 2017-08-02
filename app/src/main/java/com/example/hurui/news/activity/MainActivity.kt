@@ -2,6 +2,7 @@ package com.example.hurui.news.activity
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
@@ -15,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.amap.api.location.AMapLocationClient
@@ -33,7 +35,7 @@ import com.amap.api.location.AMapLocationListener
 import com.example.hurui.news.bean.*
 import java.util.*
 
-class MainActivity : AppCompatActivity() ,LoadNewsView{
+class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItemClickListener{
 
     var newTypes : ArrayList<NewType>? = null
     var drawerItemTypes : ArrayList<MenuType>? =null
@@ -74,9 +76,11 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
         dataList = ArrayList<NewsDetail>()
         dataAdapter = RecyclerAdapter(this)
         dataAdapter!!.setData(dataList!!)
+
         recycler_content.layoutManager = LinearLayoutManager(this)
         recycler_content.addItemDecoration(DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
         recycler_content.adapter = dataAdapter
+
         OnClickNewType(NewType("头条","top"))
 
         setLocationOption()
@@ -243,6 +247,29 @@ class MainActivity : AppCompatActivity() ,LoadNewsView{
         drawer_menu.layoutManager = LinearLayoutManager(this)
         drawer_menu.adapter = drawerAdapter
         drawerAdapter!!.notifyDataSetChanged()
+
+        drawerAdapter!!.setOnItemClickListener(this)
+    }
+
+    override fun onItemClick(view: View, position: Int) {
+        drawerlayout.closeDrawers()
+        var menuType : MenuType = drawerItemTypes!![position]
+        when(menuType.itemtext){
+            "新闻咨询" -> { }
+            "本地图片" -> {
+                //TODO: 跳转到本地图片页面
+            }
+            "地图" -> {
+                var intent : Intent = Intent(this, MapActivity::class.java)
+                startActivity(intent)
+            }
+            "关于我" -> {
+                //TODO: 跳转到关于我页面
+            }
+            "设置" -> {
+                //TODO: 跳转到设置页面
+            }
+        }
     }
 
     override fun onDestroy() {
