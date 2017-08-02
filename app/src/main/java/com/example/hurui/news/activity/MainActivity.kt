@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.drawerlayout)
 
         toolbar.title = "新闻世界"
         toolbar.setTitleTextColor(resources.getColor(R.color.white, null))
