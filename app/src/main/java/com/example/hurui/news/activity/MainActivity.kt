@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
         setContentView(R.layout.activity_main)
 
         toolbar.title = "新闻世界"
-        toolbar.setTitleTextColor(resources.getColor(R.color.white))
+        toolbar.setTitleTextColor(resources.getColor(R.color.white, null))
         toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_open)
 
         setSupportActionBar(toolbar)
@@ -147,7 +147,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
             textView.width = screenWidth / 7
             textView.setTextColor(resources.getColor(R.color.text_color))
             if (i == 0) {
-                textView.setTextColor(resources.getColor(R.color.select_text_color))
+                textView.setTextColor(resources.getColor(R.color.colorPrimaryDark))
                 mLoadNewsPresenter!!.loadNews(newType.type)
             }
             textView.setOnClickListener({OnClickNewType(newType)})
@@ -159,7 +159,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
         for (i in newTypes!!.indices){
             val newType = newTypes!![i]
             if(newType.type == oldType.type){
-                (title_view.getChildAt(i) as TextView).setTextColor(resources.getColor(R.color.select_text_color))
+                (title_view.getChildAt(i) as TextView).setTextColor(resources.getColor(R.color.colorPrimaryDark))
             }else{
                 (title_view.getChildAt(i) as TextView).setTextColor(resources.getColor(R.color.text_color))
             }

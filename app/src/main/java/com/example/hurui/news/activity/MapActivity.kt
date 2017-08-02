@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.KeyEvent
+import android.view.Menu
 import android.view.MenuItem
 import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
@@ -15,29 +16,29 @@ import kotlinx.android.synthetic.main.activity_map.*
 import kotlinx.android.synthetic.main.main_toolbar.*
 import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
+import com.amap.api.maps.UiSettings
 import com.amap.api.maps.model.*
-
 
 /**
  * Created by hurui on 2017/8/2.
  */
-class MapActivity : AppCompatActivity(){
+class MapActivity : AppCompatActivity() {
+    var aMap: AMap? = null
+    var mMyLocationStyle: MyLocationStyle? = null
 
-    var aMap : AMap? = null
-    var mMyLocationStyle : MyLocationStyle? = null
-
-    var mLocationListener : AMapLocationListener? = null
+    var mLocationListener: AMapLocationListener? = null
     var mLocationOption: AMapLocationClientOption? = null
-    var mLocationClient : AMapLocationClient? = null
-    var mMapLoaction : AMapLocation? = null
+    var mLocationClient: AMapLocationClient? = null
+    var mMapLoaction: AMapLocation? = null
+    var uiSettings: UiSettings? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
 
         toolbar.title = "地图"
-        toolbar.setTitleTextColor(resources.getColor(R.color.white))
-        toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_arrow_back)
+        toolbar.setTitleTextColor(resources.getColor(R.color.white, null))
+        toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_arrow_back, null)
 
         setSupportActionBar(toolbar)
         supportActionBar!!.setHomeButtonEnabled(true)
@@ -47,9 +48,11 @@ class MapActivity : AppCompatActivity(){
         mMapView!!.onCreate(savedInstanceState)
     }
 
-    fun initMap(){
-        if(aMap == null) {
+    fun initMap() {
+        if (aMap == null) {
             aMap = mMapView.map
+            uiSettings = aMap!!.uiSettings
+            uiSettings
         }
         aMap!!.isTrafficEnabled = true
         aMap!!.mapType = AMap.MAP_TYPE_NORMAL
@@ -62,18 +65,21 @@ class MapActivity : AppCompatActivity(){
         mMyLocationStyle!!.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE)
         aMap!!.myLocationStyle = mMyLocationStyle
         aMap!!.isMyLocationEnabled = true
-        var latlonPosition : LatLng = LatLng(mMapLoaction!!.latitude,mMapLoaction!!.longitude)
+        aMap!!.showIndoorMap(true)
+        var latlonPosition: LatLng = LatLng(mMapLoaction!!.latitude, mMapLoaction!!.longitude)
         aMap!!.moveCamera(CameraUpdateFactory.changeLatLng(latlonPosition))
 
     }
 
-    fun setLocationOption(){
+    fun setLocationOption() {
         mLocationClient = AMapLocationClient(applicationContext)
-        mLocationListener = AMapLocationListener { aMapLocation -> run{
-            Log.i("MapActivity", "返回值："+aMapLocation.city)
-            mMapLoaction = aMapLocation
-            initMap()
-        } }
+        mLocationListener = AMapLocationListener { aMapLocation ->
+            run {
+                Log.i("MapActivity", "返回值：" + aMapLocation.city)
+                mMapLoaction = aMapLocation
+                initMap()
+            }
+        }
         //初始化AMapLocationClientOption对象
         mLocationOption = AMapLocationClientOption()
         //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
@@ -124,12 +130,23 @@ class MapActivity : AppCompatActivity(){
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item!!.itemId){
+        when (item!!.itemId) {
             android.R.id.home -> {
                 finish()
-                overridePendingTransition(R.anim.activity_enter_after,R.anim.activity_out_after)
+                overridePendingTransition(R.anim.activity_enter_after, R.anim.activity_out_after)
+            }
+            R.id.ab_search -> {
+
+            }
+            R.id.offlinemap -> {
+
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.map_menu, menu)
+        return true
     }
 }
