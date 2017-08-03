@@ -4,10 +4,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
+import android.view.animation.ScaleAnimation
+import android.widget.LinearLayout
+import android.widget.SearchView
+import android.widget.Toast
 import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
@@ -18,11 +24,20 @@ import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.UiSettings
 import com.amap.api.maps.model.*
+import com.amap.api.services.core.PoiItem
+import com.amap.api.services.poisearch.PoiResult
+import com.amap.api.services.poisearch.PoiSearch
+import com.example.hurui.news.adapter.PoisAdapter
+import com.example.hurui.news.view.MyDivider
 
 /**
  * Created by hurui on 2017/8/2.
  */
-class MapActivity : AppCompatActivity(), View.OnClickListener {
+class MapActivity : AppCompatActivity(),
+        View.OnClickListener,
+        SearchView.OnQueryTextListener,
+        PoiSearch.OnPoiSearchListener, SearchView.OnCloseListener, PoisAdapter.OnItemClickListener {
+
     var aMap: AMap? = null
     var mMyLocationStyle: MyLocationStyle? = null
 
@@ -31,6 +46,9 @@ class MapActivity : AppCompatActivity(), View.OnClickListener {
     var mLocationClient: AMapLocationClient? = null
     var mMapLoaction: AMapLocation? = null
     var mUiSettings: UiSettings? = null
+    var mQuery : PoiSearch.Query? = null
+    var poiSearch : PoiSearch? = null
+    var mPoiAdapter : PoisAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +71,68 @@ class MapActivity : AppCompatActivity(), View.OnClickListener {
         aMap!!.mapType = AMap.MAP_TYPE_NORMAL
         aMap!!.moveCamera(CameraUpdateFactory.changeLatLng(LatLng(lat.toDouble(), lon.toDouble())))
 
+        mPoiAdapter = PoisAdapter(this)
+        search_list.layoutManager = LinearLayoutManager(this)
+        search_list.addItemDecoration(MyDivider(this, 1))
+        search_list.adapter = mPoiAdapter
+
+        mPoiAdapter!!.setOnItemClickListener(this)
+
         open_map_setting.setOnClickListener(this)
+        searchview.setOnQueryTextListener(this)
+        searchview.setOnCloseListener(this)
+    }
+
+    override fun onItemClick(view: View, poiitem: PoiItem) {
+        var poi : PoiItem = poiitem
+        Toast.makeText(this,poi.toString(),Toast.LENGTH_LONG).show()
+    }
+
+    override fun onClose(): Boolean {
+        search_list.visibility = View.GONE
+        return false
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if(query!!.length <= 0){
+            search_list.visibility = View.GONE
+        }else {
+            var scaleAnim : ScaleAnimation = ScaleAnimation(1f, 1f, 0f, 1f, 0.5f, 0f)
+            scaleAnim.duration = 300
+            search_list.animation = scaleAnim
+            search_list.visibility = View.VISIBLE
+        }
+        mQuery = PoiSearch.Query(query, "", mMapLoaction!!.city)
+        poiSearch = PoiSearch(this, mQuery)
+        poiSearch!!.setOnPoiSearchListener(this)
+        poiSearch!!.searchPOIAsyn()
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+//        if(newText!!.length <= 0){
+//            search_list.visibility = View.GONE
+//        }else {
+//            search_list.visibility = View.VISIBLE
+//        }
+//        mQuery = PoiSearch.Query(newText, "", mMapLoaction!!.city)
+//        poiSearch = PoiSearch(this, mQuery)
+//        poiSearch!!.setOnPoiSearchListener(this)
+//        poiSearch!!.searchPOIAsyn()
+        return true
+    }
+
+    override fun onPoiItemSearched(p0: PoiItem?, p1: Int) {
+    }
+
+    override fun onPoiSearched(result: PoiResult?, p1: Int) {
+        Log.i("==============", result!!.pois.size.toString())
+        if(result!!.pois.size == 0){
+            search_list.visibility = View.GONE
+        }else {
+            search_list.visibility = View.VISIBLE
+            mPoiAdapter!!.setData(result!!.pois)
+        }
     }
 
     override fun onClick(v: View?) {
