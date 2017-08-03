@@ -59,7 +59,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_gravity="start"
-        android:background="@android:color/white"
+        android:background="#ddffffff"
         >
 
         <LinearLayout
@@ -67,7 +67,6 @@
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:orientation="horizontal"
-            android:background="@color/colorPrimaryDark"
             android:gravity="center_vertical"
             >
 
@@ -88,7 +87,6 @@
                 android:text="胡小小瑞"
                 android:textSize="20dp"
                 android:gravity="center"
-                android:textColor="@android:color/white"
                 />
 
         </LinearLayout>
@@ -96,7 +94,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray">
+            android:background="@android:color/black">
         </View>
 
 

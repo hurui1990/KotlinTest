@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawerlayout)
 
-        toolbar.title = "新闻世界"
+        toolbar.title = "新闻速递"
         toolbar.setTitleTextColor(resources.getColor(R.color.white, null))
         toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_open)
 

@@ -2,18 +2,18 @@ package com.example.hurui.news.activity
 
 import android.graphics.Color
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.Gravity
 import android.view.KeyEvent
-import android.view.Menu
-import android.view.MenuItem
+import android.view.View
 import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
 import com.example.hurui.news.R
 import kotlinx.android.synthetic.main.activity_map.*
-import kotlinx.android.synthetic.main.main_toolbar.*
 import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.UiSettings
@@ -22,7 +22,7 @@ import com.amap.api.maps.model.*
 /**
  * Created by hurui on 2017/8/2.
  */
-class MapActivity : AppCompatActivity() {
+class MapActivity : AppCompatActivity(), View.OnClickListener {
     var aMap: AMap? = null
     var mMyLocationStyle: MyLocationStyle? = null
 
@@ -36,45 +36,50 @@ class MapActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
 
-        toolbar.title = "地图"
-        toolbar.setTitleTextColor(resources.getColor(R.color.white, null))
-        toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_arrow_back, null)
-
-        setSupportActionBar(toolbar)
-        supportActionBar!!.setHomeButtonEnabled(true)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
         mMapView!!.onCreate(savedInstanceState)
-    }
 
-    fun initMap() {
         if (aMap == null) {
             aMap = mMapView.map
             uiSettings = aMap!!.uiSettings
             uiSettings
         }
+        uiSettings!!.isZoomControlsEnabled = false
         aMap!!.isTrafficEnabled = true
         aMap!!.mapType = AMap.MAP_TYPE_NORMAL
 
+        open_map_setting.setOnClickListener(this)
+    }
+
+    override fun onClick(v: View?) {
+        when(v!!.id){
+            R.id.open_map_setting -> {
+                map_drawer.openDrawer(Gravity.END)
+            }
+        }
+    }
+
+    fun initMap() {
         mMyLocationStyle = MyLocationStyle()
-        mMyLocationStyle!!.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_location_on))
-        mMyLocationStyle!!.strokeColor(Color.argb(0, 0, 0, 0))// 设置圆形的边框颜色
-        mMyLocationStyle!!.radiusFillColor(Color.argb(0, 0, 0, 0))// 设置圆形的填充颜色
-        mMyLocationStyle!!.strokeWidth(0f)// 设置圆形的边框粗细
+        mMyLocationStyle!!.strokeColor(resources.getColor(R.color.white))// 设置圆形的边框颜色
+        mMyLocationStyle!!.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable.location))
+        mMyLocationStyle!!.radiusFillColor(resources.getColor(R.color.maolocation))// 设置圆形的填充颜色
+        mMyLocationStyle!!.strokeWidth(1f)// 设置圆形的边框粗细
         mMyLocationStyle!!.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE)
         aMap!!.myLocationStyle = mMyLocationStyle
         aMap!!.isMyLocationEnabled = true
         aMap!!.showIndoorMap(true)
+
         var latlonPosition: LatLng = LatLng(mMapLoaction!!.latitude, mMapLoaction!!.longitude)
         aMap!!.moveCamera(CameraUpdateFactory.changeLatLng(latlonPosition))
-
+        aMap!!.moveCamera(CameraUpdateFactory.zoomTo(17f))
     }
 
     fun setLocationOption() {
         mLocationClient = AMapLocationClient(applicationContext)
         mLocationListener = AMapLocationListener { aMapLocation ->
             run {
+                Snackbar.make(map_drawer,"您当前的位置:"+aMapLocation.address,Snackbar.LENGTH_LONG).show()
                 Log.i("MapActivity", "返回值：" + aMapLocation.city)
                 mMapLoaction = aMapLocation
                 initMap()
@@ -124,29 +129,11 @@ class MapActivity : AppCompatActivity() {
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        finish()
-        overridePendingTransition(R.anim.activity_enter_after,R.anim.activity_out_after)
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            finish()
+            overridePendingTransition(R.anim.activity_enter_after,R.anim.activity_out_after)
+        }
         return super.onKeyDown(keyCode, event)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item!!.itemId) {
-            android.R.id.home -> {
-                finish()
-                overridePendingTransition(R.anim.activity_enter_after, R.anim.activity_out_after)
-            }
-            R.id.ab_search -> {
-
-            }
-            R.id.offlinemap -> {
-
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.map_menu, menu)
-        return true
-    }
 }
