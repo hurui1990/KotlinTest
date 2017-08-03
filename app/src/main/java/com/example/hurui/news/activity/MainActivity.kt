@@ -263,7 +263,6 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
             }
             "地图" -> {
                 var intent : Intent = Intent(this, MapActivity::class.java)
-                intent.putExtra("location", mMapLoaction)
                 startActivity(intent)
                 overridePendingTransition(R.anim.activity_enter,R.anim.activity_out)
             }

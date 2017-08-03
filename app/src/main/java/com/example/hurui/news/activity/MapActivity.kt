@@ -1,17 +1,14 @@
 package com.example.hurui.news.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
 import android.view.animation.ScaleAnimation
-import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.Toast
 import com.amap.api.location.AMapLocation
@@ -29,6 +26,7 @@ import com.amap.api.services.poisearch.PoiResult
 import com.amap.api.services.poisearch.PoiSearch
 import com.example.hurui.news.adapter.PoisAdapter
 import com.example.hurui.news.view.MyDivider
+import java.util.*
 
 /**
  * Created by hurui on 2017/8/2.
@@ -49,6 +47,7 @@ class MapActivity : AppCompatActivity(),
     var mQuery : PoiSearch.Query? = null
     var poiSearch : PoiSearch? = null
     var mPoiAdapter : PoisAdapter? = null
+    var orignZoomLevel : Float = 17f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,15 +62,11 @@ class MapActivity : AppCompatActivity(),
             mUiSettings = aMap!!.uiSettings
             mUiSettings
         }
-        mUiSettings!!.isZoomControlsEnabled = false
-        aMap!!.isTrafficEnabled = true
-        aMap!!.mapType = AMap.MAP_TYPE_NORMAL
 
-        var intent : Intent = intent
-        var location : AMapLocation = intent.getParcelableExtra("location")
-        if(location != null){
-            aMap!!.moveCamera(CameraUpdateFactory.changeLatLng(LatLng(location.latitude.toDouble(), location.longitude.toDouble())))
-        }
+        setLocationOption()
+
+        mUiSettings!!.isZoomControlsEnabled = false
+        aMap!!.mapType = AMap.MAP_TYPE_NORMAL
 
         mPoiAdapter = PoisAdapter(this)
         search_list.layoutManager = LinearLayoutManager(this)
@@ -83,6 +78,16 @@ class MapActivity : AppCompatActivity(),
         open_map_setting.setOnClickListener(this)
         searchview.setOnQueryTextListener(this)
         searchview.setOnCloseListener(this)
+        maxZoom.setOnClickListener(this)
+        minZoom.setOnClickListener(this)
+        location_btn.setOnClickListener(this)
+    }
+
+    fun setListViewGone(){
+        var scaleAnim : ScaleAnimation = ScaleAnimation(1f, 1f, 1f, 0f, 0.5f, 0f)
+        scaleAnim.duration = 300
+        search_list.animation = scaleAnim
+        search_list.visibility = View.GONE
     }
 
     override fun onItemClick(view: View, poiitem: PoiItem) {
@@ -91,18 +96,20 @@ class MapActivity : AppCompatActivity(),
     }
 
     override fun onClose(): Boolean {
-        search_list.visibility = View.GONE
+        setListViewGone()
         return false
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         if(query!!.length <= 0){
-            search_list.visibility = View.GONE
+            setListViewGone()
         }else {
-            var scaleAnim : ScaleAnimation = ScaleAnimation(1f, 1f, 0f, 1f, 0.5f, 0f)
-            scaleAnim.duration = 300
-            search_list.animation = scaleAnim
-            search_list.visibility = View.VISIBLE
+            if(search_list.visibility != View.VISIBLE){
+                var scaleAnim : ScaleAnimation = ScaleAnimation(1f, 1f, 0f, 1f, 0.5f, 0f)
+                scaleAnim.duration = 300
+                search_list.animation = scaleAnim
+                search_list.visibility = View.VISIBLE
+            }
         }
         mQuery = PoiSearch.Query(query, "", mMapLoaction!!.city)
         poiSearch = PoiSearch(this, mQuery)
@@ -112,15 +119,6 @@ class MapActivity : AppCompatActivity(),
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-//        if(newText!!.length <= 0){
-//            search_list.visibility = View.GONE
-//        }else {
-//            search_list.visibility = View.VISIBLE
-//        }
-//        mQuery = PoiSearch.Query(newText, "", mMapLoaction!!.city)
-//        poiSearch = PoiSearch(this, mQuery)
-//        poiSearch!!.setOnPoiSearchListener(this)
-//        poiSearch!!.searchPOIAsyn()
         return true
     }
 
@@ -130,17 +128,44 @@ class MapActivity : AppCompatActivity(),
     override fun onPoiSearched(result: PoiResult?, p1: Int) {
         Log.i("==============", result!!.pois.size.toString())
         if(result!!.pois.size == 0){
-            search_list.visibility = View.GONE
-        }else {
-            search_list.visibility = View.VISIBLE
-            mPoiAdapter!!.setData(result!!.pois)
+            var scaleAnim : ScaleAnimation = ScaleAnimation(1f, 1f, 0f, 1f, 0.5f, 0f)
+            scaleAnim.duration = 300
+            layout_no_result.animation = scaleAnim
+            layout_no_result.visibility = View.VISIBLE
+            Timer().schedule(object : TimerTask() {
+                override fun run() {
+
+                    runOnUiThread {
+                        var scaleAnim : ScaleAnimation = ScaleAnimation(1f, 1f, 1f, 0f, 0.5f, 0f)
+                        scaleAnim.duration = 300
+                        layout_no_result.animation = scaleAnim
+                        layout_no_result.visibility = View.GONE
+                    }
+                }
+            }, 3000)
         }
+        mPoiAdapter!!.setData(result!!.pois)
     }
 
     override fun onClick(v: View?) {
         when(v!!.id){
             R.id.open_map_setting -> {
                 map_drawer.openDrawer(Gravity.END)
+            }
+            R.id.maxZoom -> {
+                if(orignZoomLevel < 18f){
+                    orignZoomLevel++
+                }
+                aMap!!.moveCamera(CameraUpdateFactory.zoomTo(orignZoomLevel))
+            }
+            R.id.minZoom -> {
+                if(orignZoomLevel > 1){
+                    orignZoomLevel--
+                }
+                aMap!!.moveCamera(CameraUpdateFactory.zoomTo(orignZoomLevel))
+            }
+            R.id.location_btn -> {
+                setLocationOption()
             }
         }
     }
@@ -158,7 +183,7 @@ class MapActivity : AppCompatActivity(),
 
         var latlonPosition: LatLng = LatLng(mMapLoaction!!.latitude, mMapLoaction!!.longitude)
         aMap!!.moveCamera(CameraUpdateFactory.changeLatLng(latlonPosition))
-        aMap!!.moveCamera(CameraUpdateFactory.zoomTo(17f))
+        aMap!!.moveCamera(CameraUpdateFactory.zoomTo(orignZoomLevel))
     }
 
     fun setLocationOption() {
@@ -189,11 +214,31 @@ class MapActivity : AppCompatActivity(),
         mLocationClient!!.startLocation()
     }
 
+    //切换地图显示模式
+    fun setMapDisplayType(type : Int){
+        when(type){
+            AMap.MAP_TYPE_NORMAL -> {
+                //TODO 普通模式
+                aMap!!.mapType = AMap.MAP_TYPE_NORMAL
+                mMapView.onResume()
+            }
+            AMap.MAP_TYPE_SATELLITE -> {
+                //TODO 卫星地图
+                aMap!!.mapType = AMap.MAP_TYPE_SATELLITE
+                mMapView.onResume()
+            }
+            AMap.MAP_TYPE_NIGHT -> {
+                //TODO 夜间地图
+                aMap!!.mapType = AMap.MAP_TYPE_NIGHT
+                mMapView.onResume()
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         //在activity执行onResume时执行mMapView.onResume ()，重新绘制加载地图
         mMapView.onResume()
-        setLocationOption()
     }
 
     override fun onPause() {
