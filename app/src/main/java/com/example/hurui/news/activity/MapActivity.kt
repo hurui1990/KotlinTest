@@ -57,9 +57,6 @@ class MapActivity : AppCompatActivity(),
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
         mMapView!!.onCreate(savedInstanceState)
 
-        var intent : Intent = intent;
-        var lat : Float = intent.getFloatExtra("lat",0f)
-        var lon : Float = intent.getFloatExtra("lon", 0f)
 
         if (aMap == null) {
             aMap = mMapView.map
@@ -69,7 +66,12 @@ class MapActivity : AppCompatActivity(),
         mUiSettings!!.isZoomControlsEnabled = false
         aMap!!.isTrafficEnabled = true
         aMap!!.mapType = AMap.MAP_TYPE_NORMAL
-        aMap!!.moveCamera(CameraUpdateFactory.changeLatLng(LatLng(lat.toDouble(), lon.toDouble())))
+
+        var intent : Intent = intent
+        var location : AMapLocation = intent.getParcelableExtra("location")
+        if(location != null){
+            aMap!!.moveCamera(CameraUpdateFactory.changeLatLng(LatLng(location.latitude.toDouble(), location.longitude.toDouble())))
+        }
 
         mPoiAdapter = PoisAdapter(this)
         search_list.layoutManager = LinearLayoutManager(this)
