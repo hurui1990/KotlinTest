@@ -12,13 +12,14 @@ import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.NinePatchDrawable
+import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
 import android.widget.ImageView
 
 /**
  * Created by Administrator on 2015/9/11.
  */
-class RoundImageView : ImageView {
+class RoundImageView : AppCompatImageView {
     constructor(context: Context) : super(context) {
         // TODO Auto-generated constructor stub
     }

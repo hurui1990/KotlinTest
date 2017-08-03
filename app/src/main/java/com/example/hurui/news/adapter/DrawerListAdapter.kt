@@ -35,7 +35,7 @@ class DrawerListAdapter(context:Context, itemList:ArrayList<MenuType>)
         var item : MenuType = datalist!![position]
         holder!!.img.setImageResource(item.image)
         holder!!.text.text = item.itemtext
-        holder.itemView.setTag(position)
+        holder.itemView.tag = position
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): DrawItemHolder {

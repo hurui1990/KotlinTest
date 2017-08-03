@@ -1,6 +1,6 @@
 package com.example.hurui.news.activity
 
-import android.graphics.Color
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
@@ -30,7 +30,7 @@ class MapActivity : AppCompatActivity(), View.OnClickListener {
     var mLocationOption: AMapLocationClientOption? = null
     var mLocationClient: AMapLocationClient? = null
     var mMapLoaction: AMapLocation? = null
-    var uiSettings: UiSettings? = null
+    var mUiSettings: UiSettings? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,14 +39,19 @@ class MapActivity : AppCompatActivity(), View.OnClickListener {
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
         mMapView!!.onCreate(savedInstanceState)
 
+        var intent : Intent = intent;
+        var lat : Float = intent.getFloatExtra("lat",0f)
+        var lon : Float = intent.getFloatExtra("lon", 0f)
+
         if (aMap == null) {
             aMap = mMapView.map
-            uiSettings = aMap!!.uiSettings
-            uiSettings
+            mUiSettings = aMap!!.uiSettings
+            mUiSettings
         }
-        uiSettings!!.isZoomControlsEnabled = false
+        mUiSettings!!.isZoomControlsEnabled = false
         aMap!!.isTrafficEnabled = true
         aMap!!.mapType = AMap.MAP_TYPE_NORMAL
+        aMap!!.moveCamera(CameraUpdateFactory.changeLatLng(LatLng(lat.toDouble(), lon.toDouble())))
 
         open_map_setting.setOnClickListener(this)
     }

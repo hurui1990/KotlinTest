@@ -16,10 +16,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
-import android.view.Gravity
-import android.view.KeyEvent
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.widget.TextView
 import android.widget.Toast
 import com.amap.api.location.AMapLocation
@@ -101,7 +98,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
                 city_name.text = cityname
             }
             editor = sharePre!!.edit()
-            editor!!.putString("cityname", cityname)
+            editor!!.putString("cityname", cityname).commit()
             mLoadNewsPresenter!!.loadWeather(cityname!!)
         } }
         //初始化AMapLocationClientOption对象
@@ -246,7 +243,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
         drawerItemTypes!!.add(MenuType(R.drawable.ic_news, "新闻咨询"))
         drawerItemTypes!!.add(MenuType(R.drawable.ic_picture, "本地图片"))
         drawerItemTypes!!.add(MenuType(R.drawable.ic_map, "地图"))
-        drawerItemTypes!!.add(MenuType(R.drawable.ic_user, "关于我"))
+        drawerItemTypes!!.add(MenuType(R.drawable.ic_user, "我的博客"))
         drawerItemTypes!!.add(MenuType(R.drawable.ic_settings, "设置"))
 
         drawerAdapter = DrawerListAdapter(this, drawerItemTypes!!)
@@ -266,11 +263,16 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
             }
             "地图" -> {
                 var intent : Intent = Intent(this, MapActivity::class.java)
+                intent.putExtra("lat", mMapLoaction!!.latitude)
+                intent.putExtra("lon", mMapLoaction!!.longitude)
                 startActivity(intent)
                 overridePendingTransition(R.anim.activity_enter,R.anim.activity_out)
             }
-            "关于我" -> {
+            "我的博客" -> {
                 //TODO: 跳转到关于我页面
+                var intent : Intent = Intent(this, AboutActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(R.anim.activity_enter,R.anim.activity_out)
             }
             "设置" -> {
                 //TODO: 跳转到设置页面
@@ -325,5 +327,9 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
                 return
             }
         }
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        return super.onTouchEvent(event)
     }
 }
