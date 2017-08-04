@@ -5,8 +5,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.graphics.Paint
-import android.graphics.Rect
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -31,6 +29,7 @@ import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
 import com.example.hurui.news.adapter.ViewpagerAdapter
 import com.example.hurui.news.bean.*
+import kotlinx.android.synthetic.main.fragment_news.*
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItemClickListener, ViewPager.OnPageChangeListener {
@@ -50,6 +49,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
     var mLoadNewsPresenter : LoadNewsPresenter? = null
     var fragmentList : ArrayList<Fragment>? = null
     var screenWidth : Int? = null
+    var oldPage : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
         screenWidth = wm.defaultDisplay.width
 
         toolbar.title = "新闻速递"
-        toolbar.setTitleTextColor(resources.getColor(R.color.white, null))
+        toolbar.setTitleTextColor(resources.getColor(R.color.white))
         toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_open)
 
         setSupportActionBar(toolbar)
@@ -74,10 +74,6 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
         initScrollView()
         initDrawerMenu()
         initFragments()
-
-
-        OnClickNewType(NewType("头条","top"))
-
         setLocationOption()
     }
 
@@ -139,26 +135,27 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
         newTypes!!.add(NewType("财经","caijing"))
         newTypes!!.add(NewType("时尚","shishang"))
 
-        val screenWidth : Int = Utils.getScreenWidth(this)
+        screenWidth = Utils.getScreenWidth(this)
 
         for (i in newTypes!!.indices){
             val newType : NewType = newTypes!![i]
             val textView : TextView = TextView(this)
             textView.text = newType.name
-            textView.gravity = Gravity.START
+            textView.gravity = Gravity.CENTER
             textView.textSize = resources.getDimension(R.dimen.title_text_size)
-            textView.width = screenWidth / 7
+            textView.width = screenWidth!! / 7
             textView.setTextColor(resources.getColor(R.color.text_color))
             if (i == 0) {
                 textView.setTextColor(resources.getColor(R.color.colorPrimaryDark))
                 mLoadNewsPresenter!!.loadNews(newType.type)
             }
-            textView.setOnClickListener({OnClickNewType(newType)})
+            textView.setOnClickListener({OnClickNewType(newType,i)})
             title_view.addView(textView)
         }
     }
 
-    fun OnClickNewType(oldType: NewType){
+    fun OnClickNewType(oldType: NewType, i: Int){
+        view_pager.setCurrentItem(i,true)
         for (i in newTypes!!.indices){
             val newType = newTypes!![i]
             if(newType.type == oldType.type){
@@ -212,7 +209,8 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
     override fun onPageSelected(position: Int) {
-        OnClickNewType(newTypes!![position])
+        OnClickNewType(newTypes!![position], position)
+        title_scroll_view.scrollTo((screenWidth!! / 7) * position, 0)
     }
 
     fun initDrawerMenu(){
@@ -299,7 +297,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
             20 -> {
                 if (grantResults.size > 0 && grantResults[0] === PackageManager.PERMISSION_GRANTED) {
                     // 权限被用户同意，可以去放肆了。
-                    OnClickNewType(NewType("头条","top"))
+
                 } else {
                     // 权限被用户拒绝了，洗洗睡吧。
                     Toast.makeText(this,"你拒绝了权限，不能使用该应用",Toast.LENGTH_SHORT).show()
