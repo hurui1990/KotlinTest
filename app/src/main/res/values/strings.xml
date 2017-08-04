@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">没想好叫啥</string>
-    <string name="action_setting">设置</string>
-    <string name="action_about">关于</string>
     <string name="main_title">新闻世界</string>
     <string name="back">返回</string>
 </resources>
