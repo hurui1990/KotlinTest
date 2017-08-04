@@ -77,6 +77,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
 
         dataList = ArrayList<NewsDetail>()
         dataAdapter = RecyclerAdapter(this)
+        dataAdapter!!.setHasStableIds(true)
         dataAdapter!!.setData(dataList!!)
 
         recycler_content.layoutManager = LinearLayoutManager(this)
@@ -173,25 +174,9 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE),20)
         }else{
             // 有权限
-            setData()
+            dataAdapter?.setData(result)
         }
 
-    }
-
-    //设置RecyclerView的数据
-    fun setData(){
-        var gson : Gson = Gson()
-        var resultStr : Result = gson.fromJson(getDataFromLocal(), Result::class.java)
-        //成功获取到新闻信息
-        dataAdapter?.setData(resultStr.result.data)
-    }
-
-    //获取模拟数据
-    fun getDataFromLocal() : String{
-        var path = Environment.getExternalStorageDirectory().toString()+"/data.json"
-        var file = File(path)
-        var line = file.readText()
-        return line
     }
 
     override fun loadNewsError(errorType: Int) {
@@ -317,7 +302,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
             20 -> {
                 if (grantResults.size > 0 && grantResults[0] === PackageManager.PERMISSION_GRANTED) {
                     // 权限被用户同意，可以去放肆了。
-                    setData()
+                    OnClickNewType(NewType("头条","top"))
                 } else {
                     // 权限被用户拒绝了，洗洗睡吧。
                     Toast.makeText(this,"你拒绝了权限，不能使用该应用",Toast.LENGTH_SHORT).show()

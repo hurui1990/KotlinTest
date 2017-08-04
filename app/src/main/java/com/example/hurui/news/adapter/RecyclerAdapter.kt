@@ -8,9 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
 import com.example.hurui.news.R
 import com.example.hurui.news.bean.NewsDetail
+import com.squareup.picasso.Picasso
 
 /**
  * Created by hurui on 2017/7/28.
@@ -36,24 +36,24 @@ class RecyclerAdapter(context:Context)
                 holderOne.title.text = item.title
                 holderOne.author.text = item.author_name
                 holderOne.datatime.text = item.date
-                Glide.with(mContext).load(item.thumbnail_pic_s).into(holderOne.img)
+                Picasso.with(mContext).load(item.thumbnail_pic_s).into(holderOne.img)
             }
             type2 -> {
                 var holderTwo : ItemViewHolderTwo = holder as ItemViewHolderTwo
                 holderTwo.title.text = item.title
                 holderTwo.author.text = item.author_name
                 holderTwo.datatime.text = item.date
-                Glide.with(mContext).load(item.thumbnail_pic_s).into(holderTwo.img)
-                Glide.with(mContext).load(item.thumbnail_pic_s02).into(holderTwo.img2)
+                Picasso.with(mContext).load(item.thumbnail_pic_s).into(holderTwo.img)
+                Picasso.with(mContext).load(item.thumbnail_pic_s02).into(holderTwo.img2)
             }
             type3 -> {
                 var holderThree : ItemViewHolderThree = holder as ItemViewHolderThree
                 holderThree.title.text = item.title
                 holderThree.author.text = item.author_name
                 holderThree.datatime.text = item.date
-                Glide.with(mContext).load(item.thumbnail_pic_s).into(holderThree.img)
-                Glide.with(mContext).load(item.thumbnail_pic_s02).into(holderThree.img2)
-                Glide.with(mContext).load(item.thumbnail_pic_s03).into(holderThree.img3)
+                Picasso.with(mContext).load(item.thumbnail_pic_s).into(holderThree.img)
+                Picasso.with(mContext).load(item.thumbnail_pic_s02).into(holderThree.img2)
+                Picasso.with(mContext).load(item.thumbnail_pic_s03).into(holderThree.img3)
             }
         }
     }

@@ -13,7 +13,7 @@ import retrofit2.http.Query
  */
 interface LoadNewsService {
     @GET("/toutiao/index")
-    fun getNewsResult(@Header("Authorization") appcode: String, @Query("type") type: String): Call<ResponseBody>
+    fun getNewsResult(@Query("type") appcode: String, @Query("key") type: String): Call<ResponseBody>
 
     @GET("/v5/weather")
     fun getWeather(@Query("city") city : String, @Query("key") key : String) : Call<WeatherData>

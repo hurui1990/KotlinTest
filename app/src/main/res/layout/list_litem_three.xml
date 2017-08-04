@@ -30,6 +30,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
+            android:background="@drawable/background"
             />
 
         <ImageView
@@ -40,6 +41,7 @@
             android:scaleType="centerCrop"
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
+            android:background="@drawable/background"
             />
 
         <ImageView
@@ -48,6 +50,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
+            android:background="@drawable/background"
             />
     </LinearLayout>
 
