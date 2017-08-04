@@ -19,6 +19,7 @@
             <include layout="@layout/main_toolbar"></include>
 
             <HorizontalScrollView
+                android:id="@+id/title_scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scrollbars="none"
@@ -39,15 +40,15 @@
                 android:background="#44888888">
             </View>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_content"
+            <android.support.v4.view.ViewPager
+                android:id="@+id/view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_below="@+id/divide">
-            </android.support.v7.widget.RecyclerView>
+            </android.support.v4.view.ViewPager>
 
         </LinearLayout>
 

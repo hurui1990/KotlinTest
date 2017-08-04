@@ -1,19 +1,18 @@
 package com.example.hurui.news.activity
 
-import android.Manifest
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Paint
+import android.graphics.Rect
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
+import android.support.v4.app.Fragment
+import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.*
@@ -23,27 +22,21 @@ import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.example.hurui.news.R
 import com.example.hurui.news.adapter.DrawerListAdapter
-import com.example.hurui.news.adapter.RecyclerAdapter
 import com.example.hurui.news.presenter.LoadNewsPresenter
 import com.example.hurui.news.utils.Utils
 import com.example.hurui.news.view.LoadNewsView
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.drawerlayout.*
 import kotlinx.android.synthetic.main.main_toolbar.*
-import java.io.File
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
+import com.example.hurui.news.adapter.ViewpagerAdapter
 import com.example.hurui.news.bean.*
-import java.util.*
+import kotlin.collections.ArrayList
 
-class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItemClickListener{
+class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItemClickListener, ViewPager.OnPageChangeListener {
 
     var newTypes : ArrayList<NewType>? = null
     var drawerItemTypes : ArrayList<MenuType>? =null
-    var mLoadNewsPresenter : LoadNewsPresenter? = null
-
-    var dataAdapter : RecyclerAdapter? = null
-    var dataList : ArrayList<NewsDetail>? =null
 
     var drawerAdapter : DrawerListAdapter? = null
     var drawerTogger : ActionBarDrawerToggle? = null
@@ -54,10 +47,17 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
     var editor : SharedPreferences.Editor? = null
     var cityname : String? = null
     var mMapLoaction : AMapLocation? = null
+    var mLoadNewsPresenter : LoadNewsPresenter? = null
+    var fragmentList : ArrayList<Fragment>? = null
+    var screenWidth : Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawerlayout)
+
+        var wm : WindowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager;
+
+        screenWidth = wm.defaultDisplay.width
 
         toolbar.title = "新闻速递"
         toolbar.setTitleTextColor(resources.getColor(R.color.white, null))
@@ -69,20 +69,12 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
 
         drawerTogger = ActionBarDrawerToggle(this, drawerlayout, toolbar ,R.string.back, R.string.main_title)
         drawerlayout.setDrawerListener(drawerTogger)
-
         mLoadNewsPresenter = LoadNewsPresenter(this)
 
         initScrollView()
         initDrawerMenu()
+        initFragments()
 
-        dataList = ArrayList<NewsDetail>()
-        dataAdapter = RecyclerAdapter(this)
-        dataAdapter!!.setHasStableIds(true)
-        dataAdapter!!.setData(dataList!!)
-
-        recycler_content.layoutManager = LinearLayoutManager(this)
-        recycler_content.addItemDecoration(DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
-        recycler_content.adapter = dataAdapter
 
         OnClickNewType(NewType("头条","top"))
 
@@ -118,6 +110,19 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
         mLocationClient!!.setLocationListener(mLocationListener)
         //开始定位
         mLocationClient!!.startLocation()
+    }
+
+    fun initFragments(){
+        fragmentList = ArrayList<Fragment>()
+        for(i in 0..9){
+            var fragment : Fragment = NewsFragment()
+            val bundle = Bundle()
+            bundle.putString("type", newTypes!![i].type)
+            fragment.arguments = bundle
+            fragmentList!!.add(fragment)
+        }
+        view_pager.adapter = ViewpagerAdapter(supportFragmentManager, fragmentList!!)
+        view_pager.setOnPageChangeListener(this)
     }
 
     //动态添加头部的新闻类型标签的布局
@@ -162,27 +167,11 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
                 (title_view.getChildAt(i) as TextView).setTextColor(resources.getColor(R.color.text_color))
             }
         }
-        mLoadNewsPresenter!!.loadNews(oldType.type)
     }
 
-    override fun setLoadNews(result: ArrayList<NewsDetail>) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            // 没有权限，申请权限。
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE),20)
-        }else{
-            // 有权限
-            dataAdapter?.setData(result)
-        }
+    override fun setLoadNews(result: ArrayList<NewsDetail>) {}
 
-    }
-
-    override fun loadNewsError(errorType: Int) {
-        //获取新闻信息失败
-        Toast.makeText(this,errorType.toString(),Toast.LENGTH_SHORT).show()
-    }
+    override fun loadNewsError(errorType: Int) {}
 
     override fun loadWeather(result: WeatherData) {
         var nowWeather : HeWeather5Bean = result.HeWeather5[0]
@@ -216,6 +205,14 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPageScrollStateChanged(state: Int) {}
+
+    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+
+    override fun onPageSelected(position: Int) {
+        OnClickNewType(newTypes!![position])
     }
 
     fun initDrawerMenu(){
@@ -310,9 +307,5 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
                 return
             }
         }
-    }
-
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        return super.onTouchEvent(event)
     }
 }
