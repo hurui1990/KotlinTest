@@ -31,6 +31,7 @@ import com.example.hurui.news.adapter.PoisAdapter
 import com.example.hurui.news.view.MyDivider
 import com.suke.widget.SwitchButton
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by hurui on 2017/8/2.
@@ -38,7 +39,7 @@ import java.util.*
 class MapActivity : AppCompatActivity(),
         View.OnClickListener,
         SearchView.OnQueryTextListener,
-        PoiSearch.OnPoiSearchListener, SearchView.OnCloseListener, PoisAdapter.OnItemClickListener, RadioGroup.OnCheckedChangeListener, SwitchButton.OnCheckedChangeListener {
+        PoiSearch.OnPoiSearchListener, SearchView.OnCloseListener, PoisAdapter.OnItemClickListener, RadioGroup.OnCheckedChangeListener, SwitchButton.OnCheckedChangeListener, AMap.OnCameraChangeListener {
 
     var aMap: AMap? = null
     var mMyLocationStyle: MyLocationStyle? = null
@@ -51,11 +52,14 @@ class MapActivity : AppCompatActivity(),
     var mQuery : PoiSearch.Query? = null
     var poiSearch : PoiSearch? = null
     var mPoiAdapter : PoisAdapter? = null
-    var orignZoomLevel : Float = 17f
+    var orignZoomLevel : Float = 12f
     var mTrafficPrefre : SharedPreferences? = null
     var mIndoorPrefre : SharedPreferences? = null
+    var mReliPrefre : SharedPreferences? = null
     var isTrafficOpen : Boolean = false
     var isIndoorOpen : Boolean = false
+    var isReliOpen : Boolean = false
+    var centerLatlon : LatLng? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,8 +70,10 @@ class MapActivity : AppCompatActivity(),
 
         mTrafficPrefre = getSharedPreferences("traffic",Context.MODE_PRIVATE)
         mIndoorPrefre = getSharedPreferences("indoor",Context.MODE_PRIVATE)
+        mReliPrefre = getSharedPreferences("reli",Context.MODE_PRIVATE)
         isTrafficOpen = mTrafficPrefre!!.getBoolean("isOpen", false)
         isIndoorOpen = mIndoorPrefre!!.getBoolean("isOpen", false)
+        isReliOpen = mReliPrefre!!.getBoolean("isOpen", false)
 
         if (aMap == null) {
             aMap = mMapView.map
@@ -102,6 +108,8 @@ class MapActivity : AppCompatActivity(),
         traffic_switch_btn.isChecked = isTrafficOpen
         indoor_switch_btn.setOnCheckedChangeListener(this)
         indoor_switch_btn.isChecked = isIndoorOpen
+        reli_switch_btn.setOnCheckedChangeListener(this)
+        reli_switch_btn.isChecked = isReliOpen
     }
 
     override fun onItemClick(view: View, poiitem: PoiItem) {
@@ -202,6 +210,7 @@ class MapActivity : AppCompatActivity(),
             R.id.traffic_switch_btn -> {
                 var editor = mTrafficPrefre!!.edit()
                 editor.putBoolean("isOpen", isChecked).commit()
+                isTrafficOpen = isChecked
                 when(isChecked){
                     true -> { aMap!!.isTrafficEnabled = true }
                     false -> { aMap!!.isTrafficEnabled = false }
@@ -210,12 +219,37 @@ class MapActivity : AppCompatActivity(),
             R.id.indoor_switch_btn -> {
                 var editor = mIndoorPrefre!!.edit()
                 editor.putBoolean("isOpen", isChecked).commit()
+                isIndoorOpen = isChecked
                 when(isChecked){
                     true -> { aMap!!.showIndoorMap(true) }
                     false -> { aMap!!.showIndoorMap(false) }
                 }
             }
+            R.id.reli_switch_btn -> {
+                var editor = mReliPrefre!!.edit()
+                editor.putBoolean("isOpen", isChecked).commit()
+                isReliOpen = isChecked
+                when(isChecked){
+                    true -> {
+                        setReliMap(centerLatlon!!.latitude,centerLatlon!!.longitude)
+                    }
+                    false -> {
+                        aMap!!.clear(true)
+                    }
+                }
+            }
         }
+    }
+
+    override fun onCameraChangeFinish(cameraPosition: CameraPosition?) {
+        Log.i("==============",cameraPosition.toString())
+        centerLatlon = LatLng(cameraPosition!!.target.latitude, cameraPosition.target.longitude)
+        if(isReliOpen) {
+            setReliMap(cameraPosition!!.target.latitude, cameraPosition.target.longitude)
+        }
+    }
+
+    override fun onCameraChange(cameraPosition: CameraPosition?) {
     }
 
     fun setListViewGone(){
@@ -238,6 +272,7 @@ class MapActivity : AppCompatActivity(),
         var latlonPosition: LatLng = LatLng(mMapLoaction!!.latitude, mMapLoaction!!.longitude)
         aMap!!.moveCamera(CameraUpdateFactory.changeLatLng(latlonPosition))
         aMap!!.moveCamera(CameraUpdateFactory.zoomTo(orignZoomLevel))
+        aMap!!.setOnCameraChangeListener(this)
     }
 
     fun setLocationOption() {
@@ -287,6 +322,34 @@ class MapActivity : AppCompatActivity(),
                 mMapView.onResume()
             }
         }
+    }
+
+    fun setReliMap(lat : Double, lon : Double){
+        aMap!!.clear(true)
+        var latlngs : ArrayList<LatLng> = ArrayList(5000)
+        var x : Double = lat
+        var y : Double = lon
+
+        for (i in 0..4999) {
+            var x_: Double = 0.0
+            var y_: Double = 0.0
+            x_ = Math.random() * 0.5 - 0.25
+            y_ = Math.random() * 0.5 - 0.25
+            latlngs.add(LatLng(x + x_, y + y_))
+        }
+
+        // 构建热力图 HeatmapTileProvider
+        var builder : HeatmapTileProvider.Builder =  HeatmapTileProvider.Builder()
+        builder.data(latlngs)
+        // Gradient 的设置可见参考手册
+        // 构造热力图对象
+        var heatmapTileProvider : HeatmapTileProvider = builder.build()
+
+        var tileOverlayOptions : TileOverlayOptions  = TileOverlayOptions()
+        tileOverlayOptions.tileProvider(heatmapTileProvider) // 设置瓦片图层的提供者
+        // 向地图上添加 TileOverlayOptions 类对象
+        aMap!!.addTileOverlay(tileOverlayOptions)
+
     }
 
     override fun onResume() {

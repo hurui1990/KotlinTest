@@ -322,5 +322,47 @@
 
         </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            >
+
+            <ImageView
+                android:id="@+id/reli"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_reli"
+                android:background="@drawable/round_img_shape_2"
+                android:layout_centerVertical="true"
+                android:padding="5dp"
+                />
+
+            <TextView
+                android:text="热力图"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/reli"
+                android:layout_marginLeft="10dp"/>
+
+            <com.suke.widget.SwitchButton
+                android:id="@+id/reli_switch_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                app:sb_checked_color="@color/switch_select"
+                app:sb_checked="false"
+                android:layout_alignParentRight="true"
+                />
+
+        </RelativeLayout>
+
     </LinearLayout>
 </android.support.v4.widget.DrawerLayout>
