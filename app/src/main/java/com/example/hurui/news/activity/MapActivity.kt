@@ -1,5 +1,7 @@
 package com.example.hurui.news.activity
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
@@ -9,6 +11,7 @@ import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
 import android.view.animation.ScaleAnimation
+import android.widget.RadioGroup
 import android.widget.SearchView
 import android.widget.Toast
 import com.amap.api.location.AMapLocation
@@ -26,6 +29,7 @@ import com.amap.api.services.poisearch.PoiResult
 import com.amap.api.services.poisearch.PoiSearch
 import com.example.hurui.news.adapter.PoisAdapter
 import com.example.hurui.news.view.MyDivider
+import com.suke.widget.SwitchButton
 import java.util.*
 
 /**
@@ -34,7 +38,7 @@ import java.util.*
 class MapActivity : AppCompatActivity(),
         View.OnClickListener,
         SearchView.OnQueryTextListener,
-        PoiSearch.OnPoiSearchListener, SearchView.OnCloseListener, PoisAdapter.OnItemClickListener {
+        PoiSearch.OnPoiSearchListener, SearchView.OnCloseListener, PoisAdapter.OnItemClickListener, RadioGroup.OnCheckedChangeListener, SwitchButton.OnCheckedChangeListener {
 
     var aMap: AMap? = null
     var mMyLocationStyle: MyLocationStyle? = null
@@ -48,6 +52,10 @@ class MapActivity : AppCompatActivity(),
     var poiSearch : PoiSearch? = null
     var mPoiAdapter : PoisAdapter? = null
     var orignZoomLevel : Float = 17f
+    var mTrafficPrefre : SharedPreferences? = null
+    var mIndoorPrefre : SharedPreferences? = null
+    var isTrafficOpen : Boolean = false
+    var isIndoorOpen : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +64,10 @@ class MapActivity : AppCompatActivity(),
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
         mMapView!!.onCreate(savedInstanceState)
 
+        mTrafficPrefre = getSharedPreferences("traffic",Context.MODE_PRIVATE)
+        mIndoorPrefre = getSharedPreferences("indoor",Context.MODE_PRIVATE)
+        isTrafficOpen = mTrafficPrefre!!.getBoolean("isOpen", false)
+        isIndoorOpen = mIndoorPrefre!!.getBoolean("isOpen", false)
 
         if (aMap == null) {
             aMap = mMapView.map
@@ -67,6 +79,9 @@ class MapActivity : AppCompatActivity(),
 
         mUiSettings!!.isZoomControlsEnabled = false
         aMap!!.mapType = AMap.MAP_TYPE_NORMAL
+        aMap!!.isTrafficEnabled = isTrafficOpen
+        aMap!!.showIndoorMap(isIndoorOpen)
+        aMap!!.moveCamera(CameraUpdateFactory.changeLatLng(LatLng(104.06, 30.67)))
 
         mPoiAdapter = PoisAdapter(this)
         search_list.layoutManager = LinearLayoutManager(this)
@@ -81,13 +96,12 @@ class MapActivity : AppCompatActivity(),
         maxZoom.setOnClickListener(this)
         minZoom.setOnClickListener(this)
         location_btn.setOnClickListener(this)
-    }
-
-    fun setListViewGone(){
-        var scaleAnim : ScaleAnimation = ScaleAnimation(1f, 1f, 1f, 0f, 0.5f, 0f)
-        scaleAnim.duration = 300
-        search_list.animation = scaleAnim
-        search_list.visibility = View.GONE
+        mapType_seclect.setOnCheckedChangeListener(this)
+        mapType_seclect.check(R.id.normal_map)
+        traffic_switch_btn.setOnCheckedChangeListener(this)
+        traffic_switch_btn.isChecked = isTrafficOpen
+        indoor_switch_btn.setOnCheckedChangeListener(this)
+        indoor_switch_btn.isChecked = isIndoorOpen
     }
 
     override fun onItemClick(view: View, poiitem: PoiItem) {
@@ -100,17 +114,12 @@ class MapActivity : AppCompatActivity(),
         return false
     }
 
+    //searchview输入事件监听
     override fun onQueryTextSubmit(query: String?): Boolean {
-        if(query!!.length <= 0){
-            setListViewGone()
-        }else {
-            if(search_list.visibility != View.VISIBLE){
-                var scaleAnim : ScaleAnimation = ScaleAnimation(1f, 1f, 0f, 1f, 0.5f, 0f)
-                scaleAnim.duration = 300
-                search_list.animation = scaleAnim
-                search_list.visibility = View.VISIBLE
-            }
-        }
+        var scaleAnim : ScaleAnimation = ScaleAnimation(1f, 1f, 0f, 1f, 0.5f, 0f)
+        scaleAnim.duration = 300
+        search_list.animation = scaleAnim
+        search_list.visibility = View.VISIBLE
         mQuery = PoiSearch.Query(query, "", mMapLoaction!!.city)
         poiSearch = PoiSearch(this, mQuery)
         poiSearch!!.setOnPoiSearchListener(this)
@@ -125,6 +134,7 @@ class MapActivity : AppCompatActivity(),
     override fun onPoiItemSearched(p0: PoiItem?, p1: Int) {
     }
 
+    //POI搜索结果返回
     override fun onPoiSearched(result: PoiResult?, p1: Int) {
         Log.i("==============", result!!.pois.size.toString())
         if(result!!.pois.size == 0){
@@ -147,6 +157,7 @@ class MapActivity : AppCompatActivity(),
         mPoiAdapter!!.setData(result!!.pois)
     }
 
+    //控件点击事件
     override fun onClick(v: View?) {
         when(v!!.id){
             R.id.open_map_setting -> {
@@ -170,6 +181,50 @@ class MapActivity : AppCompatActivity(),
         }
     }
 
+    //radiobutton点击事件
+    override fun onCheckedChanged(group: RadioGroup?, checkedId: Int) {
+        when(checkedId){
+            R.id.normal_map -> {
+                setMapDisplayType(AMap.MAP_TYPE_NORMAL)
+            }
+            R.id.satellite_map -> {
+                setMapDisplayType(AMap.MAP_TYPE_SATELLITE)
+            }
+            R.id.night_map -> {
+                setMapDisplayType(AMap.MAP_TYPE_NIGHT)
+            }
+        }
+    }
+
+    override fun onCheckedChanged(view: SwitchButton?, isChecked: Boolean) {
+
+        when(view!!.id){
+            R.id.traffic_switch_btn -> {
+                var editor = mTrafficPrefre!!.edit()
+                editor.putBoolean("isOpen", isChecked).commit()
+                when(isChecked){
+                    true -> { aMap!!.isTrafficEnabled = true }
+                    false -> { aMap!!.isTrafficEnabled = false }
+                }
+            }
+            R.id.indoor_switch_btn -> {
+                var editor = mIndoorPrefre!!.edit()
+                editor.putBoolean("isOpen", isChecked).commit()
+                when(isChecked){
+                    true -> { aMap!!.showIndoorMap(true) }
+                    false -> { aMap!!.showIndoorMap(false) }
+                }
+            }
+        }
+    }
+
+    fun setListViewGone(){
+        var scaleAnim : ScaleAnimation = ScaleAnimation(1f, 1f, 1f, 0f, 0.5f, 0f)
+        scaleAnim.duration = 300
+        search_list.animation = scaleAnim
+        search_list.visibility = View.GONE
+    }
+
     fun initMap() {
         mMyLocationStyle = MyLocationStyle()
         mMyLocationStyle!!.strokeColor(resources.getColor(R.color.white))// 设置圆形的边框颜色
@@ -179,7 +234,6 @@ class MapActivity : AppCompatActivity(),
         mMyLocationStyle!!.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE)
         aMap!!.myLocationStyle = mMyLocationStyle
         aMap!!.isMyLocationEnabled = true
-        aMap!!.showIndoorMap(true)
 
         var latlonPosition: LatLng = LatLng(mMapLoaction!!.latitude, mMapLoaction!!.longitude)
         aMap!!.moveCamera(CameraUpdateFactory.changeLatLng(latlonPosition))

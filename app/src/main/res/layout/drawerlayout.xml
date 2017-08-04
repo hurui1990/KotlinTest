@@ -68,6 +68,7 @@
             android:layout_height="180dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
+            android:background="#aa3a9ade"
             >
 
             <com.example.hurui.news.view.RoundImageView

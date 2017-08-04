@@ -2,6 +2,7 @@
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/map_drawer">
 
     <FrameLayout
@@ -143,6 +144,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginBottom="30dp"
+                android:padding="3dp"
                 android:background="@drawable/zoom_shape"
                 />
 
@@ -157,6 +159,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:background="@drawable/searchlist_shape"
+                android:visibility="gone"
                 >
             </android.support.v7.widget.RecyclerView>
 
@@ -166,9 +169,158 @@
     <LinearLayout
         android:id="@+id/drawer"
         android:orientation="vertical"
-        android:layout_width="250dp"
+        android:layout_width="220dp"
         android:layout_height="match_parent"
-        android:background="#ffffff"
-        android:layout_gravity="end">
+        android:background="#dd3a9ade"
+        android:layout_gravity="end"
+        android:paddingTop="15dp">
+
+        <RadioGroup
+            android:id="@+id/mapType_seclect"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_margin="10dp">
+
+            <RadioButton
+                android:id="@+id/normal_map"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="地图"
+                android:textSize="12sp"
+                android:textColor="@color/radiobutton_text"
+                android:gravity="center"
+                android:background="@drawable/left_radio_select"
+                android:button="@null"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                />
+
+            <TextView
+                android:layout_width="1dp"
+                android:layout_height="match_parent" />
+
+            <RadioButton
+                android:id="@+id/satellite_map"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="卫星"
+                android:textSize="12sp"
+                android:textColor="@color/radiobutton_text"
+                android:gravity="center"
+                android:background="@drawable/center_radio_select"
+                android:button="@null"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                />
+
+            <TextView
+                android:layout_width="1dp"
+                android:layout_height="match_parent" />
+
+            <RadioButton
+                android:id="@+id/night_map"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="夜间"
+                android:textSize="12sp"
+                android:textColor="@color/radiobutton_text"
+                android:gravity="center"
+                android:background="@drawable/right_radio_select"
+                android:button="@null"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                />
+
+        </RadioGroup>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            >
+
+            <ImageView
+                android:id="@+id/jiaptong"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_traffic"
+                android:background="@drawable/round_img_shape"
+                android:layout_centerVertical="true"
+                android:padding="5dp"
+                />
+
+            <TextView
+                android:text="实时交通"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/jiaptong"
+                android:layout_marginLeft="10dp"/>
+
+            <com.suke.widget.SwitchButton
+                android:id="@+id/traffic_switch_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                app:sb_checked_color="@color/switch_select"
+                app:sb_checked="false"
+                android:layout_alignParentRight="true"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            >
+
+            <ImageView
+                android:id="@+id/indoor"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_indoor"
+                android:background="@drawable/round_img_shape_1"
+                android:layout_centerVertical="true"
+                android:padding="5dp"
+                />
+
+            <TextView
+                android:text="室内地图"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/indoor"
+                android:layout_marginLeft="10dp"/>
+
+            <com.suke.widget.SwitchButton
+                android:id="@+id/indoor_switch_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                app:sb_checked_color="@color/switch_select"
+                app:sb_checked="false"
+                android:layout_alignParentRight="true"
+                />
+
+        </RelativeLayout>
+
     </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

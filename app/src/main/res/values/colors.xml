@@ -8,4 +8,7 @@
     <color name="white">#ffffff</color>
     <color name="mapPrimaryDark">#6e0397ff</color>
     <color name="maolocation">#1c5fb4e2</color>
+    <color name="switch_select">#ffae2c</color>
+    <color name="switch_unselect">#ffffff</color>
+    <color name="radiobutton_text">#000000</color>
 </resources>
