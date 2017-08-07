@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.KeyEvent
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_newdetail.*
 
 import com.example.hurui.news.R
@@ -28,9 +31,10 @@ class NewsDetailActivity : AppCompatActivity() {
         var url = intent.getStringExtra("url")
         var title = intent.getStringExtra("title")
 
-        newdetail_toolbar.title = title
         newdetail_toolbar.setTitleTextColor(resources.getColor(R.color.white))
-        newdetail_toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_open)
+        newdetail_toolbar.title = title
+        newdetail_toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_keyboard_arrow_left)
+        setSupportActionBar(newdetail_toolbar)
 
         news_detail.loadUrl(url)
 
@@ -60,5 +64,22 @@ class NewsDetailActivity : AppCompatActivity() {
             overridePendingTransition(R.anim.activity_enter_after,R.anim.activity_out_after)
         }
         return super.onKeyDown(keyCode, event)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.detail_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+
+        when(item!!.itemId){
+            R.id.share -> {
+                //TODO:实现社会化分享
+
+                Toast.makeText(this,"分享",Toast.LENGTH_LONG).show()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
