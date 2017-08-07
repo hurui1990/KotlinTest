@@ -1,5 +1,6 @@
 package com.example.hurui.news.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -9,38 +10,45 @@ import android.view.animation.AlphaAnimation
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
-import kotlinx.android.synthetic.main.activity_about.*
+import kotlinx.android.synthetic.main.activity_newdetail.*
 
 import com.example.hurui.news.R
-import kotlinx.android.synthetic.main.activity_newdetail.*
 
 /**
  * Created by hurui on 2017/8/3.
  */
 
-class AboutActivity : AppCompatActivity() {
+class NewsDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_about)
+        setContentView(R.layout.activity_newdetail)
 
-        about_view.loadUrl("https://hurui1990.github.io/hurui.github.io/about/")
+        var intent : Intent = intent
+        var url = intent.getStringExtra("url")
+        var title = intent.getStringExtra("title")
 
-        var webSetting : WebSettings = about_view.settings
+        newdetail_toolbar.title = title
+        newdetail_toolbar.setTitleTextColor(resources.getColor(R.color.white))
+        newdetail_toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_open)
+
+        news_detail.loadUrl(url)
+
+        var webSetting : WebSettings = news_detail.settings
         webSetting.javaScriptEnabled = true
         webSetting.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
 
-        about_view.setWebChromeClient(object : WebChromeClient(){
+        news_detail.setWebChromeClient(object : WebChromeClient(){
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
                 super.onProgressChanged(view, newProgress)
+                progress.progress = newProgress
                 Log.i("===============", "进度："+newProgress)
-                progressbar.progress = newProgress
                 if(newProgress == 100) {
-                    progressbar.visibility = View.GONE
+                    progress.visibility = View.GONE
                     var alphaAnim: AlphaAnimation = AlphaAnimation(0f, 1f)
                     alphaAnim.duration = 500
-                    about_view.animation = alphaAnim
-                    about_view.visibility = View.VISIBLE
+                    news_detail.animation = alphaAnim
+                    news_detail.visibility = View.VISIBLE
                 }
             }
         })

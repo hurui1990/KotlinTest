@@ -16,17 +16,23 @@ import com.squareup.picasso.Picasso
  * Created by hurui on 2017/7/28.
  */
 class RecyclerAdapter(context:Context)
-    : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
+    : RecyclerView.Adapter<RecyclerView.ViewHolder>(), View.OnClickListener {
     var mContext : Context = context
     var mDataList = ArrayList<NewsDetail>()
     var type0 = 0
     var type1 = 1
     var type2 = 2
     var type3 = 3
+    var onItemClickListener : OnItemClickListener? = null;
+
+    interface OnItemClickListener{
+        fun onItemClick(view:View, position:Int)
+    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         var item: NewsDetail = mDataList[position]
+        holder!!.itemView.tag = position
+        holder!!.itemView.setOnClickListener(this)
         when(getItemViewType(position)){
             type0 -> {
                 holder!!.itemView.visibility = View.GONE
@@ -95,6 +101,16 @@ class RecyclerAdapter(context:Context)
             3 -> {return type3}
             else -> {return type0}
         }
+    }
+
+    override fun onClick(v: View?) {
+        if(onItemClickListener != null){
+            onItemClickListener!!.onItemClick(v!!, v.tag as Int)
+        }
+    }
+
+    fun setItemClickListener(listener: OnItemClickListener){
+        onItemClickListener = listener
     }
 
     fun setData(dataList: ArrayList<NewsDetail>){

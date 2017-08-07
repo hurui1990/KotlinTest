@@ -1,5 +1,6 @@
 package com.example.hurui.news.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
@@ -20,7 +21,7 @@ import java.util.ArrayList
  * Created by hurui on 2017/8/4.
  */
 
-class NewsFragment : Fragment(), LoadNewsView {
+class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListener {
 
     var mLoadNewsPresenter : LoadNewsPresenter? = null
 
@@ -39,12 +40,23 @@ class NewsFragment : Fragment(), LoadNewsView {
         dataAdapter!!.setHasStableIds(true)
         dataAdapter!!.setData(dataList!!)
 
+        dataAdapter!!.setItemClickListener(this)
+
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view : View = inflater!!.inflate(R.layout.fragment_news, container, false)
         return view
     }
+
+    override fun onItemClick(view: View, position: Int) {
+        var itemData = dataList!![position]
+        var intent : Intent = Intent(activity, NewsDetailActivity::class.java)
+        intent.putExtra("url", itemData.url)
+        intent.putExtra("title", itemData.title)
+        activity.startActivity(intent)
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -56,6 +68,8 @@ class NewsFragment : Fragment(), LoadNewsView {
     }
 
     override fun setLoadNews(result: ArrayList<NewsDetail>) {
+        dataList!!.clear()
+        dataList = result
         dataAdapter?.setData(result)
     }
 

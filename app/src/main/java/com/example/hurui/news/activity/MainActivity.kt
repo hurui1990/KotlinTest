@@ -29,7 +29,6 @@ import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
 import com.example.hurui.news.adapter.ViewpagerAdapter
 import com.example.hurui.news.bean.*
-import kotlinx.android.synthetic.main.fragment_news.*
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItemClickListener, ViewPager.OnPageChangeListener {
@@ -49,7 +48,6 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
     var mLoadNewsPresenter : LoadNewsPresenter? = null
     var fragmentList : ArrayList<Fragment>? = null
     var screenWidth : Int? = null
-    var oldPage : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -4,8 +4,16 @@
     android:layout_height="match_parent"
     android:gravity="center">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/newdetail_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimaryDark"
+        android:minHeight="?attr/actionBarSize">
+    </android.support.v7.widget.Toolbar>
+
     <ProgressBar
-        android:id="@+id/progressbar"
+        android:id="@+id/progress"
         android:layout_below="@+id/newdetail_toolbar"
         android:layout_width="match_parent"
         android:layout_height="2dp"
@@ -13,10 +21,10 @@
         android:progress="0"/>
 
     <WebView
-        android:id="@+id/about_view"
+        android:id="@+id/news_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible"
-        android:layout_below="@+id/progress">
+        android:layout_below="@+id/progress"
+        android:visibility="invisible">
     </WebView>
 </RelativeLayout>
