@@ -29,6 +29,7 @@ import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
 import com.example.hurui.news.adapter.ViewpagerAdapter
 import com.example.hurui.news.bean.*
+import kotlinx.android.synthetic.main.drawerfooter.*
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItemClickListener, ViewPager.OnPageChangeListener {
