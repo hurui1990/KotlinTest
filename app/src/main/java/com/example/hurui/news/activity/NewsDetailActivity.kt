@@ -3,7 +3,6 @@ package com.example.hurui.news.activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
@@ -12,7 +11,6 @@ import android.view.animation.AlphaAnimation
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_newdetail.*
 
 import com.example.hurui.news.R
@@ -23,13 +21,16 @@ import com.example.hurui.news.R
 
 class NewsDetailActivity : AppCompatActivity() {
 
+    var url : String? = null
+    var title : String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newdetail)
 
         var intent : Intent = intent
-        var url = intent.getStringExtra("url")
-        var title = intent.getStringExtra("title")
+        url = intent.getStringExtra("url")
+        title = intent.getStringExtra("title")
 
         newdetail_toolbar.setTitleTextColor(resources.getColor(R.color.white))
         newdetail_toolbar.title = title
@@ -46,7 +47,6 @@ class NewsDetailActivity : AppCompatActivity() {
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
                 super.onProgressChanged(view, newProgress)
                 progress.progress = newProgress
-                Log.i("===============", "进度："+newProgress)
                 if(newProgress == 100) {
                     progress.visibility = View.GONE
                     var alphaAnim: AlphaAnimation = AlphaAnimation(0f, 1f)
@@ -75,9 +75,16 @@ class NewsDetailActivity : AppCompatActivity() {
 
         when(item!!.itemId){
             R.id.share -> {
-                //TODO:实现社会化分享
-
-                Toast.makeText(this,"分享",Toast.LENGTH_LONG).show()
+                val intent = Intent(Intent.ACTION_SEND)
+                intent.type = "text/plain"
+                intent.putExtra(Intent.EXTRA_TEXT, url)
+                intent.putExtra(Intent.EXTRA_SUBJECT, title)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(Intent.createChooser(intent, "分享到"))
+            }
+            android.R.id.home -> {
+                finish()
+                overridePendingTransition(R.anim.activity_enter_after,R.anim.activity_out_after)
             }
         }
         return super.onOptionsItemSelected(item)

@@ -12,7 +12,6 @@ import android.webkit.WebView
 import kotlinx.android.synthetic.main.activity_about.*
 
 import com.example.hurui.news.R
-import kotlinx.android.synthetic.main.activity_newdetail.*
 
 /**
  * Created by hurui on 2017/8/3.
