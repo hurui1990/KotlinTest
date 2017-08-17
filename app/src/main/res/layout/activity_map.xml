@@ -81,6 +81,143 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/daohanglayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/search_shape"
+                android:gravity="center"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                    <ImageView
+                        android:id="@+id/img_switch_location"
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_change"
+                        android:layout_marginLeft="5dp"
+                        android:scaleType="fitCenter"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="5dp">
+
+                        <EditText
+                            android:id="@+id/et_orin"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:hint="请输入出发地"
+                            android:background="@null"
+                            />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            ></View>
+
+                        <EditText
+                            android:id="@+id/et_des"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:hint="请输入目的地"
+                            android:background="@null"
+                            />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txt_daohang"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:text="搜索"
+                        android:textSize="16sp"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"></View>
+
+                <RadioGroup
+                    android:id="@+id/out_select"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp">
+
+                    <RadioButton
+                        android:id="@+id/rb_buxing"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="步行"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:background="@drawable/path_select"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/rb_drive"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="驾车"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:background="@drawable/path_select"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"/>
+
+                    <RadioButton
+                        android:id="@+id/rb_bus"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="公交"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:background="@drawable/path_select"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"/>
+
+                    <RadioButton
+                        android:id="@+id/rb_bike"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="骑行"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:background="@drawable/path_select"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"/>
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/layout_no_result"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -108,11 +245,11 @@
                 android:orientation="vertical"
                 android:layout_width="30dp"
                 android:layout_height="61dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="20dp"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/zoom_shape">
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/zoom_shape"
+                android:layout_above="@+id/location_btn">
 
                 <ImageView
                     android:id="@+id/maxZoom"
@@ -142,11 +279,23 @@
                 android:layout_height="30dp"
                 android:src="@drawable/ic_my_location_black_24dp"
                 android:layout_alignParentBottom="true"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="30dp"
                 android:padding="3dp"
                 android:background="@drawable/zoom_shape"
                 />
+
+            <ImageView
+                android:id="@+id/daohang"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/daohang_shape"
+                android:src="@drawable/ic_daohang"
+                android:padding="10dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="30dp"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/search_list"

@@ -61,6 +61,7 @@
         android:orientation="vertical"
         android:layout_gravity="start"
         android:background="#ddffffff"
+        android:clickable="true"
         >
 
         <LinearLayout

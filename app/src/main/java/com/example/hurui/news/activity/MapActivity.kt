@@ -3,17 +3,16 @@ package com.example.hurui.news.activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
 import android.view.animation.ScaleAnimation
-import android.widget.RadioGroup
-import android.widget.SearchView
-import android.widget.Toast
+import android.widget.*
 import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
@@ -24,9 +23,11 @@ import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.UiSettings
 import com.amap.api.maps.model.*
+import com.amap.api.services.core.LatLonPoint
 import com.amap.api.services.core.PoiItem
 import com.amap.api.services.poisearch.PoiResult
 import com.amap.api.services.poisearch.PoiSearch
+import com.amap.api.services.route.*
 import com.example.hurui.news.adapter.PoisAdapter
 import com.example.hurui.news.view.MyDivider
 import com.suke.widget.SwitchButton
@@ -39,7 +40,7 @@ import kotlin.collections.ArrayList
 class MapActivity : AppCompatActivity(),
         View.OnClickListener,
         SearchView.OnQueryTextListener,
-        PoiSearch.OnPoiSearchListener, SearchView.OnCloseListener, PoisAdapter.OnItemClickListener, RadioGroup.OnCheckedChangeListener, SwitchButton.OnCheckedChangeListener, AMap.OnCameraChangeListener {
+        PoiSearch.OnPoiSearchListener, SearchView.OnCloseListener, PoisAdapter.OnItemClickListener, RadioGroup.OnCheckedChangeListener, SwitchButton.OnCheckedChangeListener, AMap.OnCameraChangeListener, RouteSearch.OnRouteSearchListener, TextWatcher {
 
     var aMap: AMap? = null
     var mMyLocationStyle: MyLocationStyle? = null
@@ -60,6 +61,18 @@ class MapActivity : AppCompatActivity(),
     var isIndoorOpen : Boolean = false
     var isReliOpen : Boolean = false
     var centerLatlon : LatLng? = null
+    var isInDaohang : Boolean = false
+    final var BUXING : Int = 0
+    final var DRIVE : Int = 1
+    final var BUS : Int = 2
+    final var BIKE : Int = 3
+    var out_style : Int = 0
+    var oriText : String? = null
+    var desText : String? = null
+    var oriLatLonPoint : LatLonPoint? = null
+    var desLatLonPoint : LatLonPoint? = null
+    var routeSearch : RouteSearch? = null
+    var fromandto : RouteSearch.FromAndTo? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,19 +115,37 @@ class MapActivity : AppCompatActivity(),
         maxZoom.setOnClickListener(this)
         minZoom.setOnClickListener(this)
         location_btn.setOnClickListener(this)
+        daohang.setOnClickListener(this)
+        mMapView.setOnClickListener(this)
+        img_switch_location.setOnClickListener(this)
+        txt_daohang.setOnClickListener(this)
         mapType_seclect.setOnCheckedChangeListener(this)
         mapType_seclect.check(R.id.normal_map)
+        out_select.setOnCheckedChangeListener(this)
+        out_select.check(R.id.rb_buxing)
         traffic_switch_btn.setOnCheckedChangeListener(this)
         traffic_switch_btn.isChecked = isTrafficOpen
         indoor_switch_btn.setOnCheckedChangeListener(this)
         indoor_switch_btn.isChecked = isIndoorOpen
         reli_switch_btn.setOnCheckedChangeListener(this)
         reli_switch_btn.isChecked = isReliOpen
+
+        et_orin.addTextChangedListener(this)
+        et_des.addTextChangedListener(this)
+
     }
 
     override fun onItemClick(view: View, poiitem: PoiItem) {
-        var poi : PoiItem = poiitem
-        Toast.makeText(this,poi.toString(),Toast.LENGTH_LONG).show()
+        if(isInDaohang){
+            if(et_orin.isFocused){
+                oriLatLonPoint = poiitem.latLonPoint
+                et_orin.setText(poiitem.toString(),TextView.BufferType.EDITABLE)
+            }else if(et_des.isFocused){
+                desLatLonPoint = poiitem.latLonPoint
+                et_des.setText(poiitem.toString(),TextView.BufferType.EDITABLE)
+            }
+        }
+        search_list.visibility = View.GONE
     }
 
     override fun onClose(): Boolean {
@@ -144,7 +175,6 @@ class MapActivity : AppCompatActivity(),
 
     //POI搜索结果返回
     override fun onPoiSearched(result: PoiResult?, p1: Int) {
-        Log.i("==============", result!!.pois.size.toString())
         if(result!!.pois.size == 0){
             var scaleAnim : ScaleAnimation = ScaleAnimation(1f, 1f, 0f, 1f, 0.5f, 0f)
             scaleAnim.duration = 300
@@ -186,21 +216,132 @@ class MapActivity : AppCompatActivity(),
             R.id.location_btn -> {
                 setLocationOption()
             }
+            R.id.daohang -> {
+                if(isInDaohang) {
+                    daohang.setImageResource(R.drawable.ic_daohang)
+                    isInDaohang = false
+                    var scaleAnim : ScaleAnimation = ScaleAnimation(1f, 1f, 1f, 0f, 0.5f, 0f)
+                    scaleAnim.duration = 500
+                    daohanglayout.animation = scaleAnim
+                    daohanglayout.visibility = View.GONE
+
+                    Timer().schedule(object : TimerTask() {
+                        override fun run() {
+
+                            runOnUiThread {
+                                var scaleAnim : ScaleAnimation = ScaleAnimation(1f, 1f, 0f, 1f, 0.5f, 0f)
+                                scaleAnim.duration = 300
+                                mapsearchlayout.animation = scaleAnim
+                                mapsearchlayout.visibility = View.VISIBLE
+                            }
+                        }
+                    }, 500)
+
+                    var params : RelativeLayout.LayoutParams = search_list.layoutParams as RelativeLayout.LayoutParams
+                    params.addRule(RelativeLayout.BELOW, R.id.mapsearchlayout)
+                    search_list.layoutParams = params
+                }else{
+                    daohang.setImageResource(R.drawable.ic_cancel)
+                    isInDaohang = true
+                    var scaleAnim: ScaleAnimation = ScaleAnimation(1f, 1f, 1f, 0f, 0.5f, 0f)
+                    scaleAnim.duration = 300
+                    mapsearchlayout.animation = scaleAnim
+                    mapsearchlayout.visibility = View.INVISIBLE
+
+                    Timer().schedule(object : TimerTask() {
+                        override fun run() {
+
+                            runOnUiThread {
+                                var scaleAnim: ScaleAnimation = ScaleAnimation(1f, 1f, 0f, 1f, 0.5f, 0f)
+                                scaleAnim.duration = 500
+                                daohanglayout.animation = scaleAnim
+                                daohanglayout.visibility = View.VISIBLE
+                            }
+                        }
+                    }, 300)
+
+                    var params : RelativeLayout.LayoutParams = search_list.layoutParams as RelativeLayout.LayoutParams
+                    params.addRule(RelativeLayout.BELOW, R.id.daohanglayout)
+                    search_list.layoutParams = params
+                }
+
+            }
+            R.id.img_switch_location -> {
+                var et_change : String = ""
+                oriText = et_orin.text.toString()
+                desText = et_des.text.toString()
+
+                et_change = oriText!!
+                oriText = desText
+                desText = et_change
+
+                et_orin.setText(oriText, TextView.BufferType.NORMAL)
+                et_des.setText(desText, TextView.BufferType.NORMAL)
+
+            }
+            R.id.txt_daohang -> {
+                routeSearch = RouteSearch(this)
+                fromandto = RouteSearch.FromAndTo(oriLatLonPoint,desLatLonPoint)
+                routeSearch!!.setRouteSearchListener(this)
+                when(out_style){
+                    BUXING -> { setBuxingPath() }
+                    DRIVE -> { setDrivePath() }
+                    BUS -> { setBusPath() }
+                    BIKE -> { setBikePath() }
+                }
+            }
         }
+    }
+
+    fun setBuxingPath(){
+
+    }
+
+    fun setDrivePath(){}
+
+    fun setBusPath(){}
+
+    fun setBikePath(){}
+
+    override fun onDriveRouteSearched(p0: DriveRouteResult?, p1: Int) {
+
+    }
+
+    override fun onBusRouteSearched(p0: BusRouteResult?, p1: Int) {
+
+    }
+
+    override fun onRideRouteSearched(p0: RideRouteResult?, p1: Int) {
+
+    }
+
+    override fun onWalkRouteSearched(p0: WalkRouteResult?, p1: Int) {
+
+    }
+
+    override fun afterTextChanged(s: Editable?) {
+        Log.i("afterTextChanged", s!!.length.toString())
+    }
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        mQuery = PoiSearch.Query(s.toString(), "", mMapLoaction!!.city)
+        poiSearch = PoiSearch(this, mQuery)
+        poiSearch!!.setOnPoiSearchListener(this)
+        poiSearch!!.searchPOIAsyn()
     }
 
     //radiobutton点击事件
     override fun onCheckedChanged(group: RadioGroup?, checkedId: Int) {
         when(checkedId){
-            R.id.normal_map -> {
-                setMapDisplayType(AMap.MAP_TYPE_NORMAL)
-            }
-            R.id.satellite_map -> {
-                setMapDisplayType(AMap.MAP_TYPE_SATELLITE)
-            }
-            R.id.night_map -> {
-                setMapDisplayType(AMap.MAP_TYPE_NIGHT)
-            }
+            R.id.normal_map -> { setMapDisplayType(AMap.MAP_TYPE_NORMAL) }
+            R.id.satellite_map -> { setMapDisplayType(AMap.MAP_TYPE_SATELLITE) }
+            R.id.night_map -> { setMapDisplayType(AMap.MAP_TYPE_NIGHT) }
+            R.id.rb_buxing -> {out_style = BUXING}
+            R.id.rb_drive -> {out_style = DRIVE}
+            R.id.rb_bike -> {out_style = BIKE}
+            R.id.rb_bus -> {out_style = BUS}
         }
     }
 
@@ -279,7 +420,11 @@ class MapActivity : AppCompatActivity(),
         mLocationClient = AMapLocationClient(applicationContext)
         mLocationListener = AMapLocationListener { aMapLocation ->
             run {
-                Snackbar.make(map_drawer,"您当前的位置:"+aMapLocation.address,Snackbar.LENGTH_LONG).show()
+                if(aMapLocation.address.length == 0){
+                    Toast.makeText(this, "暂时无法定位，请稍后重试", Toast.LENGTH_LONG).show()
+                }else {
+                    Toast.makeText(this, "您当前的位置:" + aMapLocation.address, Toast.LENGTH_LONG).show()
+                }
                 Log.i("MapActivity", "返回值：" + aMapLocation.city)
                 mMapLoaction = aMapLocation
                 initMap()
