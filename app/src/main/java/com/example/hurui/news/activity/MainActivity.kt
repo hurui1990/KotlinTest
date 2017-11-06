@@ -5,12 +5,12 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.*
@@ -18,19 +18,18 @@ import android.widget.TextView
 import android.widget.Toast
 import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
+import com.amap.api.location.AMapLocationClientOption
+import com.amap.api.location.AMapLocationListener
 import com.example.hurui.news.R
 import com.example.hurui.news.adapter.DrawerListAdapter
+import com.example.hurui.news.adapter.ViewpagerAdapter
+import com.example.hurui.news.bean.*
 import com.example.hurui.news.presenter.LoadNewsPresenter
 import com.example.hurui.news.utils.Utils
 import com.example.hurui.news.view.LoadNewsView
+import kotlinx.android.synthetic.main.drawerfooter.*
 import kotlinx.android.synthetic.main.drawerlayout.*
 import kotlinx.android.synthetic.main.main_toolbar.*
-import com.amap.api.location.AMapLocationClientOption
-import com.amap.api.location.AMapLocationListener
-import com.example.hurui.news.adapter.ViewpagerAdapter
-import com.example.hurui.news.bean.*
-import kotlinx.android.synthetic.main.drawerfooter.*
-import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItemClickListener, ViewPager.OnPageChangeListener {
 
@@ -236,7 +235,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
     override fun onItemClick(view: View, position: Int) {
         var menuType : MenuType = drawerItemTypes!![position]
         when(menuType.itemtext){
-            "新闻咨询" -> { drawerlayout.closeDrawer(Gravity.START) }
+            "新闻咨询" -> { }
             "本地图片" -> {
                 //TODO: 跳转到本地图片页面
             }
@@ -257,17 +256,9 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
         }
     }
 
-    override fun onRestart() {
-        super.onRestart()
+    override fun onStop() {
         drawerlayout.closeDrawer(Gravity.START)
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
+        super.onStop()
     }
 
     override fun onDestroy() {
