@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawerlayout"
     tools:context="com.example.hurui.news.activity.MainActivity">
 
@@ -16,37 +17,30 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <include layout="@layout/main_toolbar"></include>
-
-            <HorizontalScrollView
-                android:id="@+id/title_scroll_view"
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/appbar_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="none"
-                >
-                <LinearLayout
-                    android:id="@+id/title_view"
-                    android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <include layout="@layout/main_toolbar"></include>
+
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tab_layout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:orientation="horizontal"
-                    >
-                </LinearLayout>
-            </HorizontalScrollView>
+                    app:tabMode="scrollable"
+                    android:background="@color/white"
+                    app:tabIndicatorColor="@color/colorPrimaryDark">
 
-            <View
-                android:id="@+id/divide"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#44888888">
-            </View>
+                </android.support.design.widget.TabLayout>
+            </android.support.design.widget.AppBarLayout>
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:layout_marginTop="10dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_below="@+id/divide">
@@ -111,8 +105,7 @@
             >
         </android.support.v7.widget.RecyclerView>
 
-        <include layout="@layout/drawerfooter">
-        </include>
+        <include layout="@layout/drawerfooter"></include>
 
     </LinearLayout>
 

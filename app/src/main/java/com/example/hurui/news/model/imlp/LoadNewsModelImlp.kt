@@ -1,12 +1,11 @@
 package com.example.hurui.news.model.imlp
 
 import android.util.Log
-import com.example.hurui.news.bean.Result
+import com.example.hurui.news.activity.NEED_REQUEST
 import com.example.hurui.news.bean.WeatherData
 import com.example.hurui.news.model.LoadNewsModel
 import com.example.hurui.news.model.OnLoadNewsListener
 import com.example.hurui.news.network.LoadNewsService
-import com.google.gson.Gson
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -29,6 +28,9 @@ class LoadNewsModelImlp(internal var onLoadNewsListener: OnLoadNewsListener) : L
 
     override fun loadNews(type: String) {
 
+        if(!NEED_REQUEST){
+            newsBaseUrl += "hurui"
+        }
         val retrofit = Retrofit.Builder()
                 .baseUrl(newsBaseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -40,19 +42,14 @@ class LoadNewsModelImlp(internal var onLoadNewsListener: OnLoadNewsListener) : L
         callback.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>?, response: Response<ResponseBody>?) {
                 var jsonStr : String = String(response!!.body()!!.bytes())
-                var gson : Gson = Gson()
-                var result : Result = gson.fromJson(jsonStr,Result::class.java)
-                mOnLoadNewsListener.onLoadSuccess(result.result.data)
+                mOnLoadNewsListener.onLoadSuccess(jsonStr)
             }
 
             override fun onFailure(call: Call<okhttp3.ResponseBody>?, t: Throwable?) {
                 Log.i("==============fa", t.toString())
+                mOnLoadNewsListener.onLoadFailed(400)
             }
         })
-
-//        var gson : Gson = Gson()
-//        var result : Result = gson.fromJson(content,Result::class.java)
-//        mOnLoadNewsListener.onLoadSuccess(result.result.data)
     }
 
     override fun loadWeather(city: String) {

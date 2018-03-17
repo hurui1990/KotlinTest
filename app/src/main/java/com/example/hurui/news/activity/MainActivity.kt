@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.*
-import android.widget.TextView
 import android.widget.Toast
 import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
@@ -23,9 +22,11 @@ import com.amap.api.location.AMapLocationListener
 import com.example.hurui.news.R
 import com.example.hurui.news.adapter.DrawerListAdapter
 import com.example.hurui.news.adapter.ViewpagerAdapter
-import com.example.hurui.news.bean.*
+import com.example.hurui.news.bean.HeWeather5Bean
+import com.example.hurui.news.bean.MenuType
+import com.example.hurui.news.bean.NewType
+import com.example.hurui.news.bean.WeatherData
 import com.example.hurui.news.presenter.LoadNewsPresenter
-import com.example.hurui.news.utils.Utils
 import com.example.hurui.news.view.LoadNewsView
 import kotlinx.android.synthetic.main.drawerfooter.*
 import kotlinx.android.synthetic.main.drawerlayout.*
@@ -48,6 +49,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
     var mLoadNewsPresenter : LoadNewsPresenter? = null
     var fragmentList : ArrayList<Fragment>? = null
     var screenWidth : Int? = null
+    var viewpagerAdapter : ViewpagerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,7 +117,11 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
             fragment.arguments = bundle
             fragmentList!!.add(fragment)
         }
-        view_pager.adapter = ViewpagerAdapter(supportFragmentManager, fragmentList!!)
+
+        viewpagerAdapter =  ViewpagerAdapter(supportFragmentManager, fragmentList!!, newTypes!!)
+        view_pager.adapter = viewpagerAdapter
+        tab_layout.setupWithViewPager(view_pager)
+        tab_layout.setTabsFromPagerAdapter(viewpagerAdapter)
         view_pager.setOnPageChangeListener(this)
     }
 
@@ -133,38 +139,13 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
         newTypes!!.add(NewType("财经","caijing"))
         newTypes!!.add(NewType("时尚","shishang"))
 
-        screenWidth = Utils.getScreenWidth(this)
 
         for (i in newTypes!!.indices){
-            val newType : NewType = newTypes!![i]
-            val textView : TextView = TextView(this)
-            textView.text = newType.name
-            textView.gravity = Gravity.CENTER
-            textView.textSize = resources.getDimension(R.dimen.title_text_size)
-            textView.width = screenWidth!! / 7
-            textView.setTextColor(resources.getColor(R.color.text_color))
-            if (i == 0) {
-                textView.setTextColor(resources.getColor(R.color.colorPrimaryDark))
-                mLoadNewsPresenter!!.loadNews(newType.type)
-            }
-            textView.setOnClickListener({OnClickNewType(newType,i)})
-            title_view.addView(textView)
+            tab_layout.addTab(tab_layout.newTab().setText(newTypes!![i].name))
         }
     }
 
-    fun OnClickNewType(oldType: NewType, i: Int){
-        view_pager.setCurrentItem(i,true)
-        for (i in newTypes!!.indices){
-            val newType = newTypes!![i]
-            if(newType.type == oldType.type){
-                (title_view.getChildAt(i) as TextView).setTextColor(resources.getColor(R.color.colorPrimaryDark))
-            }else{
-                (title_view.getChildAt(i) as TextView).setTextColor(resources.getColor(R.color.text_color))
-            }
-        }
-    }
-
-    override fun setLoadNews(result: ArrayList<NewsDetail>) {}
+    override fun setLoadNews(result: String) {}
 
     override fun loadNewsError(errorType: Int) {}
 
@@ -207,8 +188,6 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
     override fun onPageSelected(position: Int) {
-        OnClickNewType(newTypes!![position], position)
-        title_scroll_view.scrollTo((screenWidth!! / 7) * position, 0)
     }
 
     fun initDrawerMenu(){

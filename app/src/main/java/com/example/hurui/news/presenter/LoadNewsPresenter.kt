@@ -1,6 +1,5 @@
 package com.example.hurui.news.presenter
 
-import com.example.hurui.news.bean.NewsDetail
 import com.example.hurui.news.bean.WeatherData
 import com.example.hurui.news.model.OnLoadNewsListener
 import com.example.hurui.news.model.imlp.LoadNewsModelImlp
@@ -22,7 +21,7 @@ class LoadNewsPresenter(loadNewsView: LoadNewsView) : OnLoadNewsListener{
         mLoadNewsModel!!.loadNews(type)
     }
 
-    override fun onLoadSuccess(result: ArrayList<NewsDetail>) {
+    override fun onLoadSuccess(result: String) {
         mLoadNewsView!!.setLoadNews(result)
     }
 
