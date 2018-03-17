@@ -7,7 +7,7 @@
     android:id="@+id/drawerlayout"
     tools:context="com.example.hurui.news.activity.MainActivity">
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -47,67 +47,16 @@
                 >
             </android.support.v4.view.ViewPager>
         </LinearLayout>
-    </FrameLayout>
-
-    <LinearLayout
-        android:id="@+id/drawer"
-        android:layout_width="250dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_gravity="start"
-        android:background="#ddffffff"
-        android:clickable="true"
-        >
-
-        <LinearLayout
-            android:id="@+id/user_info"
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:background="#aa3a9ade"
-            >
-
-            <com.example.hurui.news.view.RoundImageView
-                android:id="@+id/icon"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/touxiang"
-                android:layout_marginLeft="20dp"
-                android:padding="1dp"
-                android:background="@drawable/imageborder"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_marginLeft="20dp"
-                android:text="胡小小瑞"
-                android:textSize="20sp"
-                android:gravity="center"
-                />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/black">
-        </View>
-
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/drawer_menu"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:paddingTop="20dp"
-            android:overScrollMode="never"
-            >
-        </android.support.v7.widget.RecyclerView>
-
-        <include layout="@layout/drawerfooter"></include>
-
     </LinearLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/drawer_head"
+        app:menu="@menu/drawer_layout"
+        >
+    </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>

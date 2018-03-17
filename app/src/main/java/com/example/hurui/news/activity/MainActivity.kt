@@ -1,29 +1,27 @@
 package com.example.hurui.news.activity
 
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
-import android.view.*
+import android.view.Gravity
+import android.view.KeyEvent
+import android.view.MenuItem
 import android.widget.Toast
 import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
 import com.example.hurui.news.R
-import com.example.hurui.news.adapter.DrawerListAdapter
 import com.example.hurui.news.adapter.ViewpagerAdapter
 import com.example.hurui.news.bean.HeWeather5Bean
-import com.example.hurui.news.bean.MenuType
 import com.example.hurui.news.bean.NewType
 import com.example.hurui.news.bean.WeatherData
 import com.example.hurui.news.presenter.LoadNewsPresenter
@@ -32,32 +30,23 @@ import kotlinx.android.synthetic.main.drawerfooter.*
 import kotlinx.android.synthetic.main.drawerlayout.*
 import kotlinx.android.synthetic.main.main_toolbar.*
 
-class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItemClickListener, ViewPager.OnPageChangeListener {
+class MainActivity : AppCompatActivity() ,LoadNewsView, ViewPager.OnPageChangeListener, NavigationView.OnNavigationItemSelectedListener {
 
+    val TAG = "MainActivity"
     var newTypes : ArrayList<NewType>? = null
-    var drawerItemTypes : ArrayList<MenuType>? =null
-
-    var drawerAdapter : DrawerListAdapter? = null
     var drawerTogger : ActionBarDrawerToggle? = null
     var mLocationListener : AMapLocationListener? = null
     var mLocationOption: AMapLocationClientOption? = null
     var mLocationClient : AMapLocationClient? = null
-    var sharePre : SharedPreferences? = null
-    var editor : SharedPreferences.Editor? = null
     var cityname : String? = null
     var mMapLoaction : AMapLocation? = null
     var mLoadNewsPresenter : LoadNewsPresenter? = null
     var fragmentList : ArrayList<Fragment>? = null
-    var screenWidth : Int? = null
     var viewpagerAdapter : ViewpagerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawerlayout)
-
-        var wm : WindowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager;
-
-        screenWidth = wm.defaultDisplay.width
 
         toolbar.title = "新闻速递"
         toolbar.setTitleTextColor(resources.getColor(R.color.white))
@@ -71,8 +60,10 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
         drawerlayout.setDrawerListener(drawerTogger)
         mLoadNewsPresenter = LoadNewsPresenter(this)
 
+        navigation_view.setNavigationItemSelectedListener(this)
+        navigation_view.itemIconTintList = null
+
         initScrollView()
-        initDrawerMenu()
         initFragments()
         setLocationOption()
     }
@@ -80,14 +71,12 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
     fun setLocationOption(){
         mLocationClient = AMapLocationClient(applicationContext)
         mLocationListener = AMapLocationListener { aMapLocation -> run{
-            Log.i("======", "返回值："+aMapLocation.city)
+            Log.i(TAG, "返回值："+aMapLocation.city)
             mMapLoaction = aMapLocation
             if(aMapLocation.city!!.length > 0){
                 cityname = aMapLocation.city
                 city_name.text = cityname
             }
-            editor = sharePre!!.edit()
-            editor!!.putString("cityname", cityname).commit()
             mLoadNewsPresenter!!.loadWeather(cityname!!)
         } }
         //初始化AMapLocationClientOption对象
@@ -139,7 +128,6 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
         newTypes!!.add(NewType("财经","caijing"))
         newTypes!!.add(NewType("时尚","shishang"))
 
-
         for (i in newTypes!!.indices){
             tab_layout.addTab(tab_layout.newTab().setText(newTypes!![i].name))
         }
@@ -151,36 +139,19 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
 
     override fun loadWeather(result: WeatherData) {
         var nowWeather : HeWeather5Bean = result.HeWeather5[0]
-        Log.i("天气情况:","天气情况:"+ nowWeather.status)
-        Log.i("天气情况:","天气情况:"+ nowWeather.aqi)
-        Log.i("天气情况:","天气情况:"+ nowWeather.basic)
-        Log.i("天气情况:","天气情况:"+ nowWeather.now)
-        Log.i("天气情况:","天气情况:"+ nowWeather.suggestion)
-        Log.i("天气情况:","天气情况:"+ nowWeather.daily_forecast)
-        Log.i("天气情况:","天气情况:"+ nowWeather.hourly_forecast)
         if(nowWeather.status == "unknown city"){
             return
         }
+        Log.i(TAG, nowWeather.now.toString())
         now_temp.text = nowWeather!!.now!!.tmp!! + "°C"
         now_weather.text = nowWeather!!.now!!.cond!!.txt!!
     }
 
-    override fun loadWeatherError(errorType: Int) {
-
-    }
+    override fun loadWeatherError(errorType: Int) {}
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         drawerTogger!!.syncState()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item!!.itemId){
-            android.R.id.home -> {
-
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onPageScrollStateChanged(state: Int) {}
@@ -190,49 +161,30 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
     override fun onPageSelected(position: Int) {
     }
 
-    fun initDrawerMenu(){
-        sharePre = getSharedPreferences("city",Context.MODE_PRIVATE)
-        cityname = sharePre!!.getString("cityname", "成都市")
-        Log.i("=========","初始值："+cityname)
-        city_name.text = cityname
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when(item!!.itemId){
+            R.id.menu_news -> {
 
-        drawerItemTypes = ArrayList<MenuType>()
-        drawerItemTypes!!.add(MenuType(R.drawable.ic_news, "新闻咨询"))
-        drawerItemTypes!!.add(MenuType(R.drawable.ic_picture, "本地图片"))
-        drawerItemTypes!!.add(MenuType(R.drawable.ic_map, "地图"))
-        drawerItemTypes!!.add(MenuType(R.drawable.ic_user, "我的博客"))
-        drawerItemTypes!!.add(MenuType(R.drawable.ic_settings, "设置"))
-
-        drawerAdapter = DrawerListAdapter(this, drawerItemTypes!!)
-        drawer_menu.layoutManager = LinearLayoutManager(this)
-        drawer_menu.adapter = drawerAdapter
-        drawerAdapter!!.notifyDataSetChanged()
-
-        drawerAdapter!!.setOnItemClickListener(this)
-    }
-
-    override fun onItemClick(view: View, position: Int) {
-        var menuType : MenuType = drawerItemTypes!![position]
-        when(menuType.itemtext){
-            "新闻咨询" -> { }
-            "本地图片" -> {
+            }
+            R.id.menu_localpicture -> {
                 //TODO: 跳转到本地图片页面
             }
-            "地图" -> {
+            R.id.menu_map -> {
                 var intent : Intent = Intent(this, MapActivity::class.java)
                 startActivity(intent)
                 overridePendingTransition(R.anim.activity_enter,R.anim.activity_out)
             }
-            "我的博客" -> {
+            R.id.menu_blog -> {
                 //TODO: 跳转到关于我页面
                 var intent : Intent = Intent(this, AboutActivity::class.java)
                 startActivity(intent)
                 overridePendingTransition(R.anim.activity_enter,R.anim.activity_out)
             }
-            "设置" -> {
+            R.id.menu_setting -> {
                 //TODO: 跳转到设置页面
             }
         }
+        return true
     }
 
     override fun onStop() {

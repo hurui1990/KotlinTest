@@ -19,6 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  */
 class LoadNewsModelImlp(private var onLoadNewsListener: OnLoadNewsListener) : LoadNewsModel {
 
+    val TAG = "LoadNewsModelImlp"
     var newsBaseUrl = "http://v.juhe.cn"
     var weatherBaseUrl = "https://free-api.heweather.com"
     var newsCode = "53bd93e93a2b5c03c61983294614c91f"
@@ -46,13 +47,14 @@ class LoadNewsModelImlp(private var onLoadNewsListener: OnLoadNewsListener) : Lo
             }
 
             override fun onFailure(call: Call<okhttp3.ResponseBody>?, t: Throwable?) {
-                Log.i("==============fa", t.toString())
+                Log.i(TAG, t.toString())
                 mOnLoadNewsListener.onLoadFailed(400)
             }
         })
     }
 
     override fun loadWeather(city: String) {
+        Log.i(TAG, "获取天气信息")
         val retrofit = Retrofit.Builder()
                 .baseUrl(weatherBaseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -63,10 +65,11 @@ class LoadNewsModelImlp(private var onLoadNewsListener: OnLoadNewsListener) : Lo
 
         callback.enqueue(object : Callback<WeatherData>{
             override fun onFailure(call: Call<WeatherData>, t: Throwable) {
-                Log.i("===============", "错误信息"+t!!.message)
+                Log.i(TAG, "错误信息"+t!!.message)
             }
 
             override fun onResponse(call: Call<WeatherData>, response: Response<WeatherData>) {
+                Log.i(TAG, "返回结果")
                 mOnLoadNewsListener.onLoadWeatherSuccess(response!!.body()!!)
             }
         })
