@@ -247,16 +247,23 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, DrawerListAdapter.OnItem
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        var build = AlertDialog.Builder(this)
-        build.setTitle("提示")
-        build.setMessage("客官不再耍一会儿？")
-        build.setPositiveButton("确定", DialogInterface.OnClickListener { dialog, which -> run{
-            finish()
-        } })
-        build.setNegativeButton("取消", DialogInterface.OnClickListener { dialog, which -> run{
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            var build = AlertDialog.Builder(this)
+            build.setTitle("提示")
+            build.setMessage("客官不再耍一会儿？")
+            build.setPositiveButton("确定", DialogInterface.OnClickListener { dialog, which ->
+                run {
+                    finish()
+                }
+            })
+            build.setNegativeButton("取消", DialogInterface.OnClickListener { dialog, which ->
+                run {
 
-        } })
-        build.create().show()
+                }
+            })
+            build.create().show()
+            return true
+        }
         return super.onKeyDown(keyCode, event)
     }
 

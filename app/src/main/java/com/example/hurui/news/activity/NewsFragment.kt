@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.util.Log
@@ -70,7 +69,7 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
     override fun onResume() {
         super.onResume()
         recycler_content.layoutManager = LinearLayoutManager(activity)
-        recycler_content.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
+//        recycler_content.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
         recycler_content.adapter = dataAdapter
         mLoadNewsPresenter!!.loadNews(mType!!)
     }
@@ -84,11 +83,9 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
         dataAdapter?.setData(dataList!!)
 
         share  = activity.getSharedPreferences("result",Context.MODE_PRIVATE)
-        if(result == null || TextUtils.isEmpty(result)) {
-            var editor: SharedPreferences.Editor = share!!.edit()
-            editor.putString("hurui", result)
-            editor.commit()
-        }
+        var editor: SharedPreferences.Editor = share!!.edit()
+        editor.putString("hurui", result)
+        editor.commit()
 
     }
 
