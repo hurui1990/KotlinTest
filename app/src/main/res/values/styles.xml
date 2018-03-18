@@ -28,4 +28,9 @@
         <item name="color">@android:color/white</item>
     </style>
 
+    <style name="TextAppearanceStyle" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textSize">15dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

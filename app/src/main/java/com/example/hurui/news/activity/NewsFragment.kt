@@ -25,11 +25,11 @@ import java.util.*
 /**
  * Created by hurui on 2017/8/4.
  */
-const val TAG = "NewsFragment"
 const val NEED_REQUEST = true
 
 class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListener {
 
+    private val TAG = "NewsFragment"
     var mLoadNewsPresenter : LoadNewsPresenter? = null
 
     var dataAdapter : RecyclerAdapter? = null
@@ -69,7 +69,6 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
     override fun onResume() {
         super.onResume()
         recycler_content.layoutManager = LinearLayoutManager(activity)
-//        recycler_content.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
         recycler_content.adapter = dataAdapter
         mLoadNewsPresenter!!.loadNews(mType!!)
     }

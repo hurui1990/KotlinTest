@@ -27,11 +27,11 @@
                 <android.support.design.widget.TabLayout
                     android:id="@+id/tab_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="35dp"
                     app:tabMode="scrollable"
                     android:background="@color/white"
                     app:tabIndicatorColor="@color/colorPrimaryDark"
-                    app:tabTextAppearance="@android:style/TextAppearance.Holo.Medium"
+                    app:tabTextAppearance="@style/TextAppearanceStyle"
                     app:tabSelectedTextColor="@color/colorPrimaryDark"
                     >
 
@@ -55,8 +55,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/drawer_head"
-        app:menu="@menu/drawer_layout"
-        >
+        app:menu="@menu/drawer_layout">
     </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>
