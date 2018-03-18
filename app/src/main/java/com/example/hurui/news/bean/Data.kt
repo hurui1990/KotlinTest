@@ -201,3 +201,9 @@ data class WindBeanXX(
         val spd: String
 )
 
+data class MediaBean(
+        val type : String,
+        val path : String,
+        val name : String,
+        val size : String
+)

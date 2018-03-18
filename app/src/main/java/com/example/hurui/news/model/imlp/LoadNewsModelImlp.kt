@@ -1,7 +1,6 @@
 package com.example.hurui.news.model.imlp
 
 import android.util.Log
-import com.example.hurui.news.activity.NEED_REQUEST
 import com.example.hurui.news.bean.WeatherData
 import com.example.hurui.news.model.LoadNewsModel
 import com.example.hurui.news.model.OnLoadNewsListener
@@ -19,6 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  */
 class LoadNewsModelImlp(private var onLoadNewsListener: OnLoadNewsListener) : LoadNewsModel {
 
+    val NEED_REQUEST = true
     val TAG = "LoadNewsModelImlp"
     var newsBaseUrl = "http://v.juhe.cn"
     var weatherBaseUrl = "https://free-api.heweather.com"

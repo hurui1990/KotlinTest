@@ -59,6 +59,8 @@
 
         <activity android:name=".activity.NewsDetailActivity"></activity>
 
+        <activity android:name=".activity.PictureActivity"></activity>
+
         <!--service-->
         <service android:name="com.amap.api.location.APSService"></service>
 

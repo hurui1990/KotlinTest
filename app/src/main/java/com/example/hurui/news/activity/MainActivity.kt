@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
-import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -30,7 +29,7 @@ import kotlinx.android.synthetic.main.drawerfooter.*
 import kotlinx.android.synthetic.main.drawerlayout.*
 import kotlinx.android.synthetic.main.main_toolbar.*
 
-class MainActivity : AppCompatActivity() ,LoadNewsView, ViewPager.OnPageChangeListener, NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigationItemSelectedListener {
 
     val TAG = "MainActivity"
     var newTypes : ArrayList<NewType>? = null
@@ -99,7 +98,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, ViewPager.OnPageChangeLi
 
     fun initFragments(){
         fragmentList = ArrayList<Fragment>()
-        for(i in 0..9){
+        for(i in 0..(newTypes!!.size-1)){
             var fragment : Fragment = NewsFragment()
             val bundle = Bundle()
             bundle.putString("type", newTypes!![i].type)
@@ -111,7 +110,6 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, ViewPager.OnPageChangeLi
         view_pager.adapter = viewpagerAdapter
         tab_layout.setupWithViewPager(view_pager)
         tab_layout.setTabsFromPagerAdapter(viewpagerAdapter)
-        view_pager.setOnPageChangeListener(this)
     }
 
     //动态添加头部的新闻类型标签的布局
@@ -154,20 +152,16 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, ViewPager.OnPageChangeLi
         drawerTogger!!.syncState()
     }
 
-    override fun onPageScrollStateChanged(state: Int) {}
-
-    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-
-    override fun onPageSelected(position: Int) {
-    }
-
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item!!.itemId){
             R.id.menu_news -> {
-
+                drawerlayout.closeDrawer(Gravity.START)
             }
             R.id.menu_localpicture -> {
                 //TODO: 跳转到本地图片页面
+                var intent : Intent = Intent(this, PictureActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(R.anim.activity_enter,R.anim.activity_out)
             }
             R.id.menu_map -> {
                 var intent : Intent = Intent(this, MapActivity::class.java)

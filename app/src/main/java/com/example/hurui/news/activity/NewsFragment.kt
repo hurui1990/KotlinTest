@@ -25,10 +25,8 @@ import java.util.*
 /**
  * Created by hurui on 2017/8/4.
  */
-const val NEED_REQUEST = true
 
 class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListener {
-
     private val TAG = "NewsFragment"
     var mLoadNewsPresenter : LoadNewsPresenter? = null
 
