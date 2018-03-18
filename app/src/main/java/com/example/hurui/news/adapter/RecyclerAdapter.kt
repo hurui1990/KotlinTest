@@ -23,7 +23,7 @@ class RecyclerAdapter(context:Context)
     var type1 = 1
     var type2 = 2
     var type3 = 3
-    var onItemClickListener : OnItemClickListener? = null;
+    var onItemClickListener : OnItemClickListener? = null
 
     interface OnItemClickListener{
         fun onItemClick(view:View, position:Int)

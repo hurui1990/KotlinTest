@@ -72,7 +72,6 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
     }
 
     override fun setLoadNews(result: String) {
-        Log.i(TAG, result)
         var gson : Gson = Gson()
         var result_gson : Result = gson.fromJson(result, Result::class.java)
         dataList!!.clear()

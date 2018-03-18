@@ -6,5 +6,5 @@ import com.example.hurui.news.bean.MediaBean
  * Created by hurui on 2018/3/18.
  */
 interface OnLoadMediaListener{
-    fun onLoadSuccess(result: ArrayList<MediaBean>)
+    fun onLoadSuccess(result: HashMap<String, ArrayList<MediaBean>>)
 }

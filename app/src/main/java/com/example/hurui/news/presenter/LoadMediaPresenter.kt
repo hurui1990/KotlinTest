@@ -1,5 +1,6 @@
 package com.example.hurui.news.presenter
 
+import android.content.Context
 import com.example.hurui.news.bean.MediaBean
 import com.example.hurui.news.model.OnLoadMediaListener
 import com.example.hurui.news.model.imlp.LoadMediaModelImlp
@@ -13,12 +14,12 @@ class LoadMediaPresenter(loadMediaView : LoadMediaView) : OnLoadMediaListener{
     var mLoadMediaListener : LoadMediaView = loadMediaView
     var mLoadMediaModel : LoadMediaModelImlp = LoadMediaModelImlp(this)
 
-    fun loadAllMedia(type : Int){
-        mLoadMediaModel!!.loadMedia(type)
+    fun loadAllMedia(type : Int, context : Context){
+        mLoadMediaModel!!.loadMedia(type, context)
     }
 
-    override fun onLoadSuccess(result: ArrayList<MediaBean>) {
-
+    override fun onLoadSuccess(result: HashMap<String,ArrayList<MediaBean>>) {
+        mLoadMediaListener.loadAllMedia(result)
     }
 
 }
