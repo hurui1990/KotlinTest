@@ -47,6 +47,7 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.jakewharton:disklrucache:2.0.2'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     implementation files('libs/AMap3DMap_5.2.1_AMapNavi_5.2.0_AMapSearch_5.2.1_AMapLocation_3.5.0_20170731.jar')
     compile 'com.android.support:cardview-v7:26.0.0'
