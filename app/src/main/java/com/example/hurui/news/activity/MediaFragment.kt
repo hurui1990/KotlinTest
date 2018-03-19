@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -30,11 +31,10 @@ class MediaFragment : Fragment(), LoadMediaView {
         super.onCreate(savedInstanceState)
         var bundle : Bundle = arguments
         mType = bundle.getInt("type")
-
         mLoadMediaPresenter = LoadMediaPresenter(this)
 
         allPicture  = ArrayList()
-        mediaAdapter = MediaRecyclerAdapter(activity)
+        mediaAdapter = MediaRecyclerAdapter(activity!!)
         mediaAdapter!!.setData(allPicture!!)
     }
 
@@ -45,14 +45,25 @@ class MediaFragment : Fragment(), LoadMediaView {
 
     override fun onResume() {
         super.onResume()
+        Log.i("=============", "onResume")
         media_recycler.layoutManager = GridLayoutManager(activity, 4) as RecyclerView.LayoutManager?
         media_recycler.adapter = mediaAdapter
         mLoadMediaPresenter!!.loadAllMedia(mType!!, activity)
 
+        media_recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                if (newState == SCROLL_STATE_IDLE) {
+                    mediaAdapter!!.setScrollState(true)
+                } else {
+                    mediaAdapter!!.setScrollState(false)
+                }
+            }
+        })
     }
 
     override fun loadAllMedia(resultMap: HashMap<String, ArrayList<MediaBean>>) {
         Log.i(TAG, Thread.currentThread().name)
+        allPicture!!.clear()
         for ((k, v) in resultMap){
             Log.i(TAG,v.size.toString())
             allPicture!!.addAll(v)

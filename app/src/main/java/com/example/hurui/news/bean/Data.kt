@@ -1,5 +1,8 @@
 package com.example.hurui.news.bean
 
+import android.graphics.Bitmap
+import com.example.hurui.news.view.SquareImageView
+
 /**
  * Created by hurui on 2017/5/25.
  */
@@ -206,4 +209,10 @@ data class MediaBean(
         val path : String,
         val name : String,
         val size : String
+)
+
+data class BitmapBean(
+        val imageview : SquareImageView,
+        val bitmap : Bitmap,
+        val path : String
 )

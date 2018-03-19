@@ -38,6 +38,7 @@ class Utils {
 
             options.inSampleSize = calculateInSampleSize(options,reqWidth,reqHeight)
             options.inJustDecodeBounds = false
+            options.inPreferredConfig = Bitmap.Config.RGB_565
             return BitmapFactory.decodeFile(filePath, options)
 
         }
