@@ -113,8 +113,17 @@ class ImageLoader(private val mContext: Context) {
 
     companion object {
 
-        fun build(context: Context): ImageLoader {
-            return ImageLoader(context)
+        private var ourInstance: ImageLoader? = null
+
+        fun build(context: Context): ImageLoader? {
+            if(ourInstance == null) {
+                synchronized(ImageLoader::class.java){
+                    if(ourInstance == null){
+                        ourInstance = ImageLoader(context)
+                    }
+                }
+            }
+            return ourInstance
         }
     }
 }

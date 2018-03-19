@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:scaleType="centerCrop"
         android:layout_marginLeft="@dimen/image_view_divide"
+        android:layout_marginTop="@dimen/image_view_divide"
         >
     </com.example.hurui.news.view.SquareImageView>
 

@@ -55,7 +55,7 @@ class Utils {
                 val halfHeight : Int = height / 2
                 while ((halfWidth / inSampleSize) >= reqWidth
                         && (halfHeight / inSampleSize) >= reqHeight){
-                    inSampleSize *= 2
+                    inSampleSize *= 4
                 }
             }
             return inSampleSize

@@ -34,8 +34,13 @@ class MediaRecyclerAdapter(context : Context) : RecyclerView.Adapter<MediaRecycl
     override fun onBindViewHolder(holder: ItemViewHolder?, position: Int) {
         var item : MediaBean = mDateList!![position]
         Log.i(TAG, item.path)
-        holder!!.itemView.tag = item.path
-        ImageLoader.build(mContext).loadBitmap(item.path, holder.img, requestSize, requestSize)
+//        Picasso.with(mContext).load(File(item.path))
+//                .resize(requestSize, requestSize)
+//                .config(Bitmap.Config.RGB_565)
+//                .placeholder(R.drawable.background)
+//                .into(holder.img)
+
+        ImageLoader.build(mContext)!!.loadBitmap(item.path, holder!!.img, requestSize, requestSize)
     }
 
     class ItemViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
