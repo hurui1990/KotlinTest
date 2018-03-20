@@ -29,6 +29,9 @@ class MediaAsyncTask(context: Context, onLoadMediaListener: OnLoadMediaListener,
             1 -> {
                 return getAllVedio()
             }
+            2 -> {
+                return getAllMusicInfo()
+            }
         }
         return null!!
     }
@@ -65,11 +68,11 @@ class MediaAsyncTask(context: Context, onLoadMediaListener: OnLoadMediaListener,
                 //存储对应关系
                 if (allPhotosTemp.containsKey(dirPath)) {
                     var data : ArrayList<MediaBean>? = allPhotosTemp!![dirPath]
-                    data!!.add(MediaBean("Image",path, displayName, size.toString(),"", ""))
+                    data!!.add(MediaBean("Image",path, displayName, size.toString(),"", "", "",  "", ""))
                     continue
                 } else {
                     var data : ArrayList<MediaBean>  = ArrayList<MediaBean>()
-                    data.add(MediaBean("Image",path,displayName,size.toString(),"",""))
+                    data.add(MediaBean("Image",path,displayName,size.toString(),"","", "", "", ""))
                     allPhotosTemp[dirPath] = data
                 }
             }
@@ -125,11 +128,62 @@ class MediaAsyncTask(context: Context, onLoadMediaListener: OnLoadMediaListener,
                 //存储对应关系
                 if (allPhotosTemp.containsKey(dirPath)) {
                     var data : ArrayList<MediaBean>? = allPhotosTemp[dirPath]
-                    data!!.add(MediaBean("Video",path, displayName,size.toString(),thumbPath, Utils.timeParse(duration.toLong())))
+                    data!!.add(MediaBean("Video",path, displayName,size.toString(),thumbPath, Utils.timeParse(duration.toLong()), "", "", ""))
                     continue
                 } else {
                     var data : ArrayList<MediaBean> =  ArrayList()
-                    data.add(MediaBean("Video",path, displayName,size.toString(),thumbPath, Utils.timeParse(duration.toLong())))
+                    data.add(MediaBean("Video",path, displayName,size.toString(),thumbPath, Utils.timeParse(duration.toLong()), "", "", ""))
+                    allPhotosTemp[dirPath] = data
+                }
+            }
+            mCursor.close()
+        }
+        return allPhotosTemp
+    }
+
+    private fun getAllMusicInfo() : HashMap<String, ArrayList<MediaBean>>{
+        Log.i(TAG, "获取所有视频信息")
+        var mMediaBeanList = ArrayList<MediaBean>()
+        val allPhotosTemp = HashMap<String, ArrayList<MediaBean>>()
+        val musicUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+        val projMusic : Array<String> = arrayOf(MediaStore.Audio.Media.DISPLAY_NAME,
+                MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.DURATION,
+                MediaStore.Audio.Media.ARTIST,
+                MediaStore.Audio.Media.ALBUM,
+                MediaStore.Audio.Media.SIZE,
+                MediaStore.Audio.Media.DATA)
+        val mCursor : Cursor = mContext.contentResolver.query(musicUri,
+                projMusic,
+                MediaStore.Audio.Media.MIME_TYPE + "=? or " + MediaStore.Audio.Media.MIME_TYPE + "=?",
+                arrayOf("audio/mpeg", "audio/x-ms-wma"),
+                null)
+        if(mCursor != null){
+            while (mCursor.moveToNext()){
+                val singer : String = mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
+                if(singer.equals("<unknown>")){
+                    continue
+                }
+                val displayName : String = mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME))
+                val title : String = mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.Media.TITLE))
+                val duration : Int = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Audio.Media.DURATION))
+                val album : String = mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM))
+                var size : Long = mCursor.getLong(mCursor.getColumnIndex(MediaStore.Audio.Media.SIZE))
+                val path : String = mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.Media.DATA))
+
+                if(size<0){
+                    size = File(path).length()/1024
+                }
+
+                var dirPath : String = File(path).parentFile.absolutePath
+                //存储对应关系
+                if (allPhotosTemp.containsKey(dirPath)) {
+                    var data : ArrayList<MediaBean>? = allPhotosTemp!![dirPath]
+                    data!!.add(MediaBean("Music",path, displayName, size.toString(),"", duration.toString(), title,  singer, album))
+                    continue
+                } else {
+                    var data : ArrayList<MediaBean>  = ArrayList<MediaBean>()
+                    data.add(MediaBean("Music",path,displayName,size.toString(),"", duration.toString(), title,  singer, album))
                     allPhotosTemp[dirPath] = data
                 }
             }

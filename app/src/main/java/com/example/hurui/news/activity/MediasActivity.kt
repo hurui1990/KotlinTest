@@ -21,15 +21,17 @@ class MediasActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_picture)
 
-        activity_pic_toolbar.title = "图片和视频"
+        activity_pic_toolbar.title = "多媒体文件"
         activity_pic_toolbar.setTitleTextColor(resources.getColor(R.color.white))
         setSupportActionBar(activity_pic_toolbar)
 
         tabTitleList = ArrayList<String>()
         tabTitleList!!.add("图片")
         tabTitleList!!.add("视频")
+        tabTitleList!!.add("音乐")
         activity_pic_tabs.addTab(activity_pic_tabs.newTab().setText(tabTitleList!![0]))
         activity_pic_tabs.addTab(activity_pic_tabs.newTab().setText(tabTitleList!![1]))
+        activity_pic_tabs.addTab(activity_pic_tabs.newTab().setText(tabTitleList!![2]))
 
         initFragment()
     }
@@ -50,6 +52,13 @@ class MediasActivity : AppCompatActivity(){
         videoBundle.putInt("type", 1)
         videoFragment.arguments = videoBundle
         mFragmentList!!.add(videoFragment)
+
+        //初始化音乐
+        var musicFragment: Fragment = MediaFragment()
+        var musicBundle = Bundle()
+        musicBundle.putInt("type", 2)
+        musicFragment.arguments = musicBundle
+        mFragmentList!!.add(musicFragment)
 
         medioViewPagerAdapter = MediaViewPagerAdapter(supportFragmentManager, mFragmentList!!, tabTitleList!!)
         activity_pic_viewpager.adapter = medioViewPagerAdapter

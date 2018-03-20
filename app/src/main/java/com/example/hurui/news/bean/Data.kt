@@ -210,7 +210,10 @@ data class MediaBean(
         val name: String,
         val size: String,
         val thumbPath: String,
-        val duration: String
+        val duration: String,
+        val title : String,
+        val singer : String,
+        val album : String
 )
 
 data class BitmapBean (

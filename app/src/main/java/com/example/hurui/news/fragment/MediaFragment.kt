@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +15,7 @@ import com.example.hurui.news.adapter.MediaRecyclerAdapter
 import com.example.hurui.news.bean.MediaBean
 import com.example.hurui.news.presenter.LoadMediaPresenter
 import com.example.hurui.news.view.LoadMediaView
+import com.example.hurui.news.view.MyDivider
 import kotlinx.android.synthetic.main.fragments_media.*
 
 /**
@@ -36,21 +37,26 @@ class MediaFragment : Fragment(), LoadMediaView, MediaRecyclerAdapter.OnItemClic
         mLoadMediaPresenter = LoadMediaPresenter(this)
 
         allPicture  = ArrayList()
-        mediaAdapter = MediaRecyclerAdapter(activity!!)
+        mediaAdapter = MediaRecyclerAdapter(activity!!, mType!!)
         mediaAdapter!!.setData(allPicture!!)
         mediaAdapter!!.setOnItemClickListener(this)
         needload = true
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view : View = inflater!!.inflate(R.layout.fragments_media, container, false)
+        var view : View? = inflater!!.inflate(R.layout.fragments_media, container, false)
         return view
     }
 
     override fun onResume() {
         super.onResume()
         if(needload) {
-            media_recycler.layoutManager = GridLayoutManager(activity, 4) as RecyclerView.LayoutManager?
+            if(mType == 2){
+                media_recycler.layoutManager = LinearLayoutManager(activity)
+                media_recycler.addItemDecoration(MyDivider(activity, 1))
+            }else {
+                media_recycler.layoutManager = GridLayoutManager(activity, 4)
+            }
             media_recycler.adapter = mediaAdapter
             mLoadMediaPresenter!!.loadAllMedia(mType!!, activity)
             needload = false
