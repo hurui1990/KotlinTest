@@ -21,6 +21,11 @@ class MediaRecyclerAdapter(context : Context) : RecyclerView.Adapter<MediaRecycl
     private var mDateList : ArrayList<MediaBean>? = null
     private var mScrollState : Boolean = false
     private val requestSize : Int = Utils.calculateImageviewSize(mContext!!)
+    private var mOnItemClickListener : OnItemClickListener? = null
+
+    interface OnItemClickListener{
+        fun onItemClick(view:View, position: Int)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ItemViewHolder? {
         var view : View = LayoutInflater.from(mContext).inflate(R.layout.media_item, parent, false)
@@ -34,13 +39,14 @@ class MediaRecyclerAdapter(context : Context) : RecyclerView.Adapter<MediaRecycl
     override fun onBindViewHolder(holder: ItemViewHolder?, position: Int) {
         var item : MediaBean = mDateList!![position]
         Log.i(TAG, item.path)
-//        Picasso.with(mContext).load(File(item.path))
-//                .resize(requestSize, requestSize)
-//                .config(Bitmap.Config.RGB_565)
-//                .placeholder(R.drawable.background)
-//                .into(holder.img)
-
         ImageLoader.build(mContext)!!.loadBitmap(item.path, holder!!.img, requestSize, requestSize)
+        holder.itemView.setOnClickListener(View.OnClickListener {
+            mOnItemClickListener!!.onItemClick(it,position)
+        })
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener){
+        mOnItemClickListener = listener
     }
 
     class ItemViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {

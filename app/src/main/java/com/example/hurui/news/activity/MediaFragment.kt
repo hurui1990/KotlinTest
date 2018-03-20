@@ -1,5 +1,6 @@
 package com.example.hurui.news.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -19,7 +20,7 @@ import kotlinx.android.synthetic.main.fragments_media.*
 /**
  * Created by hurui on 2018/3/18.
  */
-class MediaFragment : Fragment(), LoadMediaView {
+class MediaFragment : Fragment(), LoadMediaView, MediaRecyclerAdapter.OnItemClickListener {
 
     var TAG = "MediaFragment"
     var mType : Int? = null
@@ -36,6 +37,8 @@ class MediaFragment : Fragment(), LoadMediaView {
         allPicture  = ArrayList()
         mediaAdapter = MediaRecyclerAdapter(activity!!)
         mediaAdapter!!.setData(allPicture!!)
+
+        mediaAdapter!!.setOnItemClickListener(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -45,7 +48,6 @@ class MediaFragment : Fragment(), LoadMediaView {
 
     override fun onResume() {
         super.onResume()
-        Log.i("=============", "onResume")
         media_recycler.layoutManager = GridLayoutManager(activity, 4) as RecyclerView.LayoutManager?
         media_recycler.adapter = mediaAdapter
         mLoadMediaPresenter!!.loadAllMedia(mType!!, activity)
@@ -70,5 +72,17 @@ class MediaFragment : Fragment(), LoadMediaView {
         }
         Log.i(TAG,"总图片数："+ allPicture!!.size.toString())
         mediaAdapter!!.setData(allPicture!!)
+    }
+
+    override fun onItemClick(view: View, position: Int) {
+        var intent : Intent = Intent(activity, PhotoViewActivity::class.java)
+        var pathList : ArrayList<String> = ArrayList()
+        for (i in 0..(allPicture!!.size-1)){
+            pathList.add(allPicture!![i].path)
+        }
+        intent.putExtra("position", position)
+        intent.putStringArrayListExtra("list", pathList)
+        activity.startActivity(intent)
+
     }
 }

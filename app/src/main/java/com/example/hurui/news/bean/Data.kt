@@ -211,7 +211,7 @@ data class MediaBean(
         val size : String
 )
 
-data class BitmapBean(
+data class BitmapBean (
         val imageview : SquareImageView,
         val bitmap : Bitmap,
         val path : String
