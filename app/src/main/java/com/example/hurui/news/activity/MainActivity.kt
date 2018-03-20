@@ -23,6 +23,7 @@ import com.example.hurui.news.adapter.ViewpagerAdapter
 import com.example.hurui.news.bean.HeWeather5Bean
 import com.example.hurui.news.bean.NewType
 import com.example.hurui.news.bean.WeatherData
+import com.example.hurui.news.fragment.NewsFragment
 import com.example.hurui.news.presenter.LoadNewsPresenter
 import com.example.hurui.news.view.LoadNewsView
 import kotlinx.android.synthetic.main.drawerfooter.*
@@ -159,7 +160,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigat
             }
             R.id.menu_localpicture -> {
                 //TODO: 跳转到本地图片页面
-                var intent : Intent = Intent(this, PictureActivity::class.java)
+                var intent : Intent = Intent(this, MediasActivity::class.java)
                 startActivity(intent)
                 overridePendingTransition(R.anim.activity_enter,R.anim.activity_out)
             }

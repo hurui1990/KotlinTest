@@ -1,4 +1,4 @@
-package com.example.hurui.news.activity
+package com.example.hurui.news.fragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.hurui.news.R
+import com.example.hurui.news.activity.PhotoViewActivity
 import com.example.hurui.news.adapter.MediaRecyclerAdapter
 import com.example.hurui.news.bean.MediaBean
 import com.example.hurui.news.presenter.LoadMediaPresenter

@@ -21,7 +21,7 @@ class SquareImageView : ImageView {
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
         mWidth = Utils.getScreenWidth(context)
         var divide = context.resources.getDimension(R.dimen.image_view_divide).toInt()
-        imageSize  = (mWidth!! - divide * 5) / 4
+        imageSize  = (mWidth!! - divide * 3) / 4
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {}

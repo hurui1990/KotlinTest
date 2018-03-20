@@ -70,6 +70,9 @@ class Utils {
             return   (screenWidth!! - divide * 5) / 4
         }
 
+        /**
+         * 转换时长
+         * */
         fun timeParse(duration: Long): String {
             var time = ""
             val minute = duration / 60000

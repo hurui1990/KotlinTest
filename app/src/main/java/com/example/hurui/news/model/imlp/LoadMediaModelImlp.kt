@@ -2,9 +2,9 @@ package com.example.hurui.news.model.imlp
 
 import android.content.Context
 import android.util.Log
-import com.example.hurui.news.activity.MediaAsyncTask
 import com.example.hurui.news.model.LoadMediaModel
 import com.example.hurui.news.model.OnLoadMediaListener
+import com.example.hurui.news.network.MediaAsyncTask
 
 
 /**

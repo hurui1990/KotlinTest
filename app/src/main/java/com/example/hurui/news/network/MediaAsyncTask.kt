@@ -1,4 +1,4 @@
-package com.example.hurui.news.activity
+package com.example.hurui.news.network
 
 import android.content.ContentResolver
 import android.content.Context

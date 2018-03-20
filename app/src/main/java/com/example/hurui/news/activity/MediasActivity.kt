@@ -5,12 +5,13 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import com.example.hurui.news.R
 import com.example.hurui.news.adapter.MediaViewPagerAdapter
+import com.example.hurui.news.fragment.MediaFragment
 import kotlinx.android.synthetic.main.activity_picture.*
 
 /**
  * Created by hurui on 2018/3/18.
  */
-class PictureActivity : AppCompatActivity(){
+class MediasActivity : AppCompatActivity(){
 
     var mFragmentList : ArrayList<Fragment>? = null
     var tabTitleList : ArrayList<String>? = null
@@ -36,12 +37,14 @@ class PictureActivity : AppCompatActivity(){
     fun initFragment(){
         mFragmentList = ArrayList<Fragment>()
 
+        //初始化图片
         var picFragment: Fragment = MediaFragment()
         var pictureBundle = Bundle()
         pictureBundle.putInt("type", 0)
         picFragment.arguments = pictureBundle
         mFragmentList!!.add(picFragment)
 
+        //初始化视频
         var videoFragment: Fragment = MediaFragment()
         var videoBundle = Bundle()
         videoBundle.putInt("type", 1)

@@ -3,5 +3,5 @@
     <dimen name="title_text_size">6sp</dimen>
     <dimen name="title_view_margin">8dp</dimen>
 
-    <dimen name="image_view_divide">2dp</dimen>
+    <dimen name="image_view_divide">4dp</dimen>
 </resources>

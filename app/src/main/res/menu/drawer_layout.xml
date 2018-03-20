@@ -9,7 +9,7 @@
 
     <item
         android:id="@+id/menu_localpicture"
-        android:title="本地图片"
+        android:title="本地媒体"
         android:icon="@drawable/ic_picture"
         ></item>
 
