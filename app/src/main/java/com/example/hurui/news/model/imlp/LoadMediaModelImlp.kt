@@ -18,23 +18,7 @@ class LoadMediaModelImlp(onLoadMediaListener: OnLoadMediaListener) : LoadMediaMo
     override fun loadMedia(type: Int, context : Context) {
         //TODO 加载图片或视频
         Log.i(TAG, type.toString())
-        when (type){
-        0 -> {
-                getAllPictureInfo(context)
-            }
-            1 -> {
-                getAllVedioInfo(context)
-            }
-        }
-    }
-
-    fun getAllPictureInfo(context: Context){
-        MediaAsyncTask(context, mOnLoadMediaListener).execute()
-    }
-
-    fun getAllVedioInfo(context: Context){
-        //TODO 加载视频
-        Log.i(TAG, "获取所有视频信息")
+        MediaAsyncTask(context, mOnLoadMediaListener, type).execute()
     }
 
 }

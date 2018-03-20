@@ -1,11 +1,16 @@
 package com.example.hurui.news.adapter
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.media.ThumbnailUtils
+import android.provider.MediaStore
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import com.example.hurui.news.R
 import com.example.hurui.news.bean.MediaBean
 import com.example.hurui.news.utils.ImageLoader
@@ -24,7 +29,7 @@ class MediaRecyclerAdapter(context : Context) : RecyclerView.Adapter<MediaRecycl
     private var mOnItemClickListener : OnItemClickListener? = null
 
     interface OnItemClickListener{
-        fun onItemClick(view:View, position: Int)
+        fun onItemClick(view:View, position: Int, type : String)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ItemViewHolder? {
@@ -39,9 +44,18 @@ class MediaRecyclerAdapter(context : Context) : RecyclerView.Adapter<MediaRecycl
     override fun onBindViewHolder(holder: ItemViewHolder?, position: Int) {
         var item : MediaBean = mDateList!![position]
         Log.i(TAG, item.path)
-        ImageLoader.build(mContext)!!.loadBitmap(item.path, holder!!.img, requestSize, requestSize)
+        holder!!.img.tag = item.path
+        if(item.type.equals("Image")){
+            ImageLoader.build(mContext)!!.loadBitmap(item.path, holder!!.img, requestSize, requestSize)
+        }else if(item.type.equals("Video")){
+            if(item.path.equals(holder.img.tag)) {
+                holder!!.lieanLayout.visibility = View.VISIBLE
+                holder!!.txt.text = item.duration
+                holder!!.img.setImageBitmap(getVideoThumbnail(item.path, requestSize, requestSize, MediaStore.Images.Thumbnails.MINI_KIND))
+            }
+        }
         holder.itemView.setOnClickListener(View.OnClickListener {
-            mOnItemClickListener!!.onItemClick(it,position)
+            mOnItemClickListener!!.onItemClick(it, position, item.type)
         })
     }
 
@@ -50,7 +64,9 @@ class MediaRecyclerAdapter(context : Context) : RecyclerView.Adapter<MediaRecycl
     }
 
     class ItemViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
-        var img : SquareImageView = itemView!!.findViewById(R.id.item_imageview) as SquareImageView
+        val img : SquareImageView = itemView!!.findViewById(R.id.item_imageview) as SquareImageView
+        val lieanLayout : LinearLayout = itemView!!.findViewById(R.id.video_info) as LinearLayout
+        val txt : TextView = itemView!!.findViewById(R.id.video_duration_txt) as TextView
     }
 
     fun setData(dataList: ArrayList<MediaBean>){
@@ -58,7 +74,9 @@ class MediaRecyclerAdapter(context : Context) : RecyclerView.Adapter<MediaRecycl
         notifyDataSetChanged()
     }
 
-    fun setScrollState(scrollState : Boolean){
-        mScrollState = scrollState
+    private fun getVideoThumbnail(videoPath : String, width : Int, height : Int, kind : Int) : Bitmap{
+        var bitmap = ThumbnailUtils.createVideoThumbnail(videoPath, kind)
+        bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height, ThumbnailUtils.OPTIONS_RECYCLE_INPUT)
+        return bitmap
     }
 }

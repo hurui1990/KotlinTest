@@ -205,10 +205,12 @@ data class WindBeanXX(
 )
 
 data class MediaBean(
-        val type : String,
-        val path : String,
-        val name : String,
-        val size : String
+        val type: String,
+        val path: String,
+        val name: String,
+        val size: String,
+        val thumbPath: String,
+        val duration: String
 )
 
 data class BitmapBean (

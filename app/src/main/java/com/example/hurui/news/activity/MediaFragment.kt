@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +26,7 @@ class MediaFragment : Fragment(), LoadMediaView, MediaRecyclerAdapter.OnItemClic
     var mLoadMediaPresenter : LoadMediaPresenter? = null
     var allPicture : ArrayList<MediaBean>? = null
     var mediaAdapter : MediaRecyclerAdapter? = null
+    var needload = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,8 +37,8 @@ class MediaFragment : Fragment(), LoadMediaView, MediaRecyclerAdapter.OnItemClic
         allPicture  = ArrayList()
         mediaAdapter = MediaRecyclerAdapter(activity!!)
         mediaAdapter!!.setData(allPicture!!)
-
         mediaAdapter!!.setOnItemClickListener(this)
+        needload = true
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -48,19 +48,12 @@ class MediaFragment : Fragment(), LoadMediaView, MediaRecyclerAdapter.OnItemClic
 
     override fun onResume() {
         super.onResume()
-        media_recycler.layoutManager = GridLayoutManager(activity, 4) as RecyclerView.LayoutManager?
-        media_recycler.adapter = mediaAdapter
-        mLoadMediaPresenter!!.loadAllMedia(mType!!, activity)
-
-        media_recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
-                if (newState == SCROLL_STATE_IDLE) {
-                    mediaAdapter!!.setScrollState(true)
-                } else {
-                    mediaAdapter!!.setScrollState(false)
-                }
-            }
-        })
+        if(needload) {
+            media_recycler.layoutManager = GridLayoutManager(activity, 4) as RecyclerView.LayoutManager?
+            media_recycler.adapter = mediaAdapter
+            mLoadMediaPresenter!!.loadAllMedia(mType!!, activity)
+            needload = false
+        }
     }
 
     override fun loadAllMedia(resultMap: HashMap<String, ArrayList<MediaBean>>) {
@@ -74,15 +67,18 @@ class MediaFragment : Fragment(), LoadMediaView, MediaRecyclerAdapter.OnItemClic
         mediaAdapter!!.setData(allPicture!!)
     }
 
-    override fun onItemClick(view: View, position: Int) {
-        var intent : Intent = Intent(activity, PhotoViewActivity::class.java)
-        var pathList : ArrayList<String> = ArrayList()
-        for (i in 0..(allPicture!!.size-1)){
-            pathList.add(allPicture!![i].path)
+    override fun onItemClick(view: View, position: Int, type : String) {
+        if(type.equals("Image")) {
+            var pathList: ArrayList<String> = ArrayList()
+            for (i in 0..(allPicture!!.size - 1)) {
+                pathList.add(allPicture!![i].path)
+            }
+            var intent: Intent = Intent(activity, PhotoViewActivity::class.java)
+            intent.putExtra("position", position)
+            intent.putStringArrayListExtra("list", pathList)
+            activity.startActivity(intent)
+        }else if(type.equals("Video")){
+            Log.i("==========", allPicture!![position].path)
         }
-        intent.putExtra("position", position)
-        intent.putStringArrayListExtra("list", pathList)
-        activity.startActivity(intent)
-
     }
 }
