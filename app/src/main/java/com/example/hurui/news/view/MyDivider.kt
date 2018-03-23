@@ -104,7 +104,7 @@ class MyDivider(context: Context, orientation: Int) : RecyclerView.ItemDecoratio
         }
 
         val childCount = parent.childCount
-        for (i in 0..childCount - 1) {
+        for (i in 0..(childCount - 1)) {
             val child = parent.getChildAt(i)
             parent.layoutManager.getDecoratedBoundsWithMargins(child, mBounds)
             val right = mBounds.right + Math.round(child.translationX)

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.util.Log
@@ -19,6 +20,7 @@ import com.example.hurui.news.bean.Result
 import com.example.hurui.news.bean.WeatherData
 import com.example.hurui.news.presenter.LoadNewsPresenter
 import com.example.hurui.news.view.LoadNewsView
+import com.example.hurui.news.view.MyDivider
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_news.*
 import java.util.*
@@ -35,6 +37,7 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
     var dataList : ArrayList<NewsDetail>? =null
     var mType : String? = null
     var share : SharedPreferences? = null
+    var needload = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +51,7 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
         dataAdapter!!.setData(dataList!!)
 
         dataAdapter!!.setItemClickListener(this)
-
+        needload = true
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -67,9 +70,13 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
 
     override fun onResume() {
         super.onResume()
-        recycler_content.layoutManager = LinearLayoutManager(activity)
-        recycler_content.adapter = dataAdapter
-        mLoadNewsPresenter!!.loadNews(mType!!)
+        if(needload) {
+            recycler_content.layoutManager = LinearLayoutManager(activity)
+            recycler_content.addItemDecoration(MyDivider(activity, DividerItemDecoration.VERTICAL))
+            recycler_content.adapter = dataAdapter
+            mLoadNewsPresenter!!.loadNews(mType!!)
+            needload = false
+        }
     }
 
     override fun setLoadNews(result: String) {
