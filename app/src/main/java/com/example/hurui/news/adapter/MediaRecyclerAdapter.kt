@@ -12,6 +12,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.hurui.news.R
 import com.example.hurui.news.bean.MediaBean
+import com.example.hurui.news.utils.Constans
 import com.example.hurui.news.utils.ImageLoader
 import com.example.hurui.news.utils.Utils
 import com.example.hurui.news.view.SquareImageView
@@ -51,9 +52,9 @@ class MediaRecyclerAdapter(context : Context, type : Int) : RecyclerView.Adapter
         if(holder is MediaViewHolder) {
             val mediaHolder : MediaViewHolder = holder
             mediaHolder!!.img.tag = item.path
-            if (item.type.equals("Image")) {
+            if (item.type.equals(Constans.MEDIA_TYPE_IMAGE)) {
                 ImageLoader.build(mContext)!!.loadBitmap(item.path, mediaHolder!!.img, requestSize, requestSize)
-            } else if (item.type.equals("Video")) {
+            } else if (item.type.equals(Constans.MEDIA_TYPE_VEDIO)) {
                 if (item.path.equals(holder.img.tag)) {
                     mediaHolder!!.lieanLayout.visibility = View.VISIBLE
                     mediaHolder!!.txt.text = item.duration
@@ -72,7 +73,7 @@ class MediaRecyclerAdapter(context : Context, type : Int) : RecyclerView.Adapter
     }
 
     override fun getItemViewType(position: Int): Int {
-        if(mDateList!![position].type.equals("Music")){
+        if(mDateList!![position].type.equals(Constans.MEDIA_TYPE_MUSIC)){
             return 2
         }else{
             return 1

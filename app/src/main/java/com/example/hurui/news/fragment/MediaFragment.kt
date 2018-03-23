@@ -14,6 +14,7 @@ import com.example.hurui.news.activity.PhotoViewActivity
 import com.example.hurui.news.adapter.MediaRecyclerAdapter
 import com.example.hurui.news.bean.MediaBean
 import com.example.hurui.news.presenter.LoadMediaPresenter
+import com.example.hurui.news.utils.Constans
 import com.example.hurui.news.view.LoadMediaView
 import com.example.hurui.news.view.MyDivider
 import kotlinx.android.synthetic.main.fragments_media.*
@@ -75,7 +76,7 @@ class MediaFragment : Fragment(), LoadMediaView, MediaRecyclerAdapter.OnItemClic
     }
 
     override fun onItemClick(view: View, position: Int, type : String) {
-        if(type.equals("Image")) {
+        if(type.equals(Constans.MEDIA_TYPE_IMAGE)) {
             var pathList: ArrayList<String> = ArrayList()
             for (i in 0..(allPicture!!.size - 1)) {
                 pathList.add(allPicture!![i].path)
@@ -84,7 +85,7 @@ class MediaFragment : Fragment(), LoadMediaView, MediaRecyclerAdapter.OnItemClic
             intent.putExtra("position", position)
             intent.putStringArrayListExtra("list", pathList)
             activity.startActivity(intent)
-        }else if(type.equals("Video")){
+        }else if(type.equals(Constans.MEDIA_TYPE_VEDIO)){
             Log.i("==========", allPicture!![position].path)
         }
     }

@@ -8,6 +8,7 @@ import android.provider.MediaStore
 import android.util.Log
 import com.example.hurui.news.bean.MediaBean
 import com.example.hurui.news.model.OnLoadMediaListener
+import com.example.hurui.news.utils.Constans
 import com.example.hurui.news.utils.Utils
 import java.io.File
 
@@ -62,17 +63,17 @@ class MediaAsyncTask(context: Context, onLoadMediaListener: OnLoadMediaListener,
                 var size : Int = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Images.Media.SIZE))/1024
                 var displayName : String  = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME))
                 //用于展示相册初始化界面
-//                mMediaBeanList!!.add(MediaBean("Image", path, displayName, size.toString(), "", ""))
+//                mMediaBeanList!!.add(MediaBean(Constans.MEDIA_TYPE_IMAGE, path, displayName, size.toString(), "", ""))
                 // 获取该图片的父路径名
                 var dirPath : String = File(path).parentFile.absolutePath
                 //存储对应关系
                 if (allPhotosTemp.containsKey(dirPath)) {
                     var data : ArrayList<MediaBean>? = allPhotosTemp!![dirPath]
-                    data!!.add(MediaBean("Image",path, displayName, size.toString(),"", "", "",  "", ""))
+                    data!!.add(MediaBean(Constans.MEDIA_TYPE_IMAGE ,path, displayName, size.toString(),"", "", "",  "", ""))
                     continue
                 } else {
                     var data : ArrayList<MediaBean>  = ArrayList<MediaBean>()
-                    data.add(MediaBean("Image",path,displayName,size.toString(),"","", "", "", ""))
+                    data.add(MediaBean(Constans.MEDIA_TYPE_IMAGE,path,displayName,size.toString(),"","", "", "", ""))
                     allPhotosTemp[dirPath] = data
                 }
             }
@@ -100,8 +101,11 @@ class MediaAsyncTask(context: Context, onLoadMediaListener: OnLoadMediaListener,
         if(mCursor != null){
             while (mCursor.moveToNext()){
                 // 获取视频的路径
-                val videoId : Int = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Video.Media._ID))
                 val path : String = mCursor.getString(mCursor.getColumnIndex(MediaStore.Video.Media.DATA))
+                if(!File(path).exists()){
+                    continue
+                }
+                val videoId : Int = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Video.Media._ID))
                 val duration : Int = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Video.Media.DURATION))
                 var size : Long = mCursor.getLong(mCursor.getColumnIndex(MediaStore.Video.Media.SIZE))/1024
                 if(size<0){
@@ -128,11 +132,11 @@ class MediaAsyncTask(context: Context, onLoadMediaListener: OnLoadMediaListener,
                 //存储对应关系
                 if (allPhotosTemp.containsKey(dirPath)) {
                     var data : ArrayList<MediaBean>? = allPhotosTemp[dirPath]
-                    data!!.add(MediaBean("Video",path, displayName,size.toString(),thumbPath, Utils.timeParse(duration.toLong()), "", "", ""))
+                    data!!.add(MediaBean(Constans.MEDIA_TYPE_VEDIO,path, displayName,size.toString(),thumbPath, Utils.timeParse(duration.toLong()), "", "", ""))
                     continue
                 } else {
                     var data : ArrayList<MediaBean> =  ArrayList()
-                    data.add(MediaBean("Video",path, displayName,size.toString(),thumbPath, Utils.timeParse(duration.toLong()), "", "", ""))
+                    data.add(MediaBean(Constans.MEDIA_TYPE_VEDIO,path, displayName,size.toString(),thumbPath, Utils.timeParse(duration.toLong()), "", "", ""))
                     allPhotosTemp[dirPath] = data
                 }
             }
@@ -179,11 +183,11 @@ class MediaAsyncTask(context: Context, onLoadMediaListener: OnLoadMediaListener,
                 //存储对应关系
                 if (allPhotosTemp.containsKey(dirPath)) {
                     var data : ArrayList<MediaBean>? = allPhotosTemp!![dirPath]
-                    data!!.add(MediaBean("Music",path, displayName, size.toString(),"", duration.toString(), title,  singer, album))
+                    data!!.add(MediaBean(Constans.MEDIA_TYPE_MUSIC,path, displayName, size.toString(),"", duration.toString(), title,  singer, album))
                     continue
                 } else {
                     var data : ArrayList<MediaBean>  = ArrayList<MediaBean>()
-                    data.add(MediaBean("Music",path,displayName,size.toString(),"", duration.toString(), title,  singer, album))
+                    data.add(MediaBean(Constans.MEDIA_TYPE_MUSIC,path,displayName,size.toString(),"", duration.toString(), title,  singer, album))
                     allPhotosTemp[dirPath] = data
                 }
             }
