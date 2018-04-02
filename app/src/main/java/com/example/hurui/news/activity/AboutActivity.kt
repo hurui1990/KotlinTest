@@ -2,16 +2,14 @@ package com.example.hurui.news.activity
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
-import kotlinx.android.synthetic.main.activity_about.*
-
 import com.example.hurui.news.R
+import kotlinx.android.synthetic.main.activity_about.*
 
 /**
  * Created by hurui on 2017/8/3.
@@ -32,7 +30,6 @@ class AboutActivity : AppCompatActivity() {
         about_view.setWebChromeClient(object : WebChromeClient(){
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
                 super.onProgressChanged(view, newProgress)
-                Log.i("===============", "进度："+newProgress)
                 progressbar.progress = newProgress
                 if(newProgress == 100) {
                     progressbar.visibility = View.GONE

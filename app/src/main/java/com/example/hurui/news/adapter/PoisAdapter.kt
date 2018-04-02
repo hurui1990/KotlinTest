@@ -15,9 +15,9 @@ import com.example.hurui.news.R
  */
 class PoisAdapter(context: Context) : RecyclerView.Adapter<PoisAdapter.PoiViewHolder>(), View.OnClickListener {
 
-    var mContext = context
-    var dataList : ArrayList<PoiItem>? = ArrayList()
-    var mOnListItemClick : OnItemClickListener? = null
+    private var mContext = context
+    private var dataList : ArrayList<PoiItem>? = ArrayList()
+    private var mOnListItemClick : OnItemClickListener? = null
 
     interface OnItemClickListener {
         fun onItemClick(view:View, poi:PoiItem)

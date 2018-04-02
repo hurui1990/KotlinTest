@@ -12,8 +12,8 @@ import com.example.hurui.news.network.MediaAsyncTask
  */
 class LoadMediaModelImlp(onLoadMediaListener: OnLoadMediaListener) : LoadMediaModel{
 
-    var TAG = "LoadMediaModelImlp"
-    var mOnLoadMediaListener : OnLoadMediaListener = onLoadMediaListener
+    private var TAG = "LoadMediaModelImlp"
+    private var mOnLoadMediaListener : OnLoadMediaListener = onLoadMediaListener
 
     override fun loadMedia(type: Int, context : Context) {
         //TODO 加载图片或视频

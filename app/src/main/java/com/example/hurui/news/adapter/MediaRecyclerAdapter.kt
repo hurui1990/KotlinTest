@@ -34,12 +34,12 @@ class MediaRecyclerAdapter(context : Context, type : Int) : RecyclerView.Adapter
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
         var view : View? = null
-        if(viewType == 2){
+        return if(viewType == 2){
             view = LayoutInflater.from(mContext).inflate(R.layout.music_item, parent, false)
-            return MusicViewHolder(view)
+            MusicViewHolder(view)
         }else {
             view = LayoutInflater.from(mContext).inflate(R.layout.media_item, parent, false)
-            return MediaViewHolder(view)
+            MediaViewHolder(view)
         }
     }
 
@@ -73,10 +73,10 @@ class MediaRecyclerAdapter(context : Context, type : Int) : RecyclerView.Adapter
     }
 
     override fun getItemViewType(position: Int): Int {
-        if(mDateList!![position].type.equals(Constans.MEDIA_TYPE_MUSIC)){
-            return 2
+        return if(mDateList!![position].type.equals(Constans.MEDIA_TYPE_MUSIC)){
+            2
         }else{
-            return 1
+            1
         }
     }
 

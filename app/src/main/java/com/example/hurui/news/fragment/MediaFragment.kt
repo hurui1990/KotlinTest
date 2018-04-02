@@ -24,12 +24,12 @@ import kotlinx.android.synthetic.main.fragments_media.*
  */
 class MediaFragment : Fragment(), LoadMediaView, MediaRecyclerAdapter.OnItemClickListener {
 
-    var TAG = "MediaFragment"
-    var mType : Int? = null
-    var mLoadMediaPresenter : LoadMediaPresenter? = null
-    var allPicture : ArrayList<MediaBean>? = null
-    var mediaAdapter : MediaRecyclerAdapter? = null
-    var needload = false
+    private var TAG = "MediaFragment"
+    private var mType : Int? = null
+    private var mLoadMediaPresenter : LoadMediaPresenter? = null
+    private var allPicture : ArrayList<MediaBean>? = null
+    private var mediaAdapter : MediaRecyclerAdapter? = null
+    private var needload = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

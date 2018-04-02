@@ -17,8 +17,6 @@ import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
-import com.example.hurui.news.R
-import kotlinx.android.synthetic.main.activity_map.*
 import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.UiSettings
@@ -28,9 +26,11 @@ import com.amap.api.services.core.PoiItem
 import com.amap.api.services.poisearch.PoiResult
 import com.amap.api.services.poisearch.PoiSearch
 import com.amap.api.services.route.*
+import com.example.hurui.news.R
 import com.example.hurui.news.adapter.PoisAdapter
 import com.example.hurui.news.view.MyDivider
 import com.suke.widget.SwitchButton
+import kotlinx.android.synthetic.main.activity_map.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -42,37 +42,37 @@ class MapActivity : AppCompatActivity(),
         SearchView.OnQueryTextListener,
         PoiSearch.OnPoiSearchListener, SearchView.OnCloseListener, PoisAdapter.OnItemClickListener, RadioGroup.OnCheckedChangeListener, SwitchButton.OnCheckedChangeListener, AMap.OnCameraChangeListener, RouteSearch.OnRouteSearchListener, TextWatcher {
 
-    var aMap: AMap? = null
-    var mMyLocationStyle: MyLocationStyle? = null
+    private var aMap: AMap? = null
+    private var mMyLocationStyle: MyLocationStyle? = null
 
-    var mLocationListener: AMapLocationListener? = null
-    var mLocationOption: AMapLocationClientOption? = null
-    var mLocationClient: AMapLocationClient? = null
-    var mMapLoaction: AMapLocation? = null
-    var mUiSettings: UiSettings? = null
-    var mQuery : PoiSearch.Query? = null
-    var poiSearch : PoiSearch? = null
-    var mPoiAdapter : PoisAdapter? = null
-    var orignZoomLevel : Float = 12f
-    var mTrafficPrefre : SharedPreferences? = null
-    var mIndoorPrefre : SharedPreferences? = null
-    var mReliPrefre : SharedPreferences? = null
-    var isTrafficOpen : Boolean = false
-    var isIndoorOpen : Boolean = false
-    var isReliOpen : Boolean = false
-    var centerLatlon : LatLng? = null
+    private var mLocationListener: AMapLocationListener? = null
+    private var mLocationOption: AMapLocationClientOption? = null
+    private var mLocationClient: AMapLocationClient? = null
+    private var mMapLoaction: AMapLocation? = null
+    private var mUiSettings: UiSettings? = null
+    private var mQuery : PoiSearch.Query? = null
+    private var poiSearch : PoiSearch? = null
+    private var mPoiAdapter : PoisAdapter? = null
+    private var orignZoomLevel : Float = 12f
+    private var mTrafficPrefre : SharedPreferences? = null
+    private var mIndoorPrefre : SharedPreferences? = null
+    private var mReliPrefre : SharedPreferences? = null
+    private var isTrafficOpen : Boolean = false
+    private var isIndoorOpen : Boolean = false
+    private var isReliOpen : Boolean = false
+    private var centerLatlon : LatLng? = null
     var isInDaohang : Boolean = false
-    final var BUXING : Int = 0
-    final var DRIVE : Int = 1
-    final var BUS : Int = 2
-    final var BIKE : Int = 3
-    var out_style : Int = 0
-    var oriText : String? = null
-    var desText : String? = null
-    var oriLatLonPoint : LatLonPoint? = null
-    var desLatLonPoint : LatLonPoint? = null
-    var routeSearch : RouteSearch? = null
-    var fromandto : RouteSearch.FromAndTo? = null
+    private val BUXING : Int = 0
+    private val DRIVE : Int = 1
+    private val BUS : Int = 2
+    private val BIKE : Int = 3
+    private var out_style : Int = 0
+    private var oriText : String? = null
+    private var desText : String? = null
+    private var oriLatLonPoint : LatLonPoint? = null
+    private var desLatLonPoint : LatLonPoint? = null
+    private var routeSearch : RouteSearch? = null
+    private var fromandto : RouteSearch.FromAndTo? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -267,13 +267,13 @@ class MapActivity : AppCompatActivity(),
 
             }
             R.id.img_switch_location -> {
-                var et_change : String = ""
+                var etChange : String = ""
                 oriText = et_orin.text.toString()
                 desText = et_des.text.toString()
 
-                et_change = oriText!!
+                etChange = oriText!!
                 oriText = desText
-                desText = et_change
+                desText = etChange
 
                 et_orin.setText(oriText, TextView.BufferType.NORMAL)
                 et_des.setText(desText, TextView.BufferType.NORMAL)
@@ -420,7 +420,7 @@ class MapActivity : AppCompatActivity(),
         mLocationClient = AMapLocationClient(applicationContext)
         mLocationListener = AMapLocationListener { aMapLocation ->
             run {
-                if(aMapLocation.address.length == 0){
+                if(aMapLocation.address.isEmpty()){
                     Toast.makeText(this, "暂时无法定位，请稍后重试", Toast.LENGTH_LONG).show()
                 }else {
                     Toast.makeText(this, "您当前的位置:" + aMapLocation.address, Toast.LENGTH_LONG).show()
@@ -476,11 +476,11 @@ class MapActivity : AppCompatActivity(),
         var y : Double = lon
 
         for (i in 0..4999) {
-            var x_: Double = 0.0
-            var y_: Double = 0.0
-            x_ = Math.random() * 0.5 - 0.25
-            y_ = Math.random() * 0.5 - 0.25
-            latlngs.add(LatLng(x + x_, y + y_))
+            var xX: Double = 0.0
+            var yY: Double = 0.0
+            xX = Math.random() * 0.5 - 0.25
+            yY = Math.random() * 0.5 - 0.25
+            latlngs.add(LatLng(x + xX, y + yY))
         }
 
         // 构建热力图 HeatmapTileProvider

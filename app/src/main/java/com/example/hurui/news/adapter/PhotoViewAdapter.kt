@@ -14,8 +14,8 @@ import java.io.File
  */
 class PhotoViewAdapter : PagerAdapter{
 
-    var mImageList : ArrayList<String>? = null
-    var mContext : Context? = null
+    private var mImageList : ArrayList<String>? = null
+    private var mContext : Context? = null
 
     constructor(imageUrls : ArrayList<String>, context: Context) : super(){
         mImageList = imageUrls

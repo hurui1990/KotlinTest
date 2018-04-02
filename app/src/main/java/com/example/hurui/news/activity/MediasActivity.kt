@@ -13,9 +13,9 @@ import kotlinx.android.synthetic.main.activity_picture.*
  */
 class MediasActivity : AppCompatActivity(){
 
-    var mFragmentList : ArrayList<Fragment>? = null
-    var tabTitleList : ArrayList<String>? = null
-    var medioViewPagerAdapter : MediaViewPagerAdapter? = null
+    private var mFragmentList : ArrayList<Fragment>? = null
+    private var tabTitleList : ArrayList<String>? = null
+    private var medioViewPagerAdapter : MediaViewPagerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +25,7 @@ class MediasActivity : AppCompatActivity(){
         activity_pic_toolbar.setTitleTextColor(resources.getColor(R.color.white))
         setSupportActionBar(activity_pic_toolbar)
 
-        tabTitleList = ArrayList<String>()
+        tabTitleList = ArrayList()
         tabTitleList!!.add("图片")
         tabTitleList!!.add("视频")
         tabTitleList!!.add("音乐")
@@ -36,8 +36,8 @@ class MediasActivity : AppCompatActivity(){
         initFragment()
     }
 
-    fun initFragment(){
-        mFragmentList = ArrayList<Fragment>()
+    private fun initFragment(){
+        mFragmentList = ArrayList()
 
         //初始化图片
         var picFragment: Fragment = MediaFragment()

@@ -16,8 +16,6 @@ class Utils {
 
     companion object {
 
-        public val NO_INERNET_CONNECT : Int = 1
-
         /**
          * 获取屏幕的宽度
          * */

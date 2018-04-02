@@ -11,9 +11,8 @@ import android.view.animation.AlphaAnimation
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
-import kotlinx.android.synthetic.main.activity_newdetail.*
-
 import com.example.hurui.news.R
+import kotlinx.android.synthetic.main.activity_newdetail.*
 
 /**
  * Created by hurui on 2017/8/3.
@@ -21,8 +20,8 @@ import com.example.hurui.news.R
 
 class NewsDetailActivity : AppCompatActivity() {
 
-    var url : String? = null
-    var title : String? = null
+    private var url : String? = null
+    private var title : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

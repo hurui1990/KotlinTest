@@ -11,8 +11,8 @@ import com.example.hurui.news.view.LoadMediaView
  */
 class LoadMediaPresenter(loadMediaView : LoadMediaView) : OnLoadMediaListener{
 
-    var mLoadMediaListener : LoadMediaView = loadMediaView
-    var mLoadMediaModel : LoadMediaModelImlp = LoadMediaModelImlp(this)
+    private var mLoadMediaListener : LoadMediaView = loadMediaView
+    private var mLoadMediaModel : LoadMediaModelImlp = LoadMediaModelImlp(this)
 
     fun loadAllMedia(type : Int, context : Context){
         mLoadMediaModel!!.loadMedia(type, context)

@@ -10,8 +10,8 @@ import com.example.hurui.news.view.LoadNewsView
  */
 class LoadNewsPresenter(loadNewsView: LoadNewsView) : OnLoadNewsListener{
 
-    var mLoadNewsView : LoadNewsView = loadNewsView
-    var mLoadNewsModel : LoadNewsModelImlp = LoadNewsModelImlp(this)
+    private var mLoadNewsView : LoadNewsView = loadNewsView
+    private var mLoadNewsModel : LoadNewsModelImlp = LoadNewsModelImlp(this)
 
     fun loadWeather(city:String){
         mLoadNewsModel!!.loadWeather(city)

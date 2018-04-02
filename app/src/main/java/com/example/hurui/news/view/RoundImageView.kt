@@ -1,13 +1,7 @@
 package com.example.hurui.news.view
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
-import android.graphics.Rect
+import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
@@ -16,13 +10,11 @@ import android.util.AttributeSet
  * Created by Administrator on 2015/9/11.
  */
 class RoundImageView : AppCompatImageView {
-    constructor(context: Context) : super(context) {
-        // TODO Auto-generated constructor stub
-    }
+    constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {}
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {}
+    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
     override fun onDraw(canvas: Canvas) {
 
@@ -42,16 +34,14 @@ class RoundImageView : AppCompatImageView {
     companion object {
 
         fun getCroppedBitmap(bmp: Bitmap, radius: Int): Bitmap {
-            val sbmp: Bitmap
-            if (bmp.width != radius || bmp.height != radius)
-                sbmp = Bitmap.createScaledBitmap(bmp, radius, radius, false)
+            val sbmp: Bitmap = if (bmp.width != radius || bmp.height != radius)
+                Bitmap.createScaledBitmap(bmp, radius, radius, false)
             else
-                sbmp = bmp
+                bmp
             val output = Bitmap.createBitmap(sbmp.width,
                     sbmp.height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(output)
 
-            val color = 0xffa19774.toInt()
             val paint = Paint()
             val rect = Rect(0, 0, sbmp.width, sbmp.height)
 

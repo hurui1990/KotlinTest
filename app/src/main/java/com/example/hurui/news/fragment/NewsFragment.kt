@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,14 +29,13 @@ import java.util.*
  */
 
 class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListener {
-    private val TAG = "NewsFragment"
-    var mLoadNewsPresenter : LoadNewsPresenter? = null
+    private var mLoadNewsPresenter : LoadNewsPresenter? = null
 
-    var dataAdapter : RecyclerAdapter? = null
-    var dataList : ArrayList<NewsDetail>? =null
-    var mType : String? = null
-    var share : SharedPreferences? = null
-    var needload = false
+    private var dataAdapter : RecyclerAdapter? = null
+    private var dataList : ArrayList<NewsDetail>? =null
+    private var mType : String? = null
+    private var share : SharedPreferences? = null
+    private var needload = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +43,7 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
         mType = bundle.getString("type")
 
         mLoadNewsPresenter = LoadNewsPresenter(this)
-        dataList = ArrayList<NewsDetail>()
+        dataList = ArrayList()
         dataAdapter = RecyclerAdapter(activity)
         dataAdapter!!.setHasStableIds(true)
         dataAdapter!!.setData(dataList!!)
@@ -80,10 +78,10 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
     }
 
     override fun setLoadNews(result: String) {
-        var gson : Gson = Gson()
-        var result_gson : Result = gson.fromJson(result, Result::class.java)
+        var gson = Gson()
+        var resultGson : Result = gson.fromJson(result, Result::class.java)
         dataList!!.clear()
-        dataList = result_gson.result.data
+        dataList = resultGson.result.data
         dataAdapter?.setData(dataList!!)
 
         share  = activity.getSharedPreferences("result",Context.MODE_PRIVATE)
@@ -94,15 +92,14 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
     }
 
     override fun loadNewsError(errorType: Int) {
-        Log.i(TAG, "failed : " + errorType)
         if(errorType == 400){
             share = activity.getSharedPreferences("result", Context.MODE_PRIVATE)
             val result : String = share!!.getString("hurui", "")
             if(result != null && !TextUtils.isEmpty(result)){
                 var gson : Gson = Gson()
-                var result_gson : Result = gson.fromJson(result, Result::class.java)
+                var resultGson : Result = gson.fromJson(result, Result::class.java)
                 dataList!!.clear()
-                dataList = result_gson.result.data
+                dataList = resultGson.result.data
                 dataAdapter?.setData(dataList!!)
             }
         }

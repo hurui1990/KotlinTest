@@ -32,17 +32,17 @@ import kotlinx.android.synthetic.main.main_toolbar.*
 
 class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigationItemSelectedListener {
 
-    val TAG = "MainActivity"
-    var newTypes : ArrayList<NewType>? = null
-    var drawerTogger : ActionBarDrawerToggle? = null
-    var mLocationListener : AMapLocationListener? = null
-    var mLocationOption: AMapLocationClientOption? = null
-    var mLocationClient : AMapLocationClient? = null
-    var cityname : String? = null
-    var mMapLoaction : AMapLocation? = null
-    var mLoadNewsPresenter : LoadNewsPresenter? = null
-    var fragmentList : ArrayList<Fragment>? = null
-    var viewpagerAdapter : ViewpagerAdapter? = null
+    private val TAG = "MainActivity"
+    private var newTypes : ArrayList<NewType>? = null
+    private var drawerTogger : ActionBarDrawerToggle? = null
+    private var mLocationListener : AMapLocationListener? = null
+    private var mLocationOption: AMapLocationClientOption? = null
+    private var mLocationClient : AMapLocationClient? = null
+    private var cityname : String? = null
+    private var mMapLoaction : AMapLocation? = null
+    private var mLoadNewsPresenter : LoadNewsPresenter? = null
+    private var fragmentList : ArrayList<Fragment>? = null
+    private var viewpagerAdapter : ViewpagerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigat
         mLocationListener = AMapLocationListener { aMapLocation -> run{
             Log.i(TAG, "返回值："+aMapLocation.city)
             mMapLoaction = aMapLocation
-            if(aMapLocation.city!!.length > 0){
+            if(aMapLocation.city!!.isNotEmpty()){
                 cityname = aMapLocation.city
                 city_name.text = cityname
             }
@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigat
     }
 
     fun initFragments(){
-        fragmentList = ArrayList<Fragment>()
+        fragmentList = ArrayList()
         for(i in 0..(newTypes!!.size-1)){
             var fragment : Fragment = NewsFragment()
             val bundle = Bundle()
@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigat
 
     //动态添加头部的新闻类型标签的布局
     fun initScrollView(){
-        newTypes = ArrayList<NewType>()
+        newTypes = ArrayList()
         newTypes!!.add(NewType("头条","top"))
         newTypes!!.add(NewType("社会","shehui"))
         newTypes!!.add(NewType("国内","guonei"))
@@ -218,7 +218,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigat
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {
             20 -> {
-                if (grantResults.size > 0 && grantResults[0] === PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.isNotEmpty() && grantResults[0] === PackageManager.PERMISSION_GRANTED) {
                     // 权限被用户同意，可以去放肆了。
 
                 } else {

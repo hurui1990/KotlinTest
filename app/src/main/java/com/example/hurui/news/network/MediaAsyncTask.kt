@@ -17,10 +17,10 @@ import java.io.File
  */
 class MediaAsyncTask(context: Context, onLoadMediaListener: OnLoadMediaListener, type : Int): AsyncTask<ContentResolver, Void, HashMap<String, ArrayList<MediaBean>>>() {
 
-    val TAG = "MediaAsyncTask"
-    val mContext : Context = context
-    val mOnLoadMediaListener : OnLoadMediaListener = onLoadMediaListener
-    val mType : Int? = type
+    private val TAG = "MediaAsyncTask"
+    private val mContext : Context = context
+    private val mOnLoadMediaListener : OnLoadMediaListener = onLoadMediaListener
+    private val mType : Int? = type
 
     override fun doInBackground(vararg params: ContentResolver?): HashMap<String, ArrayList<MediaBean>> {
         when(mType){
@@ -72,7 +72,7 @@ class MediaAsyncTask(context: Context, onLoadMediaListener: OnLoadMediaListener,
                     data!!.add(MediaBean(Constans.MEDIA_TYPE_IMAGE ,path, displayName, size.toString(),"", "", "",  "", ""))
                     continue
                 } else {
-                    var data : ArrayList<MediaBean>  = ArrayList<MediaBean>()
+                    var data : ArrayList<MediaBean>  = ArrayList()
                     data.add(MediaBean(Constans.MEDIA_TYPE_IMAGE,path,displayName,size.toString(),"","", "", "", ""))
                     allPhotosTemp[dirPath] = data
                 }
@@ -186,7 +186,7 @@ class MediaAsyncTask(context: Context, onLoadMediaListener: OnLoadMediaListener,
                     data!!.add(MediaBean(Constans.MEDIA_TYPE_MUSIC,path, displayName, size.toString(),"", duration.toString(), title,  singer, album))
                     continue
                 } else {
-                    var data : ArrayList<MediaBean>  = ArrayList<MediaBean>()
+                    var data : ArrayList<MediaBean>  = ArrayList()
                     data.add(MediaBean(Constans.MEDIA_TYPE_MUSIC,path,displayName,size.toString(),"", duration.toString(), title,  singer, album))
                     allPhotosTemp[dirPath] = data
                 }

@@ -17,13 +17,13 @@ import com.squareup.picasso.Picasso
  */
 class RecyclerAdapter(context:Context)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>(), View.OnClickListener {
-    var mContext : Context = context
-    var mDataList = ArrayList<NewsDetail>()
-    var type0 = 0
-    var type1 = 1
-    var type2 = 2
-    var type3 = 3
-    var onItemClickListener : OnItemClickListener? = null
+    private var mContext : Context = context
+    private var mDataList = ArrayList<NewsDetail>()
+    private var type0 = 0
+    private var type1 = 1
+    private var type2 = 2
+    private var type3 = 3
+    private var onItemClickListener : OnItemClickListener? = null
 
     interface OnItemClickListener{
         fun onItemClick(view:View, position:Int)
@@ -67,15 +67,19 @@ class RecyclerAdapter(context:Context)
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
         Log.i("viewType", viewType.toString())
         var view : View
-        if(viewType == type3){
-            view  = LayoutInflater.from(mContext).inflate(R.layout.list_litem_three, parent, false)
-            return ItemViewHolderThree(view)
-        }else if(viewType == type2){
-            view  = LayoutInflater.from(mContext).inflate(R.layout.list_litem_two, parent, false)
-            return ItemViewHolderTwo(view)
-        }else{
-            view  = LayoutInflater.from(mContext).inflate(R.layout.list_litem_one, parent, false)
-            return ItemViewHolderOne(view)
+        return when (viewType) {
+            type3 -> {
+                view  = LayoutInflater.from(mContext).inflate(R.layout.list_litem_three, parent, false)
+                ItemViewHolderThree(view)
+            }
+            type2 -> {
+                view  = LayoutInflater.from(mContext).inflate(R.layout.list_litem_two, parent, false)
+                ItemViewHolderTwo(view)
+            }
+            else -> {
+                view  = LayoutInflater.from(mContext).inflate(R.layout.list_litem_one, parent, false)
+                ItemViewHolderOne(view)
+            }
         }
     }
 
@@ -95,11 +99,19 @@ class RecyclerAdapter(context:Context)
         if(item.thumbnail_pic_s03 != null){
             picPaths.add(item.thumbnail_pic_s03)
         }
-        when(picPaths.size){
-            1 -> {return type1}
-            2 -> {return type2}
-            3 -> {return type3}
-            else -> {return type0}
+        return when(picPaths.size){
+            1 -> {
+                type1
+            }
+            2 -> {
+                type2
+            }
+            3 -> {
+                type3
+            }
+            else -> {
+                type0
+            }
         }
     }
 

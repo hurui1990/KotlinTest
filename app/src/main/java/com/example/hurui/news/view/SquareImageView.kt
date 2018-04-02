@@ -1,18 +1,18 @@
 package com.example.hurui.news.view
 
 import android.content.Context
+import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
-import android.widget.ImageView
 import com.example.hurui.news.R
 import com.example.hurui.news.utils.Utils
 
 /**
  * Created by hurui on 2018/3/18.
  */
-class SquareImageView : ImageView {
+class SquareImageView : AppCompatImageView {
 
-    var mWidth : Int? = null
-    var imageSize : Int? = null
+    private var mWidth : Int? = null
+    private var imageSize : Int? = null
 
     constructor(context: Context) : super(context) {
         // TODO Auto-generated constructor stub
@@ -24,7 +24,7 @@ class SquareImageView : ImageView {
         imageSize  = (mWidth!! - divide * 3) / 4
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {}
+    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)

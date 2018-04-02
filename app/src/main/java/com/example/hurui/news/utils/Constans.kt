@@ -5,8 +5,8 @@ package com.example.hurui.news.utils
  */
 class Constans{
     companion object {
-        val MEDIA_TYPE_VEDIO : String = "Video"
-        val MEDIA_TYPE_IMAGE : String = "IMAGE"
-        val MEDIA_TYPE_MUSIC : String = "MUSIC"
+        const val MEDIA_TYPE_VEDIO : String = "Video"
+        const val MEDIA_TYPE_IMAGE : String = "IMAGE"
+        const val MEDIA_TYPE_MUSIC : String = "MUSIC"
     }
 }

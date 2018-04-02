@@ -16,8 +16,8 @@ import android.widget.LinearLayout
  */
 class MyDivider(context: Context, orientation: Int) : RecyclerView.ItemDecoration() {
 
-    val HORIZONTAL = LinearLayout.HORIZONTAL
-    val VERTICAL = LinearLayout.VERTICAL
+    private val HORIZONTAL = LinearLayout.HORIZONTAL
+    private val VERTICAL = LinearLayout.VERTICAL
 
     private val ATTRS = intArrayOf(android.R.attr.listDivider)
 
@@ -35,7 +35,7 @@ class MyDivider(context: Context, orientation: Int) : RecyclerView.ItemDecoratio
         setCustonOrientation(orientation)
     }
 
-    fun setCustonOrientation(orientation: Int) {
+    private fun setCustonOrientation(orientation: Int) {
         if (orientation != HORIZONTAL && orientation != VERTICAL) {
             throw IllegalArgumentException(
                     "Invalid orientation. It should be either HORIZONTAL or VERTICAL")

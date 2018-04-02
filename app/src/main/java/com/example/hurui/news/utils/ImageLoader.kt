@@ -33,7 +33,7 @@ class ImageLoader(private val mContext: Context) {
                     val imageView : SquareImageView = result.imageview
                     val bitmap : Bitmap = result.bitmap
                     val path : String = result.path
-                    if(path.equals(imageView.tag)){
+                    if(path == imageView.tag){
                         imageView.setImageBitmap(bitmap)
                     }
                 }
@@ -66,13 +66,13 @@ class ImageLoader(private val mContext: Context) {
         }
     }
 
-    fun addBitmapToMemoryCache(key: String, bitmap: Bitmap) {
+    private fun addBitmapToMemoryCache(key: String, bitmap: Bitmap) {
         if (getBitmapFromMemoryCache(key) == null) {
             mMemoryCache.put(key, bitmap)
         }
     }
 
-    fun getBitmapFromMemoryCache(key: String): Bitmap? {
+    private fun getBitmapFromMemoryCache(key: String): Bitmap? {
         return mMemoryCache.get(key)
     }
 
@@ -92,18 +92,18 @@ class ImageLoader(private val mContext: Context) {
         THREAD_POOL_EXECUTOR.execute(loadBitmapTask)
     }
 
-    fun getDiskCacheDir(context: Context, uniqueName : String) : File{
+    private fun getDiskCacheDir(context: Context, uniqueName : String) : File{
         val externaStorageAvailable = Environment.getExternalStorageDirectory().equals(Environment.MEDIA_MOUNTED)
         val cachePath : String
-        if(externaStorageAvailable){
-            cachePath = context.externalCacheDir.path
+        cachePath = if(externaStorageAvailable){
+            context.externalCacheDir.path
         }else{
-            cachePath = context.cacheDir.path
+            context.cacheDir.path
         }
         return File(cachePath+File.separator+uniqueName)
     }
 
-    fun getUsableSpace(path : File) : Long{
+    private fun getUsableSpace(path : File) : Long{
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD){
             return path.usableSpace
         }
