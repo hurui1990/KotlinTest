@@ -190,6 +190,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigat
         super.onDestroy()
         mLocationClient!!.stopLocation()
         mLocationClient!!.onDestroy()
+        drawerlayout.setDrawerListener(null)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

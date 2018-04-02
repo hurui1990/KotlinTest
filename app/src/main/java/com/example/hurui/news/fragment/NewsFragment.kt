@@ -76,6 +76,11 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        dataAdapter!!.setItemClickListener(null!!)
+    }
+
     override fun setLoadNews(result: String) {
         val gson = Gson()
         val resultGson : Result = gson.fromJson(result, Result::class.java)
@@ -91,7 +96,7 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
     }
 
     override fun loadNewsError(errorType: Int) {
-        if(errorType == 400){
+        if(errorType == 400 && activity != null){
             share = activity.getSharedPreferences("result", Context.MODE_PRIVATE)
             val result : String = share!!.getString("hurui", "")
             if(result != null && !TextUtils.isEmpty(result)){

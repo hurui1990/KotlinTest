@@ -1,6 +1,7 @@
 package com.example.hurui.news.adapter
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.hurui.news.R
 import com.example.hurui.news.bean.NewsDetail
+import com.example.hurui.news.utils.Utils
 import com.squareup.picasso.Picasso
 
 /**
@@ -17,7 +19,7 @@ import com.squareup.picasso.Picasso
  */
 class RecyclerAdapter(context:Context)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>(), View.OnClickListener {
-    private var mContext : Context = context
+    private var mContext = context
     private var mDataList = ArrayList<NewsDetail>()
     private var type0 = 0
     private var type1 = 1
@@ -30,6 +32,7 @@ class RecyclerAdapter(context:Context)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
+        val screenWidth : Int = Utils.getScreenWidth(mContext)
         val item: NewsDetail = mDataList[position]
         holder!!.itemView.tag = position
         holder.itemView.setOnClickListener(this)
@@ -42,24 +45,48 @@ class RecyclerAdapter(context:Context)
                 holderOne.title.text = item.title
                 holderOne.author.text = item.author_name
                 holderOne.datatime.text = item.date
-                Picasso.with(mContext).load(item.thumbnail_pic_s).into(holderOne.img)
+                Picasso.with(mContext)
+                        .load(item.thumbnail_pic_s)
+                        .config(Bitmap.Config.RGB_565)
+                        .resize(screenWidth/3, screenWidth/4)
+                        .into(holderOne.img)
             }
             type2 -> {
                 val holderTwo : ItemViewHolderTwo = holder as ItemViewHolderTwo
                 holderTwo.title.text = item.title
                 holderTwo.author.text = item.author_name
                 holderTwo.datatime.text = item.date
-                Picasso.with(mContext).load(item.thumbnail_pic_s).into(holderTwo.img)
-                Picasso.with(mContext).load(item.thumbnail_pic_s02).into(holderTwo.img2)
+                Picasso.with(mContext)
+                        .load(item.thumbnail_pic_s)
+                        .config(Bitmap.Config.RGB_565)
+                        .resize(screenWidth/2, screenWidth*3/10)
+                        .into(holderTwo.img)
+                Picasso.with(mContext)
+                        .load(item.thumbnail_pic_s02)
+                        .config(Bitmap.Config.RGB_565)
+                        .resize(screenWidth/2, screenWidth*3/10)
+                        .into(holderTwo.img2)
             }
             type3 -> {
                 val holderThree : ItemViewHolderThree = holder as ItemViewHolderThree
                 holderThree.title.text = item.title
                 holderThree.author.text = item.author_name
                 holderThree.datatime.text = item.date
-                Picasso.with(mContext).load(item.thumbnail_pic_s).into(holderThree.img)
-                Picasso.with(mContext).load(item.thumbnail_pic_s02).into(holderThree.img2)
-                Picasso.with(mContext).load(item.thumbnail_pic_s03).into(holderThree.img3)
+                Picasso.with(mContext)
+                        .load(item.thumbnail_pic_s)
+                        .config(Bitmap.Config.RGB_565)
+                        .resize(screenWidth/3, screenWidth*3/15)
+                        .into(holderThree.img)
+                Picasso.with(mContext)
+                        .load(item.thumbnail_pic_s02)
+                        .config(Bitmap.Config.RGB_565)
+                        .resize(screenWidth/3, screenWidth*3/15)
+                        .into(holderThree.img2)
+                Picasso.with(mContext)
+                        .load(item.thumbnail_pic_s03)
+                        .config(Bitmap.Config.RGB_565)
+                        .resize(screenWidth/3, screenWidth*3/15)
+                        .into(holderThree.img3)
             }
         }
     }
