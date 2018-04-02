@@ -36,5 +36,5 @@
     </LinearLayout>
 
 
-    <include layout="@layout/drawerfooter"></include>
+    <include layout="@layout/drawerfooter"/>
 </LinearLayout>

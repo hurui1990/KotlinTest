@@ -1,6 +1,5 @@
 package com.example.hurui.news.activity
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -68,7 +67,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigat
         setLocationOption()
     }
 
-    fun setLocationOption(){
+    private fun setLocationOption(){
         mLocationClient = AMapLocationClient(applicationContext)
         mLocationListener = AMapLocationListener { aMapLocation -> run{
             Log.i(TAG, "返回值："+aMapLocation.city)
@@ -97,10 +96,10 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigat
         mLocationClient!!.startLocation()
     }
 
-    fun initFragments(){
+    private fun initFragments(){
         fragmentList = ArrayList()
         for(i in 0..(newTypes!!.size-1)){
-            var fragment : Fragment = NewsFragment()
+            val fragment : Fragment = NewsFragment()
             val bundle = Bundle()
             bundle.putString("type", newTypes!![i].type)
             fragment.arguments = bundle
@@ -114,7 +113,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigat
     }
 
     //动态添加头部的新闻类型标签的布局
-    fun initScrollView(){
+    private fun initScrollView(){
         newTypes = ArrayList()
         newTypes!!.add(NewType("头条","top"))
         newTypes!!.add(NewType("社会","shehui"))
@@ -137,7 +136,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigat
     override fun loadNewsError(errorType: Int) {}
 
     override fun loadWeather(result: WeatherData) {
-        var nowWeather : HeWeather5Bean = result.HeWeather5[0]
+        val nowWeather : HeWeather5Bean = result.HeWeather5[0]
         if(nowWeather.status == "unknown city"){
             return
         }
@@ -160,18 +159,18 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigat
             }
             R.id.menu_localpicture -> {
                 //TODO: 跳转到本地图片页面
-                var intent : Intent = Intent(this, MediasActivity::class.java)
+                val intent = Intent(this, MediasActivity::class.java)
                 startActivity(intent)
                 overridePendingTransition(R.anim.activity_enter,R.anim.activity_out)
             }
             R.id.menu_map -> {
-                var intent : Intent = Intent(this, MapActivity::class.java)
+                val intent = Intent(this, MapActivity::class.java)
                 startActivity(intent)
                 overridePendingTransition(R.anim.activity_enter,R.anim.activity_out)
             }
             R.id.menu_blog -> {
                 //TODO: 跳转到关于我页面
-                var intent : Intent = Intent(this, AboutActivity::class.java)
+                val intent = Intent(this, AboutActivity::class.java)
                 startActivity(intent)
                 overridePendingTransition(R.anim.activity_enter,R.anim.activity_out)
             }
@@ -195,15 +194,15 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigat
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if(keyCode == KeyEvent.KEYCODE_BACK) {
-            var build = AlertDialog.Builder(this)
+            val build = AlertDialog.Builder(this)
             build.setTitle("提示")
             build.setMessage("客官不再耍一会儿？")
-            build.setPositiveButton("确定", DialogInterface.OnClickListener { dialog, which ->
+            build.setPositiveButton("确定", { _, _ ->
                 run {
                     finish()
                 }
             })
-            build.setNegativeButton("取消", DialogInterface.OnClickListener { dialog, which ->
+            build.setNegativeButton("取消", { _, _ ->
                 run {
 
                 }

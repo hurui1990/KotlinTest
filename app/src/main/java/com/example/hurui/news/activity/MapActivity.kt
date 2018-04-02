@@ -61,7 +61,7 @@ class MapActivity : AppCompatActivity(),
     private var isIndoorOpen : Boolean = false
     private var isReliOpen : Boolean = false
     private var centerLatlon : LatLng? = null
-    var isInDaohang : Boolean = false
+    private var isInDaohang : Boolean = false
     private val BUXING : Int = 0
     private val DRIVE : Int = 1
     private val BUS : Int = 2
@@ -155,7 +155,7 @@ class MapActivity : AppCompatActivity(),
 
     //searchview输入事件监听
     override fun onQueryTextSubmit(query: String?): Boolean {
-        var scaleAnim : ScaleAnimation = ScaleAnimation(1f, 1f, 0f, 1f, 0.5f, 0f)
+        val scaleAnim = ScaleAnimation(1f, 1f, 0f, 1f, 0.5f, 0f)
         scaleAnim.duration = 300
         search_list.animation = scaleAnim
         search_list.visibility = View.VISIBLE
@@ -176,7 +176,7 @@ class MapActivity : AppCompatActivity(),
     //POI搜索结果返回
     override fun onPoiSearched(result: PoiResult?, p1: Int) {
         if(result!!.pois.size == 0){
-            var scaleAnim : ScaleAnimation = ScaleAnimation(1f, 1f, 0f, 1f, 0.5f, 0f)
+            val scaleAnim = ScaleAnimation(1f, 1f, 0f, 1f, 0.5f, 0f)
             scaleAnim.duration = 300
             layout_no_result.animation = scaleAnim
             layout_no_result.visibility = View.VISIBLE
@@ -184,7 +184,7 @@ class MapActivity : AppCompatActivity(),
                 override fun run() {
 
                     runOnUiThread {
-                        var scaleAnim : ScaleAnimation = ScaleAnimation(1f, 1f, 1f, 0f, 0.5f, 0f)
+                        val scaleAnim = ScaleAnimation(1f, 1f, 1f, 0f, 0.5f, 0f)
                         scaleAnim.duration = 300
                         layout_no_result.animation = scaleAnim
                         layout_no_result.visibility = View.GONE
@@ -220,7 +220,7 @@ class MapActivity : AppCompatActivity(),
                 if(isInDaohang) {
                     daohang.setImageResource(R.drawable.ic_daohang)
                     isInDaohang = false
-                    var scaleAnim : ScaleAnimation = ScaleAnimation(1f, 1f, 1f, 0f, 0.5f, 0f)
+                    val scaleAnim = ScaleAnimation(1f, 1f, 1f, 0f, 0.5f, 0f)
                     scaleAnim.duration = 500
                     daohanglayout.animation = scaleAnim
                     daohanglayout.visibility = View.GONE
@@ -229,7 +229,7 @@ class MapActivity : AppCompatActivity(),
                         override fun run() {
 
                             runOnUiThread {
-                                var scaleAnim : ScaleAnimation = ScaleAnimation(1f, 1f, 0f, 1f, 0.5f, 0f)
+                                val scaleAnim = ScaleAnimation(1f, 1f, 0f, 1f, 0.5f, 0f)
                                 scaleAnim.duration = 300
                                 mapsearchlayout.animation = scaleAnim
                                 mapsearchlayout.visibility = View.VISIBLE
@@ -237,13 +237,13 @@ class MapActivity : AppCompatActivity(),
                         }
                     }, 500)
 
-                    var params : RelativeLayout.LayoutParams = search_list.layoutParams as RelativeLayout.LayoutParams
+                    val params : RelativeLayout.LayoutParams = search_list.layoutParams as RelativeLayout.LayoutParams
                     params.addRule(RelativeLayout.BELOW, R.id.mapsearchlayout)
                     search_list.layoutParams = params
                 }else{
                     daohang.setImageResource(R.drawable.ic_cancel)
                     isInDaohang = true
-                    var scaleAnim: ScaleAnimation = ScaleAnimation(1f, 1f, 1f, 0f, 0.5f, 0f)
+                    val scaleAnim = ScaleAnimation(1f, 1f, 1f, 0f, 0.5f, 0f)
                     scaleAnim.duration = 300
                     mapsearchlayout.animation = scaleAnim
                     mapsearchlayout.visibility = View.INVISIBLE
@@ -252,7 +252,7 @@ class MapActivity : AppCompatActivity(),
                         override fun run() {
 
                             runOnUiThread {
-                                var scaleAnim: ScaleAnimation = ScaleAnimation(1f, 1f, 0f, 1f, 0.5f, 0f)
+                                val scaleAnim = ScaleAnimation(1f, 1f, 0f, 1f, 0.5f, 0f)
                                 scaleAnim.duration = 500
                                 daohanglayout.animation = scaleAnim
                                 daohanglayout.visibility = View.VISIBLE
@@ -260,14 +260,14 @@ class MapActivity : AppCompatActivity(),
                         }
                     }, 300)
 
-                    var params : RelativeLayout.LayoutParams = search_list.layoutParams as RelativeLayout.LayoutParams
+                    val params : RelativeLayout.LayoutParams = search_list.layoutParams as RelativeLayout.LayoutParams
                     params.addRule(RelativeLayout.BELOW, R.id.daohanglayout)
                     search_list.layoutParams = params
                 }
 
             }
             R.id.img_switch_location -> {
-                var etChange : String = ""
+                var etChange = ""
                 oriText = et_orin.text.toString()
                 desText = et_des.text.toString()
 
@@ -293,15 +293,15 @@ class MapActivity : AppCompatActivity(),
         }
     }
 
-    fun setBuxingPath(){
+    private fun setBuxingPath(){
 
     }
 
-    fun setDrivePath(){}
+    private fun setDrivePath(){}
 
-    fun setBusPath(){}
+    private fun setBusPath(){}
 
-    fun setBikePath(){}
+    private fun setBikePath(){}
 
     override fun onDriveRouteSearched(p0: DriveRouteResult?, p1: Int) {
 
@@ -349,7 +349,7 @@ class MapActivity : AppCompatActivity(),
 
         when(view!!.id){
             R.id.traffic_switch_btn -> {
-                var editor = mTrafficPrefre!!.edit()
+                val editor = mTrafficPrefre!!.edit()
                 editor.putBoolean("isOpen", isChecked).commit()
                 isTrafficOpen = isChecked
                 when(isChecked){
@@ -358,7 +358,7 @@ class MapActivity : AppCompatActivity(),
                 }
             }
             R.id.indoor_switch_btn -> {
-                var editor = mIndoorPrefre!!.edit()
+                val editor = mIndoorPrefre!!.edit()
                 editor.putBoolean("isOpen", isChecked).commit()
                 isIndoorOpen = isChecked
                 when(isChecked){
@@ -367,7 +367,7 @@ class MapActivity : AppCompatActivity(),
                 }
             }
             R.id.reli_switch_btn -> {
-                var editor = mReliPrefre!!.edit()
+                val editor = mReliPrefre!!.edit()
                 editor.putBoolean("isOpen", isChecked).commit()
                 isReliOpen = isChecked
                 when(isChecked){
@@ -393,14 +393,14 @@ class MapActivity : AppCompatActivity(),
     override fun onCameraChange(cameraPosition: CameraPosition?) {
     }
 
-    fun setListViewGone(){
-        var scaleAnim : ScaleAnimation = ScaleAnimation(1f, 1f, 1f, 0f, 0.5f, 0f)
+    private fun setListViewGone(){
+        val scaleAnim = ScaleAnimation(1f, 1f, 1f, 0f, 0.5f, 0f)
         scaleAnim.duration = 300
         search_list.animation = scaleAnim
         search_list.visibility = View.GONE
     }
 
-    fun initMap() {
+    private fun initMap() {
         mMyLocationStyle = MyLocationStyle()
         mMyLocationStyle!!.strokeColor(resources.getColor(R.color.white))// 设置圆形的边框颜色
         mMyLocationStyle!!.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable.location))
@@ -410,13 +410,13 @@ class MapActivity : AppCompatActivity(),
         aMap!!.myLocationStyle = mMyLocationStyle
         aMap!!.isMyLocationEnabled = true
 
-        var latlonPosition: LatLng = LatLng(mMapLoaction!!.latitude, mMapLoaction!!.longitude)
+        val latlonPosition = LatLng(mMapLoaction!!.latitude, mMapLoaction!!.longitude)
         aMap!!.moveCamera(CameraUpdateFactory.changeLatLng(latlonPosition))
         aMap!!.moveCamera(CameraUpdateFactory.zoomTo(orignZoomLevel))
         aMap!!.setOnCameraChangeListener(this)
     }
 
-    fun setLocationOption() {
+    private fun setLocationOption() {
         mLocationClient = AMapLocationClient(applicationContext)
         mLocationListener = AMapLocationListener { aMapLocation ->
             run {
@@ -449,7 +449,7 @@ class MapActivity : AppCompatActivity(),
     }
 
     //切换地图显示模式
-    fun setMapDisplayType(type : Int){
+    private fun setMapDisplayType(type : Int){
         when(type){
             AMap.MAP_TYPE_NORMAL -> {
                 //TODO 普通模式
@@ -469,28 +469,28 @@ class MapActivity : AppCompatActivity(),
         }
     }
 
-    fun setReliMap(lat : Double, lon : Double){
+    private fun setReliMap(lat : Double, lon : Double){
         aMap!!.clear(true)
-        var latlngs : ArrayList<LatLng> = ArrayList(5000)
-        var x : Double = lat
-        var y : Double = lon
+        val latlngs : ArrayList<LatLng> = ArrayList(5000)
+        val x : Double = lat
+        val y : Double = lon
 
         for (i in 0..4999) {
-            var xX: Double = 0.0
-            var yY: Double = 0.0
+            var xX = 0.0
+            var yY = 0.0
             xX = Math.random() * 0.5 - 0.25
             yY = Math.random() * 0.5 - 0.25
             latlngs.add(LatLng(x + xX, y + yY))
         }
 
         // 构建热力图 HeatmapTileProvider
-        var builder : HeatmapTileProvider.Builder =  HeatmapTileProvider.Builder()
+        val builder : HeatmapTileProvider.Builder =  HeatmapTileProvider.Builder()
         builder.data(latlngs)
         // Gradient 的设置可见参考手册
         // 构造热力图对象
-        var heatmapTileProvider : HeatmapTileProvider = builder.build()
+        val heatmapTileProvider : HeatmapTileProvider = builder.build()
 
-        var tileOverlayOptions : TileOverlayOptions  = TileOverlayOptions()
+        val tileOverlayOptions  = TileOverlayOptions()
         tileOverlayOptions.tileProvider(heatmapTileProvider) // 设置瓦片图层的提供者
         // 向地图上添加 TileOverlayOptions 类对象
         aMap!!.addTileOverlay(tileOverlayOptions)

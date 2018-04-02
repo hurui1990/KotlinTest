@@ -46,12 +46,12 @@ class MediaAsyncTask(context: Context, onLoadMediaListener: OnLoadMediaListener,
         Log.i(TAG, "获取所有图片信息")
         var mMediaBeanList = ArrayList<MediaBean>()
         val allPhotosTemp = HashMap<String, ArrayList<MediaBean>>()//所有照片
-        var mImageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        var projImage : Array<String> = arrayOf(MediaStore.Images.Media._ID
+        val mImageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        val projImage : Array<String> = arrayOf(MediaStore.Images.Media._ID
                 , MediaStore.Images.Media.DATA
                 , MediaStore.Images.Media.SIZE
                 , MediaStore.Images.Media.DISPLAY_NAME)
-        var mCursor : Cursor = mContext.contentResolver.query(mImageUri,
+        val mCursor : Cursor = mContext.contentResolver.query(mImageUri,
                 projImage,
                 MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=?",
                 arrayOf("image/jpeg", "image/png"),
@@ -59,20 +59,20 @@ class MediaAsyncTask(context: Context, onLoadMediaListener: OnLoadMediaListener,
         if(mCursor!=null){
             while (mCursor.moveToNext()) {
                 // 获取图片的路径
-                var path : String = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA))
-                var size : Int = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Images.Media.SIZE))/1024
-                var displayName : String  = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME))
+                val path : String = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA))
+                val size : Int = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Images.Media.SIZE))/1024
+                val displayName : String  = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME))
                 //用于展示相册初始化界面
 //                mMediaBeanList!!.add(MediaBean(Constans.MEDIA_TYPE_IMAGE, path, displayName, size.toString(), "", ""))
                 // 获取该图片的父路径名
-                var dirPath : String = File(path).parentFile.absolutePath
+                val dirPath : String = File(path).parentFile.absolutePath
                 //存储对应关系
                 if (allPhotosTemp.containsKey(dirPath)) {
-                    var data : ArrayList<MediaBean>? = allPhotosTemp[dirPath]
+                    val data : ArrayList<MediaBean>? = allPhotosTemp[dirPath]
                     data!!.add(MediaBean(Constans.MEDIA_TYPE_IMAGE ,path, displayName, size.toString(),"", "", "",  "", ""))
                     continue
                 } else {
-                    var data : ArrayList<MediaBean>  = ArrayList()
+                    val data : ArrayList<MediaBean>  = ArrayList()
                     data.add(MediaBean(Constans.MEDIA_TYPE_IMAGE,path,displayName,size.toString(),"","", "", "", ""))
                     allPhotosTemp[dirPath] = data
                 }
@@ -131,11 +131,11 @@ class MediaAsyncTask(context: Context, onLoadMediaListener: OnLoadMediaListener,
                 val dirPath : String = File(path).parentFile.absolutePath
                 //存储对应关系
                 if (allPhotosTemp.containsKey(dirPath)) {
-                    var data : ArrayList<MediaBean>? = allPhotosTemp[dirPath]
+                    val data : ArrayList<MediaBean>? = allPhotosTemp[dirPath]
                     data!!.add(MediaBean(Constans.MEDIA_TYPE_VEDIO,path, displayName,size.toString(),thumbPath, Utils.timeParse(duration.toLong()), "", "", ""))
                     continue
                 } else {
-                    var data : ArrayList<MediaBean> =  ArrayList()
+                    val data : ArrayList<MediaBean> =  ArrayList()
                     data.add(MediaBean(Constans.MEDIA_TYPE_VEDIO,path, displayName,size.toString(),thumbPath, Utils.timeParse(duration.toLong()), "", "", ""))
                     allPhotosTemp[dirPath] = data
                 }
@@ -165,7 +165,7 @@ class MediaAsyncTask(context: Context, onLoadMediaListener: OnLoadMediaListener,
         if(mCursor != null){
             while (mCursor.moveToNext()){
                 val singer : String = mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
-                if(singer.equals("<unknown>")){
+                if(singer == "<unknown>"){
                     continue
                 }
                 val displayName : String = mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME))
@@ -179,14 +179,14 @@ class MediaAsyncTask(context: Context, onLoadMediaListener: OnLoadMediaListener,
                     size = File(path).length()/1024
                 }
 
-                var dirPath : String = File(path).parentFile.absolutePath
+                val dirPath : String = File(path).parentFile.absolutePath
                 //存储对应关系
                 if (allPhotosTemp.containsKey(dirPath)) {
-                    var data : ArrayList<MediaBean>? = allPhotosTemp[dirPath]
+                    val data : ArrayList<MediaBean>? = allPhotosTemp[dirPath]
                     data!!.add(MediaBean(Constans.MEDIA_TYPE_MUSIC,path, displayName, size.toString(),"", duration.toString(), title,  singer, album))
                     continue
                 } else {
-                    var data : ArrayList<MediaBean>  = ArrayList()
+                    val data : ArrayList<MediaBean>  = ArrayList()
                     data.add(MediaBean(Constans.MEDIA_TYPE_MUSIC,path,displayName,size.toString(),"", duration.toString(), title,  singer, album))
                     allPhotosTemp[dirPath] = data
                 }

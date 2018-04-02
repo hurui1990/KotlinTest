@@ -31,8 +31,6 @@ data class Result(
         val result:Data
 )
 
-data class MenuType(var image:Int, var itemtext:String)
-
 data class WeatherData(
         val HeWeather5:ArrayList<HeWeather5Bean>
 )

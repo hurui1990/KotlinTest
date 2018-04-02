@@ -20,7 +20,7 @@ class SquareImageView : AppCompatImageView {
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
         mWidth = Utils.getScreenWidth(context)
-        var divide = context.resources.getDimension(R.dimen.image_view_divide).toInt()
+        val divide = context.resources.getDimension(R.dimen.image_view_divide).toInt()
         imageSize  = (mWidth!! - divide * 3) / 4
     }
 

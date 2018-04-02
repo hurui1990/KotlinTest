@@ -12,15 +12,7 @@ import java.io.File
 /**
  * Created by hurui on 2018/3/19.
  */
-class PhotoViewAdapter : PagerAdapter{
-
-    private var mImageList : ArrayList<String>? = null
-    private var mContext : Context? = null
-
-    constructor(imageUrls : ArrayList<String>, context: Context) : super(){
-        mImageList = imageUrls
-        mContext = context
-    }
+class PhotoViewAdapter(val mImageList : ArrayList<String>, val mContext: Context) : PagerAdapter() {
 
     override fun instantiateItem(container: ViewGroup?, position: Int): Any {
         val photoView = PhotoView(mContext)

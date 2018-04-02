@@ -6,6 +6,5 @@
         android:id="@+id/share"
         android:title="分享"
         android:icon="@drawable/ic_more_horiz_black_24dp"
-        app:showAsAction="always"
-        ></item>
+        app:showAsAction="always"/>
 </menu>

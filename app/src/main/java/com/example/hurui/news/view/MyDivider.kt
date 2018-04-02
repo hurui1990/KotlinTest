@@ -43,13 +43,6 @@ class MyDivider(context: Context, orientation: Int) : RecyclerView.ItemDecoratio
         mOrientation = orientation
     }
 
-    fun setCustomDrawable(drawable: Drawable) {
-        if (drawable == null) {
-            throw IllegalArgumentException("Drawable cannot be null.")
-        }
-        mDivider = drawable
-    }
-
     override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State?) {
         if (parent.layoutManager == null) {
             return

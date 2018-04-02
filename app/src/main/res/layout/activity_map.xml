@@ -126,7 +126,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:background="@android:color/darker_gray"
-                            ></View>
+                            />
 
                         <EditText
                             android:id="@+id/et_des"
@@ -151,7 +151,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@android:color/darker_gray"></View>
+                    android:background="@android:color/darker_gray"/>
 
                 <RadioGroup
                     android:id="@+id/out_select"

@@ -27,7 +27,7 @@ class NewsDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newdetail)
 
-        var intent : Intent = intent
+        val intent : Intent = intent
         url = intent.getStringExtra("url")
         title = intent.getStringExtra("title")
 
@@ -38,7 +38,7 @@ class NewsDetailActivity : AppCompatActivity() {
 
         news_detail.loadUrl(url)
 
-        var webSetting : WebSettings = news_detail.settings
+        val webSetting : WebSettings = news_detail.settings
         webSetting.javaScriptEnabled = true
         webSetting.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
 
@@ -48,7 +48,7 @@ class NewsDetailActivity : AppCompatActivity() {
                 progress.progress = newProgress
                 if(newProgress == 100) {
                     progress.visibility = View.GONE
-                    var alphaAnim: AlphaAnimation = AlphaAnimation(0f, 1f)
+                    val alphaAnim = AlphaAnimation(0f, 1f)
                     alphaAnim.duration = 500
                     news_detail.animation = alphaAnim
                     news_detail.visibility = View.VISIBLE

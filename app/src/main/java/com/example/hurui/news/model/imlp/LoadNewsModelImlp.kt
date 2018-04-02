@@ -24,7 +24,6 @@ class LoadNewsModelImlp(private var onLoadNewsListener: OnLoadNewsListener) : Lo
     private var weatherBaseUrl = "https://free-api.heweather.com"
     private var newsCode = "53bd93e93a2b5c03c61983294614c91f"
     private var weatherCode = "84025e047503493c973343f0c619bd22"
-    var mOnLoadNewsListener : OnLoadNewsListener = onLoadNewsListener
     var content : String = "{'reason': '成功的返回','result': {'stat': '1','data': [{'uniquekey': 'd00ab6bc1d76967beefb9980dbec25da','title': '坚守38年，只为山里娃的读书梦','date': '2017-05-26 21:01','category': '头条','author_name': '新华社','url': 'http://mini.eastday.com/mobile/170526210105910.html','thumbnail_pic_s': 'http://09.imgmini.eastday.com/mobile/20170526/20170526210105_f98111c52883cbae6eddcab9e2ec905b_3_mwpm_03200403.jpeg','thumbnail_pic_s02': 'http://09.imgmini.eastday.com/mobile/20170526/20170526210105_6b625adf37eac05135e320d860ac7f61_5_mwpm_03200403.jpeg','thumbnail_pic_s03': 'http://09.imgmini.eastday.com/mobile/20170526/20170526210105_0cf02645ffa3604baa71bde33049a9c1_7_mwpm_03200403.jpeg' },{'title': '我们毕业了！——中国唯一一所艾滋病患儿学校迎来毕业季','date': '2017-05-26 20:47','category': '头条','author_name': '新华社','url': 'http://mini.eastday.com/mobile/170526204731243.html','thumbnail_pic_s': 'http://04.imgmini.eastday.com/mobile/20170526/20170526204731_887042f1cc1868714765360b57ebb09e_6_mwpm_03200403.jpeg','thumbnail_pic_s02': 'http://04.imgmini.eastday.com/mobile/20170526/20170526204731_0220e9c4ef2337dc1a24f10c7fec4d4b_1_mwpm_03200403.jpeg','thumbnail_pic_s03': 'http://04.imgmini.eastday.com/mobile/20170526/20170526204731_85df4ef1733fd7d87f929f90b47ca3a0_4_mwpm_03200403.jpeg' },{'uniquekey': '030eed5f2f0b34ec09fd619471152501','title': '面向大海 拥抱“金砖”——写在金砖国家领导人厦门会晤倒计时100天之际','date': '2017-05-26 20:38','category': '头条','author_name': '新华社','url': 'http://mini.eastday.com/mobile/170526203859978.html','thumbnail_pic_s': 'http://08.imgmini.eastday.com/mobile/20170526/20170526203859_745c538727a414e79753deb6acdd4655_3_mwpm_03200403.jpeg','thumbnail_pic_s02': 'http://08.imgmini.eastday.com/mobile/20170526/20170526203859_ba13b8deddeade80ade7c9f635f9a1c5_1_mwpm_03200403.jpeg','thumbnail_pic_s03': 'http://08.imgmini.eastday.com/mobile/20170526/20170526203859_6d40fc4b6db61e2d2b6a793934995ced_7_mwpm_03200403.jpeg' },] },'error_code': 0 }"
 
     override fun loadNews(type: String) {
@@ -42,13 +41,13 @@ class LoadNewsModelImlp(private var onLoadNewsListener: OnLoadNewsListener) : Lo
 
         callback.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>?, response: Response<ResponseBody>?) {
-                var jsonStr : String = String(response!!.body()!!.bytes())
-                mOnLoadNewsListener.onLoadSuccess(jsonStr)
+                val jsonStr = String(response!!.body()!!.bytes())
+                onLoadNewsListener.onLoadSuccess(jsonStr)
             }
 
             override fun onFailure(call: Call<okhttp3.ResponseBody>?, t: Throwable?) {
                 Log.i(TAG, t.toString())
-                mOnLoadNewsListener.onLoadFailed(400)
+                onLoadNewsListener.onLoadFailed(400)
             }
         })
     }
@@ -70,7 +69,7 @@ class LoadNewsModelImlp(private var onLoadNewsListener: OnLoadNewsListener) : Lo
 
             override fun onResponse(call: Call<WeatherData>, response: Response<WeatherData>) {
                 Log.i(TAG, "返回结果")
-                mOnLoadNewsListener.onLoadWeatherSuccess(response.body()!!)
+                onLoadNewsListener.onLoadWeatherSuccess(response.body()!!)
             }
         })
 

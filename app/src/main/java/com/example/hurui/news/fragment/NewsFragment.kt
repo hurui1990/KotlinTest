@@ -39,7 +39,7 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var bundle : Bundle = arguments
+        val bundle : Bundle = arguments
         mType = bundle.getString("type")
 
         mLoadNewsPresenter = LoadNewsPresenter(this)
@@ -53,13 +53,12 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var view : View = inflater!!.inflate(R.layout.fragment_news, container, false)
-        return view
+        return inflater!!.inflate(R.layout.fragment_news, container, false)
     }
 
     override fun onItemClick(view: View, position: Int) {
-        var itemData = dataList!![position]
-        var intent : Intent = Intent(activity, NewsDetailActivity::class.java)
+        val itemData = dataList!![position]
+        val intent = Intent(activity, NewsDetailActivity::class.java)
         intent.putExtra("url", itemData.url)
         intent.putExtra("title", itemData.title)
         activity.startActivity(intent)
@@ -78,14 +77,14 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
     }
 
     override fun setLoadNews(result: String) {
-        var gson = Gson()
-        var resultGson : Result = gson.fromJson(result, Result::class.java)
+        val gson = Gson()
+        val resultGson : Result = gson.fromJson(result, Result::class.java)
         dataList!!.clear()
         dataList = resultGson.result.data
         dataAdapter?.setData(dataList!!)
 
         share  = activity.getSharedPreferences("result",Context.MODE_PRIVATE)
-        var editor: SharedPreferences.Editor = share!!.edit()
+        val editor: SharedPreferences.Editor = share!!.edit()
         editor.putString("hurui", result)
         editor.commit()
 
@@ -96,8 +95,8 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
             share = activity.getSharedPreferences("result", Context.MODE_PRIVATE)
             val result : String = share!!.getString("hurui", "")
             if(result != null && !TextUtils.isEmpty(result)){
-                var gson : Gson = Gson()
-                var resultGson : Result = gson.fromJson(result, Result::class.java)
+                val gson = Gson()
+                val resultGson : Result = gson.fromJson(result, Result::class.java)
                 dataList!!.clear()
                 dataList = resultGson.result.data
                 dataAdapter?.setData(dataList!!)

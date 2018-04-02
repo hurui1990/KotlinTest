@@ -33,7 +33,7 @@ class MediaFragment : Fragment(), LoadMediaView, MediaRecyclerAdapter.OnItemClic
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var bundle : Bundle = arguments
+        val bundle : Bundle = arguments
         mType = bundle.getInt("type")
         mLoadMediaPresenter = LoadMediaPresenter(this)
 
@@ -45,8 +45,7 @@ class MediaFragment : Fragment(), LoadMediaView, MediaRecyclerAdapter.OnItemClic
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var view : View? = inflater!!.inflate(R.layout.fragments_media, container, false)
-        return view
+        return inflater!!.inflate(R.layout.fragments_media, container, false)
     }
 
     override fun onResume() {
@@ -76,16 +75,16 @@ class MediaFragment : Fragment(), LoadMediaView, MediaRecyclerAdapter.OnItemClic
     }
 
     override fun onItemClick(view: View, position: Int, type : String) {
-        if(type.equals(Constans.MEDIA_TYPE_IMAGE)) {
-            var pathList: ArrayList<String> = ArrayList()
+        if(type == Constans.MEDIA_TYPE_IMAGE) {
+            val pathList: ArrayList<String> = ArrayList()
             for (i in 0..(allPicture!!.size - 1)) {
                 pathList.add(allPicture!![i].path)
             }
-            var intent: Intent = Intent(activity, PhotoViewActivity::class.java)
+            val intent = Intent(activity, PhotoViewActivity::class.java)
             intent.putExtra("position", position)
             intent.putStringArrayListExtra("list", pathList)
             activity.startActivity(intent)
-        }else if(type.equals(Constans.MEDIA_TYPE_VEDIO)){
+        }else if(type == Constans.MEDIA_TYPE_VEDIO){
             Log.i("==========", allPicture!![position].path)
         }
     }

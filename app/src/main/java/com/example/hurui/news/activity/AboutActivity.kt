@@ -23,7 +23,7 @@ class AboutActivity : AppCompatActivity() {
 
         about_view.loadUrl("https://hurui1990.github.io/hurui.github.io/about/")
 
-        var webSetting : WebSettings = about_view.settings
+        val webSetting : WebSettings = about_view.settings
         webSetting.javaScriptEnabled = true
         webSetting.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
 
@@ -33,7 +33,7 @@ class AboutActivity : AppCompatActivity() {
                 progressbar.progress = newProgress
                 if(newProgress == 100) {
                     progressbar.visibility = View.GONE
-                    var alphaAnim: AlphaAnimation = AlphaAnimation(0f, 1f)
+                    val alphaAnim = AlphaAnimation(0f, 1f)
                     alphaAnim.duration = 500
                     about_view.animation = alphaAnim
                     about_view.visibility = View.VISIBLE

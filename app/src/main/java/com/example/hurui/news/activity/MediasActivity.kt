@@ -40,22 +40,22 @@ class MediasActivity : AppCompatActivity(){
         mFragmentList = ArrayList()
 
         //初始化图片
-        var picFragment: Fragment = MediaFragment()
-        var pictureBundle = Bundle()
+        val picFragment: Fragment = MediaFragment()
+        val pictureBundle = Bundle()
         pictureBundle.putInt("type", 0)
         picFragment.arguments = pictureBundle
         mFragmentList!!.add(picFragment)
 
         //初始化视频
-        var videoFragment: Fragment = MediaFragment()
-        var videoBundle = Bundle()
+        val videoFragment: Fragment = MediaFragment()
+        val videoBundle = Bundle()
         videoBundle.putInt("type", 1)
         videoFragment.arguments = videoBundle
         mFragmentList!!.add(videoFragment)
 
         //初始化音乐
-        var musicFragment: Fragment = MediaFragment()
-        var musicBundle = Bundle()
+        val musicFragment: Fragment = MediaFragment()
+        val musicBundle = Bundle()
         musicBundle.putInt("type", 2)
         musicFragment.arguments = musicBundle
         mFragmentList!!.add(musicFragment)

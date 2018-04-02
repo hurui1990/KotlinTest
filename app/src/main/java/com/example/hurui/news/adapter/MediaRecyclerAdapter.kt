@@ -21,10 +21,8 @@ import com.example.hurui.news.view.SquareImageView
  * Created by hurui on 2018/3/18.
  */
 class MediaRecyclerAdapter(context : Context, type : Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
-    val TAG = "MediaRecyclerAdapter"
     private var mContext : Context = context
     private var mDateList : ArrayList<MediaBean>? = null
-    private var mType : Int = type
     private val requestSize : Int = Utils.calculateImageviewSize(mContext)
     private var mOnItemClickListener : OnItemClickListener? = null
 
@@ -48,14 +46,14 @@ class MediaRecyclerAdapter(context : Context, type : Int) : RecyclerView.Adapter
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
-        var item : MediaBean = mDateList!![position]
+        val item : MediaBean = mDateList!![position]
         if(holder is MediaViewHolder) {
             val mediaHolder : MediaViewHolder = holder
             mediaHolder.img.tag = item.path
-            if (item.type.equals(Constans.MEDIA_TYPE_IMAGE)) {
+            if (item.type == Constans.MEDIA_TYPE_IMAGE) {
                 ImageLoader.build(mContext)!!.loadBitmap(item.path, mediaHolder.img, requestSize, requestSize)
-            } else if (item.type.equals(Constans.MEDIA_TYPE_VEDIO)) {
-                if (item.path.equals(holder.img.tag)) {
+            } else if (item.type == Constans.MEDIA_TYPE_VEDIO) {
+                if (item.path == holder.img.tag) {
                     mediaHolder.lieanLayout.visibility = View.VISIBLE
                     mediaHolder.txt.text = item.duration
                     mediaHolder.img.setImageBitmap(getVideoThumbnail(item.path, requestSize, requestSize, MediaStore.Images.Thumbnails.MINI_KIND))
@@ -67,13 +65,13 @@ class MediaRecyclerAdapter(context : Context, type : Int) : RecyclerView.Adapter
             musicHolder.txtTitle.text = item.title
             musicHolder.txtSinger.text = item.singer
         }
-        holder!!.itemView.setOnClickListener(View.OnClickListener {
+        holder!!.itemView.setOnClickListener({
             mOnItemClickListener!!.onItemClick(it, position, item.type)
         })
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if(mDateList!![position].type.equals(Constans.MEDIA_TYPE_MUSIC)){
+        return if(mDateList!![position].type == Constans.MEDIA_TYPE_MUSIC){
             2
         }else{
             1

@@ -22,15 +22,14 @@ class Utils {
         fun getScreenWidth(context : Context): Int {
             val windowManager : WindowManager = context.getSystemService(WINDOW_SERVICE) as WindowManager
             val display : Display = windowManager.defaultDisplay
-            val screenWidth = display.width
-            return screenWidth
+            return display.width
         }
 
         /**
          * 将图片资源压缩并返回
          * */
         fun decodeSampledBitmapFromFile(resources: Resources, filePath : String, reqWidth : Int, reqHeight : Int) : Bitmap{
-            var options : BitmapFactory.Options = BitmapFactory.Options()
+            val options : BitmapFactory.Options = BitmapFactory.Options()
             options.inJustDecodeBounds = true
             BitmapFactory.decodeFile(filePath,options)
 
@@ -64,7 +63,7 @@ class Utils {
          * */
         fun calculateImageviewSize(context: Context) : Int{
             val screenWidth : Int = Utils.getScreenWidth(context)
-            var divide = context.resources.getDimension(R.dimen.image_view_divide).toInt()
+            val divide = context.resources.getDimension(R.dimen.image_view_divide).toInt()
             return   (screenWidth - divide * 5) / 4
         }
 

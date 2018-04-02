@@ -30,7 +30,7 @@ class RecyclerAdapter(context:Context)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
-        var item: NewsDetail = mDataList[position]
+        val item: NewsDetail = mDataList[position]
         holder!!.itemView.tag = position
         holder.itemView.setOnClickListener(this)
         when(getItemViewType(position)){
@@ -38,14 +38,14 @@ class RecyclerAdapter(context:Context)
                 holder.itemView.visibility = View.GONE
             }
             type1 -> {
-                var holderOne : ItemViewHolderOne = holder as ItemViewHolderOne
+                val holderOne : ItemViewHolderOne = holder as ItemViewHolderOne
                 holderOne.title.text = item.title
                 holderOne.author.text = item.author_name
                 holderOne.datatime.text = item.date
                 Picasso.with(mContext).load(item.thumbnail_pic_s).into(holderOne.img)
             }
             type2 -> {
-                var holderTwo : ItemViewHolderTwo = holder as ItemViewHolderTwo
+                val holderTwo : ItemViewHolderTwo = holder as ItemViewHolderTwo
                 holderTwo.title.text = item.title
                 holderTwo.author.text = item.author_name
                 holderTwo.datatime.text = item.date
@@ -53,7 +53,7 @@ class RecyclerAdapter(context:Context)
                 Picasso.with(mContext).load(item.thumbnail_pic_s02).into(holderTwo.img2)
             }
             type3 -> {
-                var holderThree : ItemViewHolderThree = holder as ItemViewHolderThree
+                val holderThree : ItemViewHolderThree = holder as ItemViewHolderThree
                 holderThree.title.text = item.title
                 holderThree.author.text = item.author_name
                 holderThree.datatime.text = item.date
@@ -66,7 +66,7 @@ class RecyclerAdapter(context:Context)
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
         Log.i("viewType", viewType.toString())
-        var view : View
+        val view : View
         return when (viewType) {
             type3 -> {
                 view  = LayoutInflater.from(mContext).inflate(R.layout.list_litem_three, parent, false)
@@ -88,8 +88,8 @@ class RecyclerAdapter(context:Context)
     }
 
     override fun getItemViewType(position: Int): Int {
-        var item = mDataList[position]
-        var picPaths = ArrayList<String>()
+        val item = mDataList[position]
+        val picPaths = ArrayList<String>()
         if(item.thumbnail_pic_s != null){
             picPaths.add(item.thumbnail_pic_s)
         }

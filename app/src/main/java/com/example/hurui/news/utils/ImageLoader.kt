@@ -57,7 +57,7 @@ class ImageLoader(private val mContext: Context) {
             }
         }
 
-        var diskCacheDir = getDiskCacheDir(mContext, "bitmap")
+        val diskCacheDir = getDiskCacheDir(mContext, "bitmap")
         if (!diskCacheDir.exists()){
             diskCacheDir.mkdirs()
         }
@@ -78,13 +78,13 @@ class ImageLoader(private val mContext: Context) {
 
     fun loadBitmap(path : String, imageView : SquareImageView, reqWidth : Int, reqHeight : Int){
         imageView.tag = path
-        var bitmap : Bitmap? = getBitmapFromMemoryCache(path)
+        val bitmap : Bitmap? = getBitmapFromMemoryCache(path)
         if(bitmap != null){
             imageView.setImageBitmap(bitmap)
             return
         }
         val loadBitmapTask = Runnable {
-            var bitmap = Utils.decodeSampledBitmapFromFile(mContext.resources, path, reqWidth, reqHeight)
+            val bitmap = Utils.decodeSampledBitmapFromFile(mContext.resources, path, reqWidth, reqHeight)
             addBitmapToMemoryCache(path, bitmap)
             val result = BitmapBean(imageView, bitmap, path)
             mHandler.obtainMessage(0, result).sendToTarget()
@@ -107,7 +107,7 @@ class ImageLoader(private val mContext: Context) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD){
             return path.usableSpace
         }
-        val statFs : StatFs = StatFs(path.path)
+        val statFs = StatFs(path.path)
         return statFs.blockSize.toLong() * statFs.availableBlocks.toLong()
     }
 
