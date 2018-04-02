@@ -14,23 +14,23 @@ class LoadNewsPresenter(loadNewsView: LoadNewsView) : OnLoadNewsListener{
     private var mLoadNewsModel : LoadNewsModelImlp = LoadNewsModelImlp(this)
 
     fun loadWeather(city:String){
-        mLoadNewsModel!!.loadWeather(city)
+        mLoadNewsModel.loadWeather(city)
     }
 
     fun loadNews(type:String) {
-        mLoadNewsModel!!.loadNews(type)
+        mLoadNewsModel.loadNews(type)
     }
 
     override fun onLoadSuccess(result: String) {
-        mLoadNewsView!!.setLoadNews(result)
+        mLoadNewsView.setLoadNews(result)
     }
 
     override fun onLoadFailed(errorType: Int) {
-        mLoadNewsView!!.loadNewsError(errorType)
+        mLoadNewsView.loadNewsError(errorType)
     }
 
     override fun onLoadWeatherSuccess(retult: WeatherData) {
-        mLoadNewsView!!.loadWeather(retult)
+        mLoadNewsView.loadWeather(retult)
     }
 
     override fun onLoadWeatherFailed(errorType: Int) {

@@ -15,7 +15,7 @@ class LoadMediaPresenter(loadMediaView : LoadMediaView) : OnLoadMediaListener{
     private var mLoadMediaModel : LoadMediaModelImlp = LoadMediaModelImlp(this)
 
     fun loadAllMedia(type : Int, context : Context){
-        mLoadMediaModel!!.loadMedia(type, context)
+        mLoadMediaModel.loadMedia(type, context)
     }
 
     override fun onLoadSuccess(result: HashMap<String,ArrayList<MediaBean>>) {

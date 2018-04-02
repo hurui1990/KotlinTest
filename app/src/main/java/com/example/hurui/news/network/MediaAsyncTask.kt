@@ -68,7 +68,7 @@ class MediaAsyncTask(context: Context, onLoadMediaListener: OnLoadMediaListener,
                 var dirPath : String = File(path).parentFile.absolutePath
                 //存储对应关系
                 if (allPhotosTemp.containsKey(dirPath)) {
-                    var data : ArrayList<MediaBean>? = allPhotosTemp!![dirPath]
+                    var data : ArrayList<MediaBean>? = allPhotosTemp[dirPath]
                     data!!.add(MediaBean(Constans.MEDIA_TYPE_IMAGE ,path, displayName, size.toString(),"", "", "",  "", ""))
                     continue
                 } else {
@@ -182,7 +182,7 @@ class MediaAsyncTask(context: Context, onLoadMediaListener: OnLoadMediaListener,
                 var dirPath : String = File(path).parentFile.absolutePath
                 //存储对应关系
                 if (allPhotosTemp.containsKey(dirPath)) {
-                    var data : ArrayList<MediaBean>? = allPhotosTemp!![dirPath]
+                    var data : ArrayList<MediaBean>? = allPhotosTemp[dirPath]
                     data!!.add(MediaBean(Constans.MEDIA_TYPE_MUSIC,path, displayName, size.toString(),"", duration.toString(), title,  singer, album))
                     continue
                 } else {

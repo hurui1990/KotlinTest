@@ -32,10 +32,10 @@ class RecyclerAdapter(context:Context)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         var item: NewsDetail = mDataList[position]
         holder!!.itemView.tag = position
-        holder!!.itemView.setOnClickListener(this)
+        holder.itemView.setOnClickListener(this)
         when(getItemViewType(position)){
             type0 -> {
-                holder!!.itemView.visibility = View.GONE
+                holder.itemView.visibility = View.GONE
             }
             type1 -> {
                 var holderOne : ItemViewHolderOne = holder as ItemViewHolderOne

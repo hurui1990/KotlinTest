@@ -25,7 +25,7 @@ class MediaRecyclerAdapter(context : Context, type : Int) : RecyclerView.Adapter
     private var mContext : Context = context
     private var mDateList : ArrayList<MediaBean>? = null
     private var mType : Int = type
-    private val requestSize : Int = Utils.calculateImageviewSize(mContext!!)
+    private val requestSize : Int = Utils.calculateImageviewSize(mContext)
     private var mOnItemClickListener : OnItemClickListener? = null
 
     interface OnItemClickListener{
@@ -51,14 +51,14 @@ class MediaRecyclerAdapter(context : Context, type : Int) : RecyclerView.Adapter
         var item : MediaBean = mDateList!![position]
         if(holder is MediaViewHolder) {
             val mediaHolder : MediaViewHolder = holder
-            mediaHolder!!.img.tag = item.path
+            mediaHolder.img.tag = item.path
             if (item.type.equals(Constans.MEDIA_TYPE_IMAGE)) {
-                ImageLoader.build(mContext)!!.loadBitmap(item.path, mediaHolder!!.img, requestSize, requestSize)
+                ImageLoader.build(mContext)!!.loadBitmap(item.path, mediaHolder.img, requestSize, requestSize)
             } else if (item.type.equals(Constans.MEDIA_TYPE_VEDIO)) {
                 if (item.path.equals(holder.img.tag)) {
-                    mediaHolder!!.lieanLayout.visibility = View.VISIBLE
-                    mediaHolder!!.txt.text = item.duration
-                    mediaHolder!!.img.setImageBitmap(getVideoThumbnail(item.path, requestSize, requestSize, MediaStore.Images.Thumbnails.MINI_KIND))
+                    mediaHolder.lieanLayout.visibility = View.VISIBLE
+                    mediaHolder.txt.text = item.duration
+                    mediaHolder.img.setImageBitmap(getVideoThumbnail(item.path, requestSize, requestSize, MediaStore.Images.Thumbnails.MINI_KIND))
                 }
             }
         }else if(holder is MusicViewHolder) {

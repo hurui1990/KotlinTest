@@ -65,7 +65,7 @@ class Utils {
         fun calculateImageviewSize(context: Context) : Int{
             val screenWidth : Int = Utils.getScreenWidth(context)
             var divide = context.resources.getDimension(R.dimen.image_view_divide).toInt()
-            return   (screenWidth!! - divide * 5) / 4
+            return   (screenWidth - divide * 5) / 4
         }
 
         /**

@@ -142,8 +142,8 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigat
             return
         }
         Log.i(TAG, nowWeather.now.toString())
-        now_temp.text = nowWeather!!.now!!.tmp!! + "°C"
-        now_weather.text = nowWeather!!.now!!.cond!!.txt!!
+        now_temp.text = nowWeather.now.tmp + "°C"
+        now_weather.text = nowWeather.now.cond.txt
     }
 
     override fun loadWeatherError(errorType: Int) {}
@@ -154,7 +154,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigat
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item!!.itemId){
+        when(item.itemId){
             R.id.menu_news -> {
                 drawerlayout.closeDrawer(Gravity.START)
             }

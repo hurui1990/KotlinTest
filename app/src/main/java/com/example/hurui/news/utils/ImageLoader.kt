@@ -84,9 +84,9 @@ class ImageLoader(private val mContext: Context) {
             return
         }
         val loadBitmapTask = Runnable {
-            var bitmap = Utils.decodeSampledBitmapFromFile(mContext!!.resources, path, reqWidth, reqHeight)
+            var bitmap = Utils.decodeSampledBitmapFromFile(mContext.resources, path, reqWidth, reqHeight)
             addBitmapToMemoryCache(path, bitmap)
-            val result : BitmapBean = BitmapBean(imageView, bitmap, path)
+            val result = BitmapBean(imageView, bitmap, path)
             mHandler.obtainMessage(0, result).sendToTarget()
         }
         THREAD_POOL_EXECUTOR.execute(loadBitmapTask)

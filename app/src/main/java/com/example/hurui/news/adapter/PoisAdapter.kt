@@ -30,14 +30,14 @@ class PoisAdapter(context: Context) : RecyclerView.Adapter<PoisAdapter.PoiViewHo
     override fun onBindViewHolder(holder: PoiViewHolder?, position: Int) {
         var item : PoiItem = dataList!![position]
         holder!!.name.text = item.toString()
-        holder!!.address.text = item.adName
-        holder!!.itemView.tag = item
+        holder.address.text = item.adName
+        holder.itemView.tag = item
         Log.i("PoisAdapter", item.toString())
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PoiViewHolder {
         var view : View = LayoutInflater.from(mContext).inflate(R.layout.poi_item, parent, false)
-        view!!.setOnClickListener(this)
+        view.setOnClickListener(this)
         return PoiViewHolder(view)
     }
 

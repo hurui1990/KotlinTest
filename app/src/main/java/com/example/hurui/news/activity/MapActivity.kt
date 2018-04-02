@@ -192,7 +192,7 @@ class MapActivity : AppCompatActivity(),
                 }
             }, 3000)
         }
-        mPoiAdapter!!.setData(result!!.pois)
+        mPoiAdapter!!.setData(result.pois)
     }
 
     //控件点击事件
@@ -386,7 +386,7 @@ class MapActivity : AppCompatActivity(),
         Log.i("==============",cameraPosition.toString())
         centerLatlon = LatLng(cameraPosition!!.target.latitude, cameraPosition.target.longitude)
         if(isReliOpen) {
-            setReliMap(cameraPosition!!.target.latitude, cameraPosition.target.longitude)
+            setReliMap(cameraPosition.target.latitude, cameraPosition.target.longitude)
         }
     }
 
