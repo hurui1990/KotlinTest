@@ -12,11 +12,11 @@ import java.io.File
 /**
  * Created by hurui on 2018/3/19.
  */
-class PhotoViewAdapter(val mImageList : ArrayList<String>, val mContext: Context) : PagerAdapter() {
+class PhotoViewAdapter(private val mImageList : ArrayList<String>, private val mContext: Context) : PagerAdapter() {
 
     override fun instantiateItem(container: ViewGroup?, position: Int): Any {
         val photoView = PhotoView(mContext)
-        Picasso.with(mContext).load(File(mImageList!![position])).into(photoView)
+        Picasso.with(mContext).load(File(mImageList[position])).into(photoView)
         container!!.addView(photoView)
         return photoView
     }
@@ -26,7 +26,7 @@ class PhotoViewAdapter(val mImageList : ArrayList<String>, val mContext: Context
     }
 
     override fun getCount(): Int {
-        return mImageList!!.size
+        return mImageList.size
     }
 
     override fun destroyItem(container: ViewGroup?, position: Int, `object`: Any?) {

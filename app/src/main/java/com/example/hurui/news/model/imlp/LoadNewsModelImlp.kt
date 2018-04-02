@@ -19,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class LoadNewsModelImlp(private var onLoadNewsListener: OnLoadNewsListener) : LoadNewsModel {
 
     private val NEED_REQUEST = true
-    val TAG = "LoadNewsModelImlp"
+    private val TAG = "LoadNewsModelImlp"
     private var newsBaseUrl = "http://v.juhe.cn"
     private var weatherBaseUrl = "https://free-api.heweather.com"
     private var newsCode = "53bd93e93a2b5c03c61983294614c91f"
@@ -37,7 +37,7 @@ class LoadNewsModelImlp(private var onLoadNewsListener: OnLoadNewsListener) : Lo
                 .build()
 
         val loadNewsService = retrofit.create(LoadNewsService::class.java)
-        val callback = loadNewsService.getNewsResult (type,newsCode)
+        val callback = loadNewsService.getNewsResult(type,newsCode)
 
         callback.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>?, response: Response<ResponseBody>?) {

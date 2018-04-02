@@ -452,17 +452,14 @@ class MapActivity : AppCompatActivity(),
     private fun setMapDisplayType(type : Int){
         when(type){
             AMap.MAP_TYPE_NORMAL -> {
-                //TODO 普通模式
                 aMap!!.mapType = AMap.MAP_TYPE_NORMAL
                 mMapView.onResume()
             }
             AMap.MAP_TYPE_SATELLITE -> {
-                //TODO 卫星地图
                 aMap!!.mapType = AMap.MAP_TYPE_SATELLITE
                 mMapView.onResume()
             }
             AMap.MAP_TYPE_NIGHT -> {
-                //TODO 夜间地图
                 aMap!!.mapType = AMap.MAP_TYPE_NIGHT
                 mMapView.onResume()
             }

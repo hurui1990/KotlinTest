@@ -20,7 +20,7 @@ import com.example.hurui.news.view.SquareImageView
 /**
  * Created by hurui on 2018/3/18.
  */
-class MediaRecyclerAdapter(context : Context, type : Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class MediaRecyclerAdapter(context : Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private var mContext : Context = context
     private var mDateList : ArrayList<MediaBean>? = null
     private val requestSize : Int = Utils.calculateImageviewSize(mContext)
@@ -31,7 +31,7 @@ class MediaRecyclerAdapter(context : Context, type : Int) : RecyclerView.Adapter
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
-        var view : View? = null
+        var view: View?
         return if(viewType == 2){
             view = LayoutInflater.from(mContext).inflate(R.layout.music_item, parent, false)
             MusicViewHolder(view)

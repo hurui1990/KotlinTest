@@ -38,7 +38,7 @@ class MediaFragment : Fragment(), LoadMediaView, MediaRecyclerAdapter.OnItemClic
         mLoadMediaPresenter = LoadMediaPresenter(this)
 
         allPicture  = ArrayList()
-        mediaAdapter = MediaRecyclerAdapter(activity!!, mType!!)
+        mediaAdapter = MediaRecyclerAdapter(activity!!)
         mediaAdapter!!.setData(allPicture!!)
         mediaAdapter!!.setOnItemClickListener(this)
         needload = true
