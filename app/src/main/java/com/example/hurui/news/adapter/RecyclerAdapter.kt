@@ -17,9 +17,8 @@ import com.squareup.picasso.Picasso
 /**
  * Created by hurui on 2017/7/28.
  */
-class RecyclerAdapter(context:Context)
+class RecyclerAdapter(private val mContext : Context)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>(), View.OnClickListener {
-    private var mContext = context
     private var mDataList = ArrayList<NewsDetail>()
     private var type0 = 0
     private var type1 = 1

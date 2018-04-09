@@ -8,9 +8,8 @@ import com.example.hurui.news.view.LoadNewsView
 /**
  * Created by hurui on 2017/5/25.
  */
-class LoadNewsPresenter(loadNewsView: LoadNewsView) : OnLoadNewsListener{
+class LoadNewsPresenter(private val mLoadNewsView: LoadNewsView) : OnLoadNewsListener{
 
-    private var mLoadNewsView : LoadNewsView = loadNewsView
     private var mLoadNewsModel : LoadNewsModelImlp = LoadNewsModelImlp(this)
 
     fun loadWeather(city:String){

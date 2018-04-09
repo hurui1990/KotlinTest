@@ -20,8 +20,7 @@ import com.example.hurui.news.view.SquareImageView
 /**
  * Created by hurui on 2018/3/18.
  */
-class MediaRecyclerAdapter(context : Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
-    private var mContext : Context = context
+class MediaRecyclerAdapter(private val mContext : Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private var mDateList : ArrayList<MediaBean>? = null
     private val requestSize : Int = Utils.calculateImageviewSize(mContext)
     private var mOnItemClickListener : OnItemClickListener? = null

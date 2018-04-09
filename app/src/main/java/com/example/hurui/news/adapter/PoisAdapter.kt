@@ -13,9 +13,8 @@ import com.example.hurui.news.R
 /**
  * Created by hurui on 2017/8/3.
  */
-class PoisAdapter(context: Context) : RecyclerView.Adapter<PoisAdapter.PoiViewHolder>(), View.OnClickListener {
+class PoisAdapter(private val mContext: Context) : RecyclerView.Adapter<PoisAdapter.PoiViewHolder>(), View.OnClickListener {
 
-    private var mContext = context
     private var dataList : ArrayList<PoiItem>? = ArrayList()
     private var mOnListItemClick : OnItemClickListener? = null
 

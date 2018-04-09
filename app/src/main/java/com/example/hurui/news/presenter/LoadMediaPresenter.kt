@@ -9,9 +9,8 @@ import com.example.hurui.news.view.LoadMediaView
 /**
  * Created by hurui on 2018/3/18.
  */
-class LoadMediaPresenter(loadMediaView : LoadMediaView) : OnLoadMediaListener{
+class LoadMediaPresenter(private val mLoadMediaListener : LoadMediaView) : OnLoadMediaListener{
 
-    private var mLoadMediaListener : LoadMediaView = loadMediaView
     private var mLoadMediaModel : LoadMediaModelImlp = LoadMediaModelImlp(this)
 
     fun loadAllMedia(type : Int, context : Context){

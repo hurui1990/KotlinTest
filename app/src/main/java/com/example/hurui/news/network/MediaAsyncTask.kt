@@ -15,11 +15,9 @@ import java.io.File
 /**
  * Created by hurui on 2018/3/18.
  */
-class MediaAsyncTask(context: Context, onLoadMediaListener: OnLoadMediaListener, type : Int): AsyncTask<ContentResolver, Void, HashMap<String, ArrayList<MediaBean>>>() {
+class MediaAsyncTask(private val mContext: Context, private val mOnLoadMediaListener: OnLoadMediaListener, type : Int): AsyncTask<ContentResolver, Void, HashMap<String, ArrayList<MediaBean>>>() {
 
     private val TAG = "MediaAsyncTask"
-    private val mContext : Context = context
-    private val mOnLoadMediaListener : OnLoadMediaListener = onLoadMediaListener
     private val mType : Int? = type
 
     override fun doInBackground(vararg params: ContentResolver?): HashMap<String, ArrayList<MediaBean>> {
