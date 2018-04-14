@@ -49,4 +49,17 @@ class AboutActivity : AppCompatActivity() {
         }
         return super.onKeyDown(keyCode, event)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        container.removeAllViews()
+        if(about_view != null) {
+            about_view.clearHistory()
+            about_view.clearCache(true)
+            about_view.loadUrl("about:blank") // clearView() should be changed to loadUrl("about:blank"), since clearView() is deprecated now
+            about_view.freeMemory()
+            about_view.pauseTimers()
+            about_view.destroy()// Note that mWebView.destroy() and mWebView = null do the exact same thing
+        }
+    }
 }

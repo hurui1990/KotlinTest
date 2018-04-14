@@ -144,6 +144,9 @@ class MapActivity : AppCompatActivity(),
                 desLatLonPoint = poiitem.latLonPoint
                 et_des.setText(poiitem.toString(),TextView.BufferType.EDITABLE)
             }
+        }else {
+            searchview.setQuery(poiitem.toString(),false)
+            aMap!!.moveCamera(CameraUpdateFactory.changeLatLng(LatLng(poiitem.latLonPoint.latitude,poiitem.latLonPoint.longitude)))
         }
         search_list.visibility = View.GONE
     }
@@ -264,20 +267,6 @@ class MapActivity : AppCompatActivity(),
                     params.addRule(RelativeLayout.BELOW, R.id.daohanglayout)
                     search_list.layoutParams = params
                 }
-
-            }
-            R.id.img_switch_location -> {
-                var etChange = ""
-                oriText = et_orin.text.toString()
-                desText = et_des.text.toString()
-
-                etChange = oriText!!
-                oriText = desText
-                desText = etChange
-
-                et_orin.setText(oriText, TextView.BufferType.NORMAL)
-                et_des.setText(desText, TextView.BufferType.NORMAL)
-
             }
             R.id.txt_daohang -> {
                 routeSearch = RouteSearch(this)
@@ -320,6 +309,7 @@ class MapActivity : AppCompatActivity(),
     }
 
     override fun afterTextChanged(s: Editable?) {
+
         Log.i("afterTextChanged", s!!.length.toString())
     }
 
@@ -384,10 +374,10 @@ class MapActivity : AppCompatActivity(),
 
     override fun onCameraChangeFinish(cameraPosition: CameraPosition?) {
         Log.i("==============",cameraPosition.toString())
-        centerLatlon = LatLng(cameraPosition!!.target.latitude, cameraPosition.target.longitude)
-        if(isReliOpen) {
-            setReliMap(cameraPosition.target.latitude, cameraPosition.target.longitude)
-        }
+//        centerLatlon = LatLng(cameraPosition!!.target.latitude, cameraPosition.target.longitude)
+//        if(isReliOpen) {
+//            setReliMap(cameraPosition.target.latitude, cameraPosition.target.longitude)
+//        }
     }
 
     override fun onCameraChange(cameraPosition: CameraPosition?) {
@@ -400,17 +390,20 @@ class MapActivity : AppCompatActivity(),
         search_list.visibility = View.GONE
     }
 
-    private fun initMap() {
-        mMyLocationStyle = MyLocationStyle()
+    private fun initMap(lat: Double, lng:Double) {
+        Log.i("==========", "initMap")
+        if(mMyLocationStyle == null) {
+            mMyLocationStyle = MyLocationStyle()
+        }
         mMyLocationStyle!!.strokeColor(resources.getColor(R.color.white))// 设置圆形的边框颜色
-        mMyLocationStyle!!.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable.location))
+//        mMyLocationStyle!!.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable.location))
         mMyLocationStyle!!.radiusFillColor(resources.getColor(R.color.maolocation))// 设置圆形的填充颜色
         mMyLocationStyle!!.strokeWidth(1f)// 设置圆形的边框粗细
         mMyLocationStyle!!.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE)
         aMap!!.myLocationStyle = mMyLocationStyle
         aMap!!.isMyLocationEnabled = true
 
-        val latlonPosition = LatLng(mMapLoaction!!.latitude, mMapLoaction!!.longitude)
+        val latlonPosition = LatLng(lat, lng)
         aMap!!.moveCamera(CameraUpdateFactory.changeLatLng(latlonPosition))
         aMap!!.moveCamera(CameraUpdateFactory.zoomTo(orignZoomLevel))
         aMap!!.setOnCameraChangeListener(this)
@@ -427,7 +420,7 @@ class MapActivity : AppCompatActivity(),
                 }
                 Log.i("MapActivity", "返回值：" + aMapLocation.city)
                 mMapLoaction = aMapLocation
-                initMap()
+                initMap(mMapLoaction!!.latitude,mMapLoaction!!.longitude)
             }
         }
         //初始化AMapLocationClientOption对象
