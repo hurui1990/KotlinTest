@@ -76,11 +76,6 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        dataAdapter!!.setItemClickListener(null!!)
-    }
-
     override fun setLoadNews(result: String) {
         val gson = Gson()
         val resultGson : Result = gson.fromJson(result, Result::class.java)
