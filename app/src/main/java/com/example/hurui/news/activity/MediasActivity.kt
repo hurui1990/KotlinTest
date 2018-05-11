@@ -13,9 +13,9 @@ import kotlinx.android.synthetic.main.activity_picture.*
  */
 class MediasActivity : AppCompatActivity(){
 
-    private var mFragmentList : ArrayList<Fragment>? = null
-    private var tabTitleList : ArrayList<String>? = null
-    private var medioViewPagerAdapter : MediaViewPagerAdapter? = null
+    private lateinit var mFragmentList : ArrayList<Fragment>
+    private lateinit var tabTitleList : ArrayList<String>
+    private lateinit var medioViewPagerAdapter : MediaViewPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

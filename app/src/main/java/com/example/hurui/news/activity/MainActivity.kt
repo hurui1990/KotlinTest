@@ -32,16 +32,16 @@ import kotlinx.android.synthetic.main.main_toolbar.*
 class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigationItemSelectedListener {
 
     private val TAG = "MainActivity"
-    private var newTypes : ArrayList<NewType>? = null
-    private var drawerTogger : ActionBarDrawerToggle? = null
-    private var mLocationListener : AMapLocationListener? = null
-    private var mLocationOption: AMapLocationClientOption? = null
-    private var mLocationClient : AMapLocationClient? = null
-    private var cityname : String? = null
-    private var mMapLoaction : AMapLocation? = null
-    private var mLoadNewsPresenter : LoadNewsPresenter? = null
-    private var fragmentList : ArrayList<Fragment>? = null
-    private var viewpagerAdapter : ViewpagerAdapter? = null
+    private lateinit var newTypes : ArrayList<NewType>
+    private lateinit var drawerTogger : ActionBarDrawerToggle
+    private lateinit var mLocationListener : AMapLocationListener
+    private lateinit var mLocationOption: AMapLocationClientOption
+    private lateinit var mLocationClient : AMapLocationClient
+    private lateinit var cityname : String
+    private lateinit var mMapLoaction : AMapLocation
+    private lateinit var mLoadNewsPresenter : LoadNewsPresenter
+    private lateinit var fragmentList : ArrayList<Fragment>
+    private lateinit var viewpagerAdapter : ViewpagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

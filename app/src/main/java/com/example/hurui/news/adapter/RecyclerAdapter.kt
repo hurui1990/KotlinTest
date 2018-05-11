@@ -24,7 +24,7 @@ class RecyclerAdapter(private val mContext : Context)
     private var type1 = 1
     private var type2 = 2
     private var type3 = 3
-    private var onItemClickListener : OnItemClickListener? = null
+    private lateinit var onItemClickListener : OnItemClickListener
 
     interface OnItemClickListener{
         fun onItemClick(view:View, position:Int)

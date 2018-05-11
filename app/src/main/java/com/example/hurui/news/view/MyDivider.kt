@@ -21,7 +21,7 @@ class MyDivider(context: Context, orientation: Int) : RecyclerView.ItemDecoratio
 
     private val ATTRS = intArrayOf(android.R.attr.listDivider)
 
-    private var mDivider: Drawable? = null
+    private lateinit var mDivider: Drawable
 
     private var mOrientation: Int = 0
 

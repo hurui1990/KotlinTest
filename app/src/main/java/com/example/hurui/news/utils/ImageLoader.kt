@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class ImageLoader(private val mContext: Context) {
     private val mMemoryCache: LruCache<String, Bitmap>
-    private var mDiskLruCache : DiskLruCache? = null
+    private lateinit var mDiskLruCache : DiskLruCache
     private val DISK_CACHE_SIZE : Long = 1024 * 1024 * 50
     private val CPU_COUNT = Runtime.getRuntime().availableProcessors()
     private val CORE_POOL_SIZE = CPU_COUNT + 1

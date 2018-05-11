@@ -20,8 +20,8 @@ import kotlinx.android.synthetic.main.activity_newdetail.*
 
 class NewsDetailActivity : AppCompatActivity() {
 
-    private var url : String? = null
-    private var title : String? = null
+    private lateinit var url : String
+    private lateinit var title : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

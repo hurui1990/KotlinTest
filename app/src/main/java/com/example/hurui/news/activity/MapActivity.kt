@@ -43,36 +43,36 @@ class MapActivity : AppCompatActivity(),
         PoiSearch.OnPoiSearchListener, SearchView.OnCloseListener, PoisAdapter.OnItemClickListener, RadioGroup.OnCheckedChangeListener, SwitchButton.OnCheckedChangeListener, AMap.OnCameraChangeListener, RouteSearch.OnRouteSearchListener, TextWatcher {
 
     private var aMap: AMap? = null
-    private var mMyLocationStyle: MyLocationStyle? = null
+    private lateinit var mMyLocationStyle: MyLocationStyle
 
-    private var mLocationListener: AMapLocationListener? = null
-    private var mLocationOption: AMapLocationClientOption? = null
-    private var mLocationClient: AMapLocationClient? = null
-    private var mMapLoaction: AMapLocation? = null
-    private var mUiSettings: UiSettings? = null
-    private var mQuery : PoiSearch.Query? = null
-    private var poiSearch : PoiSearch? = null
-    private var mPoiAdapter : PoisAdapter? = null
+    private lateinit var mLocationListener: AMapLocationListener
+    private lateinit var mLocationOption: AMapLocationClientOption
+    private lateinit var mLocationClient: AMapLocationClient
+    private lateinit var mMapLoaction: AMapLocation
+    private lateinit var mUiSettings: UiSettings
+    private lateinit var mQuery : PoiSearch.Query
+    private lateinit var poiSearch : PoiSearch
+    private lateinit var mPoiAdapter : PoisAdapter
     private var orignZoomLevel : Float = 12f
-    private var mTrafficPrefre : SharedPreferences? = null
-    private var mIndoorPrefre : SharedPreferences? = null
-    private var mReliPrefre : SharedPreferences? = null
+    private lateinit var mTrafficPrefre : SharedPreferences
+    private lateinit var mIndoorPrefre : SharedPreferences
+    private lateinit var mReliPrefre : SharedPreferences
     private var isTrafficOpen : Boolean = false
     private var isIndoorOpen : Boolean = false
     private var isReliOpen : Boolean = false
-    private var centerLatlon : LatLng? = null
+    private lateinit var centerLatlon : LatLng
     private var isInDaohang : Boolean = false
     private val BUXING : Int = 0
     private val DRIVE : Int = 1
     private val BUS : Int = 2
     private val BIKE : Int = 3
     private var out_style : Int = 0
-    private var oriText : String? = null
-    private var desText : String? = null
-    private var oriLatLonPoint : LatLonPoint? = null
-    private var desLatLonPoint : LatLonPoint? = null
-    private var routeSearch : RouteSearch? = null
-    private var fromandto : RouteSearch.FromAndTo? = null
+    private lateinit var oriText : String
+    private lateinit var desText : String
+    private lateinit var oriLatLonPoint : LatLonPoint
+    private lateinit var desLatLonPoint : LatLonPoint
+    private lateinit var routeSearch : RouteSearch
+    private lateinit var fromandto : RouteSearch.FromAndTo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -31,10 +31,10 @@ import java.util.*
 class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListener {
     private var mLoadNewsPresenter : LoadNewsPresenter? = null
 
-    private var dataAdapter : RecyclerAdapter? = null
-    private var dataList : ArrayList<NewsDetail>? =null
-    private var mType : String? = null
-    private var share : SharedPreferences? = null
+    private lateinit var dataAdapter : RecyclerAdapter
+    private lateinit var dataList : ArrayList<NewsDetail>
+    private lateinit var mType : String
+    private lateinit var share : SharedPreferences
     private var needload = false
 
     override fun onCreate(savedInstanceState: Bundle?) {

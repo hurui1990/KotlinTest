@@ -26,9 +26,9 @@ class MediaFragment : Fragment(), LoadMediaView, MediaRecyclerAdapter.OnItemClic
 
     private var TAG = "MediaFragment"
     private var mType : Int? = null
-    private var mLoadMediaPresenter : LoadMediaPresenter? = null
-    private var allPicture : ArrayList<MediaBean>? = null
-    private var mediaAdapter : MediaRecyclerAdapter? = null
+    private lateinit var mLoadMediaPresenter : LoadMediaPresenter
+    private lateinit var allPicture : ArrayList<MediaBean>
+    private lateinit var mediaAdapter : MediaRecyclerAdapter
     private var needload = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
