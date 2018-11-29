@@ -64,9 +64,9 @@ class MediaRecyclerAdapter(private val mContext : Context) : RecyclerView.Adapte
             musicHolder.txtTitle.text = item.title
             musicHolder.txtSinger.text = item.singer
         }
-        holder!!.itemView.setOnClickListener({
+        holder!!.itemView.setOnClickListener {
             mOnItemClickListener!!.onItemClick(it, position, item.type)
-        })
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
