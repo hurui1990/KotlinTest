@@ -3,12 +3,12 @@ package com.example.hurui.news.activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
 import android.view.animation.ScaleAnimation
@@ -202,7 +202,7 @@ class MapActivity : AppCompatActivity(),
     override fun onClick(v: View?) {
         when(v!!.id){
             R.id.open_map_setting -> {
-                map_drawer.openDrawer(Gravity.END)
+                map_drawer.openDrawer(GravityCompat.END)
             }
             R.id.maxZoom -> {
                 if(orignZoomLevel < 18f){
@@ -505,7 +505,7 @@ class MapActivity : AppCompatActivity(),
         mMapView.onDestroy()
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         //在activity执行onSaveInstanceState时执行mMapView.onSaveInstanceState (outState)，保存地图当前的状态
         mMapView.onSaveInstanceState(outState)

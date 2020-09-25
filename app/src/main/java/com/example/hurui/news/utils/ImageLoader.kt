@@ -26,7 +26,7 @@ class ImageLoader(private val mContext: Context) {
     private val KEPP_ALIVE = 10L
 
     private val mHandler : Handler = object : Handler(Looper.getMainLooper()){
-        override fun handleMessage(msg: Message?) {
+        override fun handleMessage(msg: Message) {
             when (msg!!.what){
                 0 -> {
                     val result : BitmapBean = msg.obj as BitmapBean
@@ -96,7 +96,7 @@ class ImageLoader(private val mContext: Context) {
         val externaStorageAvailable = Environment.getExternalStorageDirectory().equals(Environment.MEDIA_MOUNTED)
         val cachePath : String
         cachePath = if(externaStorageAvailable){
-            context.externalCacheDir.path
+            context.externalCacheDir!!.path
         }else{
             context.cacheDir.path
         }

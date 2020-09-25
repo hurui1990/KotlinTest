@@ -20,23 +20,19 @@ import kotlinx.android.synthetic.main.activity_newdetail.*
 
 class NewsDetailActivity : AppCompatActivity() {
 
-    private lateinit var url : String
-    private lateinit var title : String
+    private val url by lazy { intent.getStringExtra("url") }
+    private val title by lazy { intent.getStringExtra("title") }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newdetail)
-
-        val intent : Intent = intent
-        url = intent.getStringExtra("url")
-        title = intent.getStringExtra("title")
 
         newdetail_toolbar.setTitleTextColor(resources.getColor(R.color.white))
         newdetail_toolbar.title = title
         newdetail_toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_keyboard_arrow_left)
         setSupportActionBar(newdetail_toolbar)
 
-        news_detail.loadUrl(url)
+        news_detail.loadUrl(url!!)
 
         val webSetting : WebSettings = news_detail.settings
         webSetting.javaScriptEnabled = true
@@ -70,7 +66,7 @@ class NewsDetailActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when(item!!.itemId){
             R.id.share -> {

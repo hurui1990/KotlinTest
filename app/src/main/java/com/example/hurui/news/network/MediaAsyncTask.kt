@@ -49,7 +49,7 @@ class MediaAsyncTask(private val mContext: Context, private val mOnLoadMediaList
                 , MediaStore.Images.Media.DATA
                 , MediaStore.Images.Media.SIZE
                 , MediaStore.Images.Media.DISPLAY_NAME)
-        val mCursor : Cursor = mContext.contentResolver.query(mImageUri,
+        val mCursor : Cursor? = mContext.contentResolver.query(mImageUri,
                 projImage,
                 MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=?",
                 arrayOf("image/jpeg", "image/png"),
@@ -91,7 +91,7 @@ class MediaAsyncTask(private val mContext: Context, private val mOnLoadMediaList
                 ,MediaStore.Video.Media.SIZE
                 ,MediaStore.Video.Media.DISPLAY_NAME
                 ,MediaStore.Video.Media.DATE_MODIFIED)
-        val mCursor : Cursor = mContext.contentResolver.query(videoUri,
+        val mCursor : Cursor? = mContext.contentResolver.query(videoUri,
                 projVideo,
                 MediaStore.Video.Media.MIME_TYPE + "=?",
                 arrayOf("video/mp4"),
@@ -115,16 +115,18 @@ class MediaAsyncTask(private val mContext: Context, private val mOnLoadMediaList
                 //提前生成缩略图
                 MediaStore.Video.Thumbnails.getThumbnail(mContext.contentResolver, videoId.toLong(), MediaStore.Video.Thumbnails.MICRO_KIND, null)
                 val projection : Array<String> = arrayOf(MediaStore.Video.Thumbnails._ID, MediaStore.Video.Thumbnails.DATA)
-                val cursor : Cursor = mContext.contentResolver.query(MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI
+                val cursor : Cursor? = mContext.contentResolver.query(MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI
                         , projection
                         , MediaStore.Video.Thumbnails.VIDEO_ID + "=?"
                         , arrayOf(videoId.toString())
                         , null)
                 var thumbPath = ""
-                while (cursor.moveToNext()){
-                    thumbPath = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Thumbnails.DATA))
+                if (cursor != null) {
+                    while (cursor.moveToNext()) {
+                        thumbPath = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Thumbnails.DATA))
+                    }
+                    cursor.close()
                 }
-                cursor.close()
                 // 获取该视频的父路径名
                 val dirPath : String = File(path).parentFile.absolutePath
                 //存储对应关系
@@ -155,7 +157,7 @@ class MediaAsyncTask(private val mContext: Context, private val mOnLoadMediaList
                 MediaStore.Audio.Media.ALBUM,
                 MediaStore.Audio.Media.SIZE,
                 MediaStore.Audio.Media.DATA)
-        val mCursor : Cursor = mContext.contentResolver.query(musicUri,
+        val mCursor : Cursor? = mContext.contentResolver.query(musicUri,
                 projMusic,
                 MediaStore.Audio.Media.MIME_TYPE + "=? or " + MediaStore.Audio.Media.MIME_TYPE + "=?",
                 arrayOf("audio/mpeg", "audio/x-ms-wma"),

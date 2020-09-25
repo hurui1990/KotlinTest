@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
+import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -155,7 +156,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigat
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.menu_news -> {
-                drawerlayout.closeDrawer(Gravity.START)
+                drawerlayout.closeDrawer(GravityCompat.START)
             }
             R.id.menu_localpicture -> {
                 //TODO: 跳转到本地图片页面
@@ -182,7 +183,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigat
     }
 
     override fun onStop() {
-        drawerlayout.closeDrawer(Gravity.START)
+        drawerlayout.closeDrawer(GravityCompat.START)
         super.onStop()
     }
 
@@ -198,16 +199,16 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigat
             val build = AlertDialog.Builder(this)
             build.setTitle("提示")
             build.setMessage("客官不再耍一会儿？")
-            build.setPositiveButton("确定", { _, _ ->
+            build.setPositiveButton("确定") { _, _ ->
                 run {
                     finish()
                 }
-            })
-            build.setNegativeButton("取消", { _, _ ->
+            }
+            build.setNegativeButton("取消") { _, _ ->
                 run {
 
                 }
-            })
+            }
             build.create().show()
             return true
         }

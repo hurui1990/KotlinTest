@@ -14,14 +14,14 @@ import java.io.File
  */
 class PhotoViewAdapter(private val mImageList : ArrayList<String>, private val mContext: Context) : PagerAdapter() {
 
-    override fun instantiateItem(container: ViewGroup?, position: Int): Any {
+    override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val photoView = PhotoView(mContext)
-        Picasso.with(mContext).load(File(mImageList[position])).into(photoView)
+        Picasso.get().load(File(mImageList[position])).into(photoView)
         container!!.addView(photoView)
         return photoView
     }
 
-    override fun isViewFromObject(view: View?, `object`: Any?): Boolean {
+    override fun isViewFromObject(view: View, `object`: Any): Boolean {
         return view == `object`
     }
 
@@ -29,7 +29,7 @@ class PhotoViewAdapter(private val mImageList : ArrayList<String>, private val m
         return mImageList.size
     }
 
-    override fun destroyItem(container: ViewGroup?, position: Int, `object`: Any?) {
+    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         container!!.removeView(`object` as View?)
     }
 

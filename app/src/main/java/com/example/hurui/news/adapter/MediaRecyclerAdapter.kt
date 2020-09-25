@@ -29,7 +29,7 @@ class MediaRecyclerAdapter(private val mContext : Context) : RecyclerView.Adapte
         fun onItemClick(view:View, position: Int, type : String)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         var view: View?
         return if(viewType == 2){
             view = LayoutInflater.from(mContext).inflate(R.layout.music_item, parent, false)
@@ -44,7 +44,7 @@ class MediaRecyclerAdapter(private val mContext : Context) : RecyclerView.Adapte
         return mDateList!!.size
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item : MediaBean = mDateList!![position]
         if(holder is MediaViewHolder) {
             val mediaHolder : MediaViewHolder = holder
@@ -81,15 +81,15 @@ class MediaRecyclerAdapter(private val mContext : Context) : RecyclerView.Adapte
         mOnItemClickListener = listener
     }
 
-    class MediaViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
-        val img : SquareImageView = itemView!!.findViewById(R.id.item_imageview) as SquareImageView
-        val lieanLayout : LinearLayout = itemView!!.findViewById(R.id.video_info) as LinearLayout
-        val txt : TextView = itemView!!.findViewById(R.id.video_duration_txt) as TextView
+    class MediaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val img : SquareImageView = itemView!!.findViewById(R.id.item_imageview)
+        val lieanLayout : LinearLayout = itemView!!.findViewById(R.id.video_info)
+        val txt : TextView = itemView!!.findViewById(R.id.video_duration_txt)
     }
 
-    class MusicViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
-        val txtTitle : TextView = itemView!!.findViewById(R.id.title) as TextView
-        val txtSinger : TextView = itemView!!.findViewById(R.id.singer) as TextView
+    class MusicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val txtTitle : TextView = itemView!!.findViewById(R.id.title)
+        val txtSinger : TextView = itemView!!.findViewById(R.id.singer)
     }
 
     fun setData(dataList: ArrayList<MediaBean>){

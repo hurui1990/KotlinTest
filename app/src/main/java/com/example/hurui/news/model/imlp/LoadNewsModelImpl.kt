@@ -16,10 +16,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 /**
  * Created by hurui on 2017/5/25.
  */
-class LoadNewsModelImlp(private val onLoadNewsListener: OnLoadNewsListener) : LoadNewsModel {
+class LoadNewsModelImpl(private val onLoadNewsListener: OnLoadNewsListener) : LoadNewsModel {
 
     private val NEED_REQUEST = true
-    private val TAG = "LoadNewsModelImlp"
+    private val TAG = "LoadNewsModelImpl"
     private var newsBaseUrl = "http://v.juhe.cn"
     private var weatherBaseUrl = "https://free-api.heweather.com"
     private var newsCode = "53bd93e93a2b5c03c61983294614c91f"

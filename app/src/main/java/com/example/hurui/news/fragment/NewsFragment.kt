@@ -33,18 +33,16 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
 
     private lateinit var dataAdapter : RecyclerAdapter
     private lateinit var dataList : ArrayList<NewsDetail>
-    private lateinit var mType : String
+    private val mType by lazy { arguments!!.getString("type") }
     private lateinit var share : SharedPreferences
     private var needload = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val bundle : Bundle = arguments
-        mType = bundle.getString("type")
 
         mLoadNewsPresenter = LoadNewsPresenter(this)
         dataList = ArrayList()
-        dataAdapter = RecyclerAdapter(activity)
+        dataAdapter = RecyclerAdapter()
         dataAdapter!!.setHasStableIds(true)
         dataAdapter!!.setData(dataList!!)
 
@@ -52,7 +50,7 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
         needload = true
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater!!.inflate(R.layout.fragment_news, container, false)
     }
 
@@ -61,7 +59,7 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
         val intent = Intent(activity, NewsDetailActivity::class.java)
         intent.putExtra("url", itemData.url)
         intent.putExtra("title", itemData.title)
-        activity.startActivity(intent)
+        activity!!.startActivity(intent)
     }
 
 
@@ -83,7 +81,7 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
         dataList = resultGson.result.data
         dataAdapter?.setData(dataList!!)
 
-        share  = activity.getSharedPreferences("result",Context.MODE_PRIVATE)
+        share  = activity!!.getSharedPreferences("result",Context.MODE_PRIVATE)
         val editor: SharedPreferences.Editor = share!!.edit()
         editor.putString("hurui", result)
         editor.commit()
@@ -92,8 +90,8 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
 
     override fun loadNewsError(errorType: Int) {
         if(errorType == 400 && activity != null){
-            share = activity.getSharedPreferences("result", Context.MODE_PRIVATE)
-            val result : String = share!!.getString("hurui", "")
+            share = activity!!.getSharedPreferences("result", Context.MODE_PRIVATE)
+            val result : String? = share!!.getString("hurui", "")
             if(result != null && !TextUtils.isEmpty(result)){
                 val gson = Gson()
                 val resultGson : Result = gson.fromJson(result, Result::class.java)

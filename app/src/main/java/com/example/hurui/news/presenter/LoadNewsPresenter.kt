@@ -2,7 +2,7 @@ package com.example.hurui.news.presenter
 
 import com.example.hurui.news.bean.WeatherData
 import com.example.hurui.news.model.OnLoadNewsListener
-import com.example.hurui.news.model.imlp.LoadNewsModelImlp
+import com.example.hurui.news.model.imlp.LoadNewsModelImpl
 import com.example.hurui.news.view.LoadNewsView
 
 /**
@@ -10,7 +10,7 @@ import com.example.hurui.news.view.LoadNewsView
  */
 class LoadNewsPresenter(private val mLoadNewsView: LoadNewsView) : OnLoadNewsListener{
 
-    private var mLoadNewsModel : LoadNewsModelImlp = LoadNewsModelImlp(this)
+    private var mLoadNewsModel : LoadNewsModelImpl = LoadNewsModelImpl(this)
 
     fun loadWeather(city:String){
         mLoadNewsModel.loadWeather(city)

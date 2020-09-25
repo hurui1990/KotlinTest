@@ -12,12 +12,12 @@ android {
             storePassword 'Hurui1990'
         }
     }
-    compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 30
+    buildToolsVersion "30.0.1"
     defaultConfig {
         applicationId "com.example.hurui.newsapp"
-        minSdkVersion 21
-        targetSdkVersion 25
+        minSdkVersion 23
+        targetSdkVersion 30
         versionCode 20170804
         versionName "1.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -29,30 +29,36 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    api "org.jetbrains.kotlin:kotlin-stdlib:${kotlin_version}"
+    api 'com.android.support.constraint:constraint-layout:2.0.1'
     //noinspection GradleCompatible
-    compile 'com.android.support:design:26.0.0-alpha1'
+    api 'com.android.support:design:28.0.0'
     //noinspection GradleCompatible
-    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    compile 'com.google.code.gson:gson:2.8.0'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.jakewharton:disklrucache:2.0.2'
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    implementation files('libs/AMap3DMap_5.2.1_AMapNavi_5.2.0_AMapSearch_5.2.1_AMapLocation_3.5.0_20170731.jar')
-    compile 'com.android.support:cardview-v7:26.0.0-alpha1'
-    compile 'com.github.zcweng:switch-button:0.0.3@aar'
-    compile 'com.bm.photoview:library:1.4.1'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3'
+    api 'com.android.support:appcompat-v7:28.0.0'
+    api 'com.squareup.retrofit2:retrofit:2.6.0'
+    api 'com.squareup.retrofit2:converter-gson:2.9.0'
+    api 'com.google.code.gson:gson:2.8.6'
+    api 'com.squareup.picasso:picasso:2.71828'
+    api 'com.jakewharton:disklrucache:2.0.2'
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    api files('libs/AMap3DMap_5.2.1_AMapNavi_5.2.0_AMapSearch_5.2.1_AMapLocation_3.5.0_20170731.jar')
+    //noinspection GradleCompatible
+    api 'com.android.support:cardview-v7:28.0.0'
+    api 'com.github.zcweng:switch-button:0.0.3@aar'
+    api 'com.bm.photoview:library:1.4.1'
 }

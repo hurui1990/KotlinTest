@@ -25,7 +25,7 @@ import kotlinx.android.synthetic.main.fragments_media.*
 class MediaFragment : Fragment(), LoadMediaView, MediaRecyclerAdapter.OnItemClickListener {
 
     private var TAG = "MediaFragment"
-    private var mType : Int? = null
+    private val mType by lazy { arguments!!.getInt("type") }
     private lateinit var mLoadMediaPresenter : LoadMediaPresenter
     private lateinit var allPicture : ArrayList<MediaBean>
     private lateinit var mediaAdapter : MediaRecyclerAdapter
@@ -33,8 +33,6 @@ class MediaFragment : Fragment(), LoadMediaView, MediaRecyclerAdapter.OnItemClic
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val bundle : Bundle = arguments
-        mType = bundle.getInt("type")
         mLoadMediaPresenter = LoadMediaPresenter(this)
 
         allPicture  = ArrayList()
@@ -44,7 +42,7 @@ class MediaFragment : Fragment(), LoadMediaView, MediaRecyclerAdapter.OnItemClic
         needload = true
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater!!.inflate(R.layout.fragments_media, container, false)
     }
 
@@ -58,7 +56,7 @@ class MediaFragment : Fragment(), LoadMediaView, MediaRecyclerAdapter.OnItemClic
                 media_recycler.layoutManager = GridLayoutManager(activity, 4)
             }
             media_recycler.adapter = mediaAdapter
-            mLoadMediaPresenter!!.loadAllMedia(mType!!, activity)
+            mLoadMediaPresenter!!.loadAllMedia(mType!!, activity!!)
             needload = false
         }
     }
@@ -83,7 +81,7 @@ class MediaFragment : Fragment(), LoadMediaView, MediaRecyclerAdapter.OnItemClic
             val intent = Intent(activity, PhotoViewActivity::class.java)
             intent.putExtra("position", position)
             intent.putStringArrayListExtra("list", pathList)
-            activity.startActivity(intent)
+            activity!!.startActivity(intent)
         }else if(type == Constans.MEDIA_TYPE_VEDIO){
             Log.i("==========", allPicture!![position].path)
         }

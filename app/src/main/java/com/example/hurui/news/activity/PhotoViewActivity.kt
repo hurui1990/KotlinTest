@@ -17,7 +17,7 @@ class PhotoViewActivity : AppCompatActivity(){
         setContentView(R.layout.activity_photoview)
 
         val position : Int = intent.getIntExtra("position",-1)
-        val list : ArrayList<String> = intent.getStringArrayListExtra("list")
+        val list : ArrayList<String> = intent.getStringArrayListExtra("list") as ArrayList<String>
 
         photo_viewpager.adapter = PhotoViewAdapter(list, this)
         Log.i("===========", position.toString())

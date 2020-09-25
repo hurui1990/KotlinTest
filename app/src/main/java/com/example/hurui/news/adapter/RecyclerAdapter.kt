@@ -17,7 +17,7 @@ import com.squareup.picasso.Picasso
 /**
  * Created by hurui on 2017/7/28.
  */
-class RecyclerAdapter(private val mContext : Context)
+class RecyclerAdapter
     : RecyclerView.Adapter<RecyclerView.ViewHolder>(), View.OnClickListener {
     private var mDataList = ArrayList<NewsDetail>()
     private var type0 = 0
@@ -25,12 +25,13 @@ class RecyclerAdapter(private val mContext : Context)
     private var type2 = 2
     private var type3 = 3
     private lateinit var onItemClickListener : OnItemClickListener
+    private lateinit var mContext : Context
 
     interface OnItemClickListener{
         fun onItemClick(view:View, position:Int)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val screenWidth : Int = Utils.getScreenWidth(mContext)
         val item: NewsDetail = mDataList[position]
         holder!!.itemView.tag = position
@@ -44,7 +45,7 @@ class RecyclerAdapter(private val mContext : Context)
                 holderOne.title.text = item.title
                 holderOne.author.text = item.author_name
                 holderOne.datatime.text = item.date
-                Picasso.with(mContext)
+                Picasso.get()
                         .load(item.thumbnail_pic_s)
                         .config(Bitmap.Config.RGB_565)
                         .resize(screenWidth/3, screenWidth/4)
@@ -55,12 +56,12 @@ class RecyclerAdapter(private val mContext : Context)
                 holderTwo.title.text = item.title
                 holderTwo.author.text = item.author_name
                 holderTwo.datatime.text = item.date
-                Picasso.with(mContext)
+                Picasso.get()
                         .load(item.thumbnail_pic_s)
                         .config(Bitmap.Config.RGB_565)
                         .resize(screenWidth/2, screenWidth*3/10)
                         .into(holderTwo.img)
-                Picasso.with(mContext)
+                Picasso.get()
                         .load(item.thumbnail_pic_s02)
                         .config(Bitmap.Config.RGB_565)
                         .resize(screenWidth/2, screenWidth*3/10)
@@ -71,17 +72,17 @@ class RecyclerAdapter(private val mContext : Context)
                 holderThree.title.text = item.title
                 holderThree.author.text = item.author_name
                 holderThree.datatime.text = item.date
-                Picasso.with(mContext)
+                Picasso.get()
                         .load(item.thumbnail_pic_s)
                         .config(Bitmap.Config.RGB_565)
                         .resize(screenWidth/3, screenWidth*3/15)
                         .into(holderThree.img)
-                Picasso.with(mContext)
+                Picasso.get()
                         .load(item.thumbnail_pic_s02)
                         .config(Bitmap.Config.RGB_565)
                         .resize(screenWidth/3, screenWidth*3/15)
                         .into(holderThree.img2)
-                Picasso.with(mContext)
+                Picasso.get()
                         .load(item.thumbnail_pic_s03)
                         .config(Bitmap.Config.RGB_565)
                         .resize(screenWidth/3, screenWidth*3/15)
@@ -90,7 +91,8 @@ class RecyclerAdapter(private val mContext : Context)
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        mContext = parent.context
         Log.i("viewType", viewType.toString())
         val view : View
         return when (viewType) {
@@ -156,27 +158,30 @@ class RecyclerAdapter(private val mContext : Context)
         notifyDataSetChanged()
     }
 
-    class ItemViewHolderThree(itemView: View?) : RecyclerView.ViewHolder(itemView) {
-        var title : TextView = itemView!!.findViewById(R.id.title) as TextView
-        var author : TextView = itemView!!.findViewById(R.id.author) as TextView
-        var img : ImageView = itemView!!.findViewById(R.id.itemImg) as ImageView
-        var img2 : ImageView = itemView!!.findViewById(R.id.itemImg2) as ImageView
-        var img3 : ImageView = itemView!!.findViewById(R.id.itemImg3) as ImageView
-        var datatime : TextView = itemView!!.findViewById(R.id.data_time) as TextView
+    class ItemViewHolderThree(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        var title : TextView = itemView.findViewById(R.id.title)
+        var author : TextView = itemView.findViewById(R.id.author)
+        var img : ImageView = itemView.findViewById(R.id.itemImg)
+        var img2 : ImageView = itemView.findViewById(R.id.itemImg2)
+        var img3 : ImageView = itemView.findViewById(R.id.itemImg3)
+        var datatime : TextView = itemView.findViewById(R.id.data_time)
+
+
     }
 
-    class ItemViewHolderTwo(itemView: View?) : RecyclerView.ViewHolder(itemView) {
-        var title : TextView = itemView!!.findViewById(R.id.title) as TextView
-        var author : TextView = itemView!!.findViewById(R.id.author) as TextView
-        var img : ImageView = itemView!!.findViewById(R.id.itemImg) as ImageView
-        var img2 : ImageView = itemView!!.findViewById(R.id.itemImg2) as ImageView
-        var datatime : TextView = itemView!!.findViewById(R.id.data_time) as TextView
+    class ItemViewHolderTwo(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var title : TextView = itemView.findViewById(R.id.title)
+        var author : TextView = itemView.findViewById(R.id.author)
+        var img : ImageView = itemView.findViewById(R.id.itemImg)
+        var img2 : ImageView = itemView.findViewById(R.id.itemImg2)
+        var datatime : TextView = itemView.findViewById(R.id.data_time)
     }
 
-    class ItemViewHolderOne(itemView: View?) : RecyclerView.ViewHolder(itemView) {
-        var title : TextView = itemView!!.findViewById(R.id.title) as TextView
-        var author : TextView = itemView!!.findViewById(R.id.author) as TextView
-        var img : ImageView = itemView!!.findViewById(R.id.itemImg) as ImageView
-        var datatime : TextView = itemView!!.findViewById(R.id.data_time) as TextView
+    class ItemViewHolderOne(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var title : TextView = itemView.findViewById(R.id.title)
+        var author : TextView = itemView.findViewById(R.id.author)
+        var img : ImageView = itemView.findViewById(R.id.itemImg)
+        var datatime : TextView = itemView.findViewById(R.id.data_time)
     }
 }

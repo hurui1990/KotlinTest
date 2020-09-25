@@ -1,10 +1,10 @@
 package com.example.hurui.news.view
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
+import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.LinearLayout
@@ -14,14 +14,14 @@ import android.widget.LinearLayout
 /**
  * Created by hurui on 2017/8/3.
  */
-class MyDivider(context: Context, orientation: Int) : RecyclerView.ItemDecoration() {
+class MyDivider(context: FragmentActivity?, orientation: Int) : RecyclerView.ItemDecoration() {
 
     private val HORIZONTAL = LinearLayout.HORIZONTAL
     private val VERTICAL = LinearLayout.VERTICAL
 
     private val ATTRS = intArrayOf(android.R.attr.listDivider)
 
-    private lateinit var mDivider: Drawable
+    private var mDivider: Drawable
 
     private var mOrientation: Int = 0
 
@@ -29,8 +29,8 @@ class MyDivider(context: Context, orientation: Int) : RecyclerView.ItemDecoratio
 
 
     init {
-        val a = context.obtainStyledAttributes(ATTRS)
-        mDivider = a.getDrawable(0)
+        val a = context!!.obtainStyledAttributes(ATTRS)
+        mDivider = a.getDrawable(0)!!
         a.recycle()
         setCustonOrientation(orientation)
     }
@@ -43,7 +43,7 @@ class MyDivider(context: Context, orientation: Int) : RecyclerView.ItemDecoratio
         mOrientation = orientation
     }
 
-    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State?) {
+    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         if (parent.layoutManager == null) {
             return
         }
@@ -99,7 +99,7 @@ class MyDivider(context: Context, orientation: Int) : RecyclerView.ItemDecoratio
         val childCount = parent.childCount
         for (i in 0..(childCount - 1)) {
             val child = parent.getChildAt(i)
-            parent.layoutManager.getDecoratedBoundsWithMargins(child, mBounds)
+            parent.layoutManager!!.getDecoratedBoundsWithMargins(child, mBounds)
             val right = mBounds.right + Math.round(child.translationX)
             val left = right - mDivider!!.intrinsicWidth
             mDivider!!.setBounds(left, top, right, bottom)
@@ -109,10 +109,10 @@ class MyDivider(context: Context, orientation: Int) : RecyclerView.ItemDecoratio
     }
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView,
-                                state: RecyclerView.State?) {
+                                state: RecyclerView.State) {
         val childAdapterPosition = parent.getChildAdapterPosition(view)
 
-        val lastCount = parent.adapter.itemCount - 1
+        val lastCount = parent.adapter!!.itemCount - 1
 
         //如果当前条目与是最后一个条目，就不设置divider padding
         if (childAdapterPosition == lastCount) {

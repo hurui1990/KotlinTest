@@ -26,7 +26,7 @@ class PoisAdapter(private val mContext: Context) : RecyclerView.Adapter<PoisAdap
         return dataList!!.size
     }
 
-    override fun onBindViewHolder(holder: PoiViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: PoiViewHolder, position: Int) {
         val item : PoiItem = dataList!![position]
         holder!!.name.text = item.toString()
         holder.address.text = item.adName
@@ -34,7 +34,7 @@ class PoisAdapter(private val mContext: Context) : RecyclerView.Adapter<PoisAdap
         Log.i("PoisAdapter", item.toString())
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PoiViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PoiViewHolder {
         val view : View = LayoutInflater.from(mContext).inflate(R.layout.poi_item, parent, false)
         view.setOnClickListener(this)
         return PoiViewHolder(view)
@@ -50,9 +50,9 @@ class PoisAdapter(private val mContext: Context) : RecyclerView.Adapter<PoisAdap
         }
     }
 
-    class PoiViewHolder(itemView : View?) : RecyclerView.ViewHolder(itemView) {
-        var name : TextView = itemView!!.findViewById(R.id.poi_name) as TextView
-        var address : TextView = itemView!!.findViewById(R.id.address) as TextView
+    class PoiViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
+        var name : TextView = itemView!!.findViewById(R.id.poi_name)
+        var address : TextView = itemView!!.findViewById(R.id.address)
     }
 
     fun setData(list:ArrayList<PoiItem>){
