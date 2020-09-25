@@ -67,7 +67,7 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
         super.onResume()
         if(needload) {
             recycler_content.layoutManager = LinearLayoutManager(activity)
-            recycler_content.addItemDecoration(MyDivider(activity, DividerItemDecoration.VERTICAL))
+//            recycler_content.addItemDecoration(MyDivider(activity, DividerItemDecoration.VERTICAL))
             recycler_content.adapter = dataAdapter
             mLoadNewsPresenter!!.loadNews(mType!!)
             needload = false

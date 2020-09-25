@@ -1,5 +1,6 @@
 package com.example.hurui.news.activity
 
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -8,9 +9,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.view.Gravity
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.widget.Toast
@@ -20,6 +19,7 @@ import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
 import com.example.hurui.news.R
 import com.example.hurui.news.adapter.ViewpagerAdapter
+import com.example.hurui.news.base.BaseActivity
 import com.example.hurui.news.bean.HeWeather5Bean
 import com.example.hurui.news.bean.NewType
 import com.example.hurui.news.bean.WeatherData
@@ -30,24 +30,27 @@ import kotlinx.android.synthetic.main.drawerfooter.*
 import kotlinx.android.synthetic.main.drawerlayout.*
 import kotlinx.android.synthetic.main.main_toolbar.*
 
-class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : BaseActivity() ,LoadNewsView, NavigationView.OnNavigationItemSelectedListener {
 
     private val TAG = "MainActivity"
     private lateinit var newTypes : ArrayList<NewType>
     private lateinit var drawerTogger : ActionBarDrawerToggle
     private lateinit var mLocationListener : AMapLocationListener
-    private lateinit var mLocationOption: AMapLocationClientOption
-    private lateinit var mLocationClient : AMapLocationClient
-    private lateinit var cityname : String
-    private lateinit var mMapLoaction : AMapLocation
+    private val mLocationOption by lazy { AMapLocationClientOption() }
+    private val mLocationClient by lazy { AMapLocationClient(applicationContext) }
+    private lateinit var cityName : String
+    private lateinit var mMapLocation : AMapLocation
     private lateinit var mLoadNewsPresenter : LoadNewsPresenter
     private lateinit var fragmentList : ArrayList<Fragment>
     private lateinit var viewpagerAdapter : ViewpagerAdapter
+    private lateinit var dialog : Dialog
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.drawerlayout)
+    override fun getLayoutId(): Int {
+        return R.layout.drawerlayout
+    }
 
+    override fun initView() {
+        super.initView()
         toolbar.title = "新闻速递"
         toolbar.setTitleTextColor(resources.getColor(R.color.white))
         toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_open)
@@ -69,45 +72,42 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigat
     }
 
     private fun setLocationOption(){
-        mLocationClient = AMapLocationClient(applicationContext)
         mLocationListener = AMapLocationListener { aMapLocation -> run{
             Log.i(TAG, "返回值："+aMapLocation.city)
-            mMapLoaction = aMapLocation
+            mMapLocation = aMapLocation
             if(aMapLocation.city!!.isNotEmpty()){
-                cityname = aMapLocation.city
-                city_name.text = cityname
+                cityName = aMapLocation.city
+                city_name.text = cityName
             }
-            mLoadNewsPresenter!!.loadWeather(cityname!!)
+            mLoadNewsPresenter!!.loadWeather(cityName!!)
         } }
-        //初始化AMapLocationClientOption对象
-        mLocationOption = AMapLocationClientOption()
         //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
-        mLocationOption!!.locationMode = AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
+        mLocationOption.locationMode = AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
         //获取最近3s内精度最高的一次定位结果：
-        mLocationOption!!.isOnceLocationLatest = true
+        mLocationOption.isOnceLocationLatest = true
         //设置是否返回地址信息（默认返回地址信息）
-        mLocationOption!!.isNeedAddress = true
+        mLocationOption.isNeedAddress = true
         //设置超时事件
-        mLocationOption!!.httpTimeOut = 2000
+        mLocationOption.httpTimeOut = 5000
         //设置定义的属性
-        mLocationClient!!.setLocationOption(mLocationOption)
+        mLocationClient.setLocationOption(mLocationOption)
         //设置监听事件
-        mLocationClient!!.setLocationListener(mLocationListener)
+        mLocationClient.setLocationListener(mLocationListener)
         //开始定位
-        mLocationClient!!.startLocation()
+        mLocationClient.startLocation()
     }
 
     private fun initFragments(){
         fragmentList = ArrayList()
-        for(i in 0..(newTypes!!.size-1)){
+        for(i in 0 until newTypes.size){
             val fragment : Fragment = NewsFragment()
             val bundle = Bundle()
-            bundle.putString("type", newTypes!![i].type)
+            bundle.putString("type", newTypes[i].type)
             fragment.arguments = bundle
-            fragmentList!!.add(fragment)
+            fragmentList.add(fragment)
         }
 
-        viewpagerAdapter =  ViewpagerAdapter(supportFragmentManager, fragmentList!!, newTypes!!)
+        viewpagerAdapter =  ViewpagerAdapter(supportFragmentManager, fragmentList, newTypes)
         view_pager.adapter = viewpagerAdapter
         tab_layout.setupWithViewPager(view_pager)
         tab_layout.setTabsFromPagerAdapter(viewpagerAdapter)
@@ -116,19 +116,19 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigat
     //动态添加头部的新闻类型标签的布局
     private fun initScrollView(){
         newTypes = ArrayList()
-        newTypes!!.add(NewType("头条","top"))
-        newTypes!!.add(NewType("社会","shehui"))
-        newTypes!!.add(NewType("国内","guonei"))
-        newTypes!!.add(NewType("国际","guoji"))
-        newTypes!!.add(NewType("娱乐","yule"))
-        newTypes!!.add(NewType("体育","tiyu"))
-        newTypes!!.add(NewType("军事","junshi"))
-        newTypes!!.add(NewType("科技","keji"))
-        newTypes!!.add(NewType("财经","caijing"))
-        newTypes!!.add(NewType("时尚","shishang"))
+        newTypes.add(NewType("头条","top"))
+        newTypes.add(NewType("社会","shehui"))
+        newTypes.add(NewType("国内","guonei"))
+        newTypes.add(NewType("国际","guoji"))
+        newTypes.add(NewType("娱乐","yule"))
+        newTypes.add(NewType("体育","tiyu"))
+        newTypes.add(NewType("军事","junshi"))
+        newTypes.add(NewType("科技","keji"))
+        newTypes.add(NewType("财经","caijing"))
+        newTypes.add(NewType("时尚","shishang"))
 
-        for (i in newTypes!!.indices){
-            tab_layout.addTab(tab_layout.newTab().setText(newTypes!![i].name))
+        for (i in newTypes.indices){
+            tab_layout.addTab(tab_layout.newTab().setText(newTypes[i].name))
         }
     }
 
@@ -150,7 +150,7 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigat
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        drawerTogger!!.syncState()
+        drawerTogger.syncState()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -189,27 +189,27 @@ class MainActivity : AppCompatActivity() ,LoadNewsView, NavigationView.OnNavigat
 
     override fun onDestroy() {
         super.onDestroy()
-        mLocationClient!!.stopLocation()
-        mLocationClient!!.onDestroy()
+        mLocationClient.stopLocation()
+        mLocationClient.onDestroy()
         drawerlayout.setDrawerListener(null)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if(keyCode == KeyEvent.KEYCODE_BACK) {
-            val build = AlertDialog.Builder(this)
-            build.setTitle("提示")
-            build.setMessage("客官不再耍一会儿？")
-            build.setPositiveButton("确定") { _, _ ->
-                run {
-                    finish()
-                }
-            }
-            build.setNegativeButton("取消") { _, _ ->
-                run {
-
-                }
-            }
-            build.create().show()
+            dialog = AlertDialog.Builder(this)
+                    .setTitle("提示")
+                    .setMessage("客官不再耍一会儿？")
+                    .setPositiveButton("确定") { _, _ ->
+                        run {
+                            finish()
+                        }
+                    }
+                    .setNegativeButton("取消") { _, _ ->
+                        run {
+                            dialog.dismiss()
+                        }
+                    }.create()
+            dialog.show()
             return true
         }
         return super.onKeyDown(keyCode, event)

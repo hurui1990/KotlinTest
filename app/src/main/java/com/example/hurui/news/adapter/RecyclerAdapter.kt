@@ -3,7 +3,6 @@ package com.example.hurui.news.adapter
 import android.content.Context
 import android.graphics.Bitmap
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -93,7 +92,6 @@ class RecyclerAdapter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         mContext = parent.context
-        Log.i("viewType", viewType.toString())
         val view : View
         return when (viewType) {
             type3 -> {
@@ -158,30 +156,59 @@ class RecyclerAdapter
         notifyDataSetChanged()
     }
 
-    class ItemViewHolderThree(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ItemViewHolderThree : RecyclerView.ViewHolder {
 
-        var title : TextView = itemView.findViewById(R.id.title)
-        var author : TextView = itemView.findViewById(R.id.author)
-        var img : ImageView = itemView.findViewById(R.id.itemImg)
-        var img2 : ImageView = itemView.findViewById(R.id.itemImg2)
-        var img3 : ImageView = itemView.findViewById(R.id.itemImg3)
-        var datatime : TextView = itemView.findViewById(R.id.data_time)
+        var title : TextView
+        var author : TextView
+        var img : ImageView
+        var img2 : ImageView
+        var img3 : ImageView
+        var datatime : TextView
 
+        constructor(itemView: View) : super(itemView){
+            itemView.apply {
+                title = findViewById(R.id.title)
+                author = findViewById(R.id.author)
+                img  = findViewById(R.id.itemImg)
+                img2 = findViewById(R.id.itemImg2)
+                img3 = findViewById(R.id.itemImg3)
+                datatime = findViewById(R.id.data_time)
+            }
+        }
 
     }
 
-    class ItemViewHolderTwo(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var title : TextView = itemView.findViewById(R.id.title)
-        var author : TextView = itemView.findViewById(R.id.author)
-        var img : ImageView = itemView.findViewById(R.id.itemImg)
-        var img2 : ImageView = itemView.findViewById(R.id.itemImg2)
-        var datatime : TextView = itemView.findViewById(R.id.data_time)
+    class ItemViewHolderTwo : RecyclerView.ViewHolder {
+        var title : TextView
+        var author : TextView
+        var img : ImageView
+        var img2 : ImageView
+        var datatime : TextView
+
+        constructor(itemView: View) : super(itemView){
+            itemView.apply {
+                title = findViewById(R.id.title)
+                author = findViewById(R.id.author)
+                img = findViewById(R.id.itemImg)
+                img2 = findViewById(R.id.itemImg2)
+                datatime = findViewById(R.id.data_time)
+            }
+        }
     }
 
-    class ItemViewHolderOne(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var title : TextView = itemView.findViewById(R.id.title)
-        var author : TextView = itemView.findViewById(R.id.author)
-        var img : ImageView = itemView.findViewById(R.id.itemImg)
-        var datatime : TextView = itemView.findViewById(R.id.data_time)
+    class ItemViewHolderOne : RecyclerView.ViewHolder {
+        var title : TextView
+        var author : TextView
+        var img : ImageView
+        var datatime : TextView
+
+        constructor(itemView: View) : super(itemView){
+            itemView.apply {
+                title = findViewById(R.id.title)
+                author = findViewById(R.id.author)
+                img = findViewById(R.id.itemImg)
+                datatime = findViewById(R.id.data_time)
+            }
+        }
     }
 }
