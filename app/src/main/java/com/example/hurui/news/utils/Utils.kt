@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.view.Display
 import android.view.WindowManager
 import com.example.hurui.news.R
+import java.io.FileNotFoundException
 
 /**
  * Created by hurui on 2017/5/25.
@@ -29,14 +30,18 @@ class Utils {
          * 将图片资源压缩并返回
          * */
         fun decodeSampledBitmapFromFile(resources: Resources, filePath : String, reqWidth : Int, reqHeight : Int) : Bitmap{
-            val options : BitmapFactory.Options = BitmapFactory.Options()
+            val options = BitmapFactory.Options()
             options.inJustDecodeBounds = true
             BitmapFactory.decodeFile(filePath,options)
 
             options.inSampleSize = calculateInSampleSize(options,reqWidth,reqHeight)
             options.inJustDecodeBounds = false
             options.inPreferredConfig = Bitmap.Config.RGB_565
-            return BitmapFactory.decodeFile(filePath, options)
+            return try {
+                BitmapFactory.decodeFile(filePath, options)
+            }catch (e : FileNotFoundException){
+                BitmapFactory.decodeResource(resources,R.drawable.ic_map)
+            }
 
         }
 

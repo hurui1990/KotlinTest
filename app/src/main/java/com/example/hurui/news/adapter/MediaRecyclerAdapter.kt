@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.media.ThumbnailUtils
 import android.provider.MediaStore
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,23 +47,28 @@ class MediaRecyclerAdapter(private val mContext : Context) : RecyclerView.Adapte
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item : MediaBean = mDateList!![position]
-        if(holder is MediaViewHolder) {
-            val mediaHolder : MediaViewHolder = holder
-            mediaHolder.img.tag = item.path
-            if (item.type == Constans.MEDIA_TYPE_IMAGE) {
-                ImageLoader.build(mContext)!!.loadBitmap(item.path, mediaHolder.img, requestSize, requestSize)
-            } else if (item.type == Constans.MEDIA_TYPE_VEDIO) {
-                if (item.path == holder.img.tag) {
-                    mediaHolder.lieanLayout.visibility = View.VISIBLE
-                    mediaHolder.txt.text = item.duration
-                    mediaHolder.img.setImageBitmap(getVideoThumbnail(item.path, requestSize, requestSize, MediaStore.Images.Thumbnails.MINI_KIND))
+        with(holder){
+            when(this){
+                is MediaViewHolder -> {
+                    val mediaHolder : MediaViewHolder = this
+                    mediaHolder.img.tag = item.path
+                    if (item.type == Constans.MEDIA_TYPE_IMAGE) {
+                        ImageLoader.build(mContext)!!.loadBitmap(item.path, mediaHolder.img, requestSize, requestSize)
+                    } else if (item.type == Constans.MEDIA_TYPE_VEDIO) {
+                        if (item.path == this.img.tag) {
+                            mediaHolder.lieanLayout.visibility = View.VISIBLE
+                            mediaHolder.txt.text = item.duration
+                            mediaHolder.img.setImageBitmap(getVideoThumbnail(item.path, requestSize, requestSize, MediaStore.Images.Thumbnails.MINI_KIND))
+                        }
+                    }
+                }
+                is MusicViewHolder -> {
+                    val musicHolder: MusicViewHolder = this
+                    musicHolder.txtTitle.tag = item.path
+                    musicHolder.txtTitle.text = item.title
+                    musicHolder.txtSinger.text = item.singer
                 }
             }
-        }else if(holder is MusicViewHolder) {
-            val musicHolder: MusicViewHolder = holder
-            musicHolder.txtTitle.tag = item.path
-            musicHolder.txtTitle.text = item.title
-            musicHolder.txtSinger.text = item.singer
         }
         holder!!.itemView.setOnClickListener {
             mOnItemClickListener!!.onItemClick(it, position, item.type)

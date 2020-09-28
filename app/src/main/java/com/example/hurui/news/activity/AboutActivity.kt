@@ -1,7 +1,5 @@
 package com.example.hurui.news.activity
 
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.KeyEvent
 import android.view.View
 import android.view.animation.AlphaAnimation
@@ -9,25 +7,28 @@ import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import com.example.hurui.news.R
+import com.example.hurui.news.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_about.*
 
 /**
  * Created by hurui on 2017/8/3.
  */
 
-class AboutActivity : AppCompatActivity() {
+class AboutActivity : BaseActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_about)
+    override fun getLayoutId(): Int {
+        return R.layout.activity_about
+    }
 
+    override fun initView() {
+        super.initView()
         about_view.loadUrl("https://hurui1990.github.io/hurui.github.io/about/")
 
         val webSetting : WebSettings = about_view.settings
         webSetting.javaScriptEnabled = true
         webSetting.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
 
-        about_view.setWebChromeClient(object : WebChromeClient(){
+        about_view.webChromeClient = object : WebChromeClient(){
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
                 super.onProgressChanged(view, newProgress)
                 progressbar.progress = newProgress
@@ -39,7 +40,7 @@ class AboutActivity : AppCompatActivity() {
                     about_view.visibility = View.VISIBLE
                 }
             }
-        })
+        }
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

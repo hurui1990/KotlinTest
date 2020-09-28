@@ -100,7 +100,7 @@ class MainActivity : BaseActivity() ,LoadNewsView, NavigationView.OnNavigationIt
     private fun initFragments(){
         fragmentList = ArrayList()
         for(i in 0 until newTypes.size){
-            val fragment : Fragment = NewsFragment()
+            val fragment = NewsFragment()
             val bundle = Bundle()
             bundle.putString("type", newTypes[i].type)
             fragment.arguments = bundle

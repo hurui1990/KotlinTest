@@ -1,8 +1,10 @@
 package com.example.hurui.news.fragment
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.PermissionChecker
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -15,6 +17,7 @@ import com.example.hurui.news.adapter.MediaRecyclerAdapter
 import com.example.hurui.news.bean.MediaBean
 import com.example.hurui.news.presenter.LoadMediaPresenter
 import com.example.hurui.news.utils.Constans
+import com.example.hurui.news.utils.PermissionUtil
 import com.example.hurui.news.view.LoadMediaView
 import com.example.hurui.news.view.MyDivider
 import kotlinx.android.synthetic.main.fragments_media.*

@@ -10,12 +10,12 @@ import com.example.hurui.news.network.MediaAsyncTask
 /**
  * Created by hurui on 2018/3/18.
  */
-class LoadMediaModelImlp(private val mOnLoadMediaListener: OnLoadMediaListener) : LoadMediaModel{
+class LoadMediaModelImpl(private val mOnLoadMediaListener: OnLoadMediaListener) : LoadMediaModel{
 
     private var TAG = "LoadMediaModelImlp"
 
     override fun loadMedia(type: Int, context : Context) {
-        //TODO 加载图片或视频
+        //加载图片或视频
         Log.i(TAG, type.toString())
         MediaAsyncTask(context, mOnLoadMediaListener, type).execute()
     }
