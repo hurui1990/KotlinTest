@@ -5,8 +5,11 @@ import android.graphics.Bitmap
 import android.os.*
 import android.util.LruCache
 import com.example.hurui.news.bean.BitmapBean
+import com.example.hurui.news.utils.Constans.Companion.DISK_CACHE_SIZE
+import com.example.hurui.news.utils.Constans.Companion.KEEP_ALIVE
 import com.example.hurui.news.view.SquareImageView
 import com.jakewharton.disklrucache.DiskLruCache
+import org.jetbrains.anko.imageBitmap
 import java.io.File
 import java.util.concurrent.*
 import java.util.concurrent.atomic.AtomicInteger
@@ -19,22 +22,20 @@ import java.util.concurrent.atomic.AtomicInteger
 class ImageLoader(private val mContext: Context) {
     private val mMemoryCache: LruCache<String, Bitmap>
     private lateinit var mDiskLruCache : DiskLruCache
-    private val DISK_CACHE_SIZE : Long = 1024 * 1024 * 50
     private val CPU_COUNT = Runtime.getRuntime().availableProcessors()
-    private val CORE_POOL_SIZE = CPU_COUNT + 1
+    private val CORE_POOL_SIZE = CPU_COUNT + 3
     private val MAXIMUM_POOL_EXECUTOR = CPU_COUNT * 5 + 1
-    private val KEPP_ALIVE = 10L
 
     private val mHandler : Handler = object : Handler(Looper.getMainLooper()){
         override fun handleMessage(msg: Message) {
-            when (msg!!.what){
+            when (msg.what){
                 0 -> {
-                    val result : BitmapBean = msg.obj as BitmapBean
-                    val imageView : SquareImageView = result.imageview
-                    val bitmap : Bitmap = result.bitmap
-                    val path : String = result.path
+                    val result = msg.obj as BitmapBean
+                    val imageView  = result.imageview
+                    val bitmap = result.bitmap
+                    val path = result.path
                     if(path == imageView.tag){
-                        imageView.setImageBitmap(bitmap)
+                        imageView.imageBitmap = bitmap
                     }
                 }
             }
@@ -48,7 +49,13 @@ class ImageLoader(private val mContext: Context) {
         }
     }
 
-    private val THREAD_POOL_EXECUTOR : Executor = ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_EXECUTOR, KEPP_ALIVE,TimeUnit.SECONDS, LinkedBlockingQueue<Runnable>(), mThreadFactory)
+    private val THREAD_POOL_EXECUTOR : Executor = ThreadPoolExecutor(
+            CORE_POOL_SIZE,
+            MAXIMUM_POOL_EXECUTOR,
+            KEEP_ALIVE,
+            TimeUnit.SECONDS,
+            LinkedBlockingQueue(),
+            mThreadFactory)
 
     init {
         mMemoryCache = object : LruCache<String, Bitmap>(100) {

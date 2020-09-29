@@ -12,21 +12,24 @@ import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import com.example.hurui.news.R
+import com.example.hurui.news.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_newdetail.*
 
 /**
  * Created by hurui on 2017/8/3.
  */
 
-class NewsDetailActivity : AppCompatActivity() {
+class NewsDetailActivity : BaseActivity() {
 
     private val url by lazy { intent.getStringExtra("url") }
     private val title by lazy { intent.getStringExtra("title") }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_newdetail)
+    override fun getLayoutId(): Int {
+        return R.layout.activity_newdetail
+    }
 
+    override fun initView() {
+        super.initView()
         newdetail_toolbar.setTitleTextColor(resources.getColor(R.color.white))
         newdetail_toolbar.title = title
         newdetail_toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_keyboard_arrow_left)

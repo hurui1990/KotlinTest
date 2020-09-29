@@ -8,6 +8,6 @@ import com.example.hurui.news.bean.WeatherData
 interface OnLoadNewsListener {
     fun onLoadSuccess(result:String)
     fun onLoadFailed(errorType:Int)
-    fun onLoadWeatherSuccess(retult:WeatherData)
+    fun onLoadWeatherSuccess(result:WeatherData)
     fun onLoadWeatherFailed(errorType:Int)
 }

@@ -203,15 +203,16 @@ data class WindBeanXX(
 )
 
 data class MediaBean(
-        val type: String,
-        val path: String,
-        val name: String,
-        val size: String,
-        val thumbPath: String,
-        val duration: String,
-        val title : String,
-        val singer : String,
-        val album : String
+        var type: String = "",
+        var path: String = "",
+        var name: String = "",
+        var size: String = "",
+        val thumbPath: String = "",
+        var duration: String = "",
+        val title : String = "",
+        val singer : String = "",
+        val album : String = "",
+        var list: ArrayList<MediaBean> = arrayListOf()
 )
 
 data class BitmapBean (

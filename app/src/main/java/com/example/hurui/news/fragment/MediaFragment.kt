@@ -40,46 +40,83 @@ class MediaFragment : Fragment(), LoadMediaView, MediaRecyclerAdapter.OnItemClic
 
         allPicture  = ArrayList()
         mediaAdapter = MediaRecyclerAdapter(activity!!)
-        mediaAdapter!!.setData(allPicture!!)
-        mediaAdapter!!.setOnItemClickListener(this)
+        mediaAdapter.setData(allPicture!!)
+        mediaAdapter.setOnItemClickListener(this)
         needload = true
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.fragments_media, container, false)
+        return inflater.inflate(R.layout.fragments_media, container, false)
     }
 
     override fun onResume() {
         super.onResume()
         if(needload) {
-            if(mType == 2){
-                media_recycler.layoutManager = LinearLayoutManager(activity)
-                media_recycler.addItemDecoration(MyDivider(activity, 1))
-            }else {
-                media_recycler.layoutManager = GridLayoutManager(activity, 4)
+            when (mType) {
+                2 -> {
+                    media_recycler.layoutManager = LinearLayoutManager(activity)
+                    media_recycler.addItemDecoration(MyDivider(activity, 1))
+                }
+                1 -> {
+                    media_recycler.layoutManager = GridLayoutManager(activity, 3)
+                }
+                0 -> {
+                    media_recycler.layoutManager = GridLayoutManager(activity, 2)
+                }
             }
             media_recycler.adapter = mediaAdapter
-            mLoadMediaPresenter!!.loadAllMedia(mType!!, activity!!)
+            mLoadMediaPresenter.loadAllMedia(mType, activity!!)
             needload = false
         }
     }
 
-    override fun loadAllMedia(resultMap: HashMap<String, ArrayList<MediaBean>>) {
+    override fun loadAllPictureMedia(resultMap: HashMap<String, ArrayList<MediaBean>>) {
         Log.i(TAG, Thread.currentThread().name)
-        allPicture!!.clear()
+        allPicture.clear()
         for ((k, v) in resultMap){
             Log.i(TAG,v.size.toString())
-            allPicture!!.addAll(v)
+            var bean = MediaBean()
+            bean.type = Constans.MEDIA_TYPE_IMAGE
+            bean.name = k
+            bean.path = v[0].path
+            bean.list = v
+            allPicture.add(bean)
         }
-        Log.i(TAG,"总图片数："+ allPicture!!.size.toString())
-        mediaAdapter!!.setData(allPicture!!)
+        mediaAdapter.setData(allPicture)
+    }
+
+    override fun loadAllVideoMedia(result: HashMap<String, ArrayList<MediaBean>>) {
+        Log.i(TAG, Thread.currentThread().name)
+        allPicture.clear()
+        for ((k, v) in result){
+            Log.i(TAG,v.size.toString())
+            var bean = MediaBean()
+            bean.type = Constans.MEDIA_TYPE_VEDIO
+            bean.name = k
+            bean.duration = v.size.toString()
+            bean.path = v[0].path
+            bean.list = v
+            allPicture.add(bean)
+
+        }
+        mediaAdapter.setData(allPicture!!)
+    }
+
+    override fun loadAllMusicMedia(result: HashMap<String, ArrayList<MediaBean>>) {
+        Log.i(TAG, Thread.currentThread().name)
+        allPicture.clear()
+        for ((k, v) in result){
+            Log.i(TAG,v.size.toString())
+            allPicture.addAll(v)
+        }
+        mediaAdapter.setData(allPicture!!)
     }
 
     override fun onItemClick(view: View, position: Int, type : String) {
         if(type == Constans.MEDIA_TYPE_IMAGE) {
             val pathList: ArrayList<String> = ArrayList()
-            for (i in 0..(allPicture!!.size - 1)) {
-                pathList.add(allPicture!![i].path)
+            for (i in 0 until allPicture!!.size) {
+                pathList.add(allPicture[i].path)
             }
             val intent = Intent(activity, PhotoViewActivity::class.java)
             intent.putExtra("position", position)

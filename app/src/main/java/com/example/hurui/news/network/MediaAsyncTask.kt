@@ -18,7 +18,7 @@ import java.io.File
 class MediaAsyncTask(private val mContext: Context, private val mOnLoadMediaListener: OnLoadMediaListener, type : Int): AsyncTask<ContentResolver, Void, HashMap<String, ArrayList<MediaBean>>>() {
 
     private val TAG = "MediaAsyncTask"
-    private val mType : Int? = type
+    private val mType = type
 
     override fun doInBackground(vararg params: ContentResolver?): HashMap<String, ArrayList<MediaBean>> {
         when(mType){
@@ -35,43 +35,44 @@ class MediaAsyncTask(private val mContext: Context, private val mOnLoadMediaList
         return null!!
     }
 
-    override fun onPostExecute(result: HashMap<String, ArrayList<MediaBean>>?) {
+    override fun onPostExecute(result: HashMap<String, ArrayList<MediaBean>>) {
         super.onPostExecute(result)
-        mOnLoadMediaListener.onLoadSuccess(result!!)
+        mOnLoadMediaListener.onLoadSuccess(mType,result)
     }
 
     private fun getAllPicture() : HashMap<String, ArrayList<MediaBean>>{
         Log.i(TAG, "获取所有图片信息")
-        var mMediaBeanList = ArrayList<MediaBean>()
         val allPhotosTemp = HashMap<String, ArrayList<MediaBean>>()//所有照片
         val mImageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        val projImage : Array<String> = arrayOf(MediaStore.Images.Media._ID
+        val proImage : Array<String> = arrayOf(MediaStore.Images.Media._ID
                 , MediaStore.Images.Media.DATA
                 , MediaStore.Images.Media.SIZE
-                , MediaStore.Images.Media.DISPLAY_NAME)
+                , MediaStore.Images.Media.DISPLAY_NAME
+                , MediaStore.Images.Media.TITLE)
         val mCursor : Cursor? = mContext.contentResolver.query(mImageUri,
-                projImage,
+                proImage,
                 MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=?",
                 arrayOf("image/jpeg", "image/png"),
                 MediaStore.Images.Media.DATE_MODIFIED+" desc")
         if(mCursor!=null){
             while (mCursor.moveToNext()) {
                 // 获取图片的路径
-                val path : String = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA))
-                val size : Int = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Images.Media.SIZE))/1024
-                val displayName : String  = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME))
+                val path = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA))
+                val size = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Images.Media.SIZE))/1024
+                val displayName = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME))
                 //用于展示相册初始化界面
 //                mMediaBeanList!!.add(MediaBean(Constans.MEDIA_TYPE_IMAGE, path, displayName, size.toString(), "", ""))
                 // 获取该图片的父路径名
-                val dirPath : String = File(path).parentFile.absolutePath
+                val dirPath = File(path).parentFile.absolutePath
+                val album = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.TITLE))
                 //存储对应关系
                 if (allPhotosTemp.containsKey(dirPath)) {
                     val data : ArrayList<MediaBean>? = allPhotosTemp[dirPath]
-                    data!!.add(MediaBean(Constans.MEDIA_TYPE_IMAGE ,path, displayName, size.toString(),"", "", "",  "", ""))
+                    data!!.add(MediaBean(Constans.MEDIA_TYPE_IMAGE ,path, displayName, size.toString(), album = album))
                     continue
                 } else {
                     val data : ArrayList<MediaBean>  = ArrayList()
-                    data.add(MediaBean(Constans.MEDIA_TYPE_IMAGE,path,displayName,size.toString(),"","", "", "", ""))
+                    data.add(MediaBean(Constans.MEDIA_TYPE_IMAGE,path,displayName,size.toString(),album = album))
                     allPhotosTemp[dirPath] = data
                 }
             }

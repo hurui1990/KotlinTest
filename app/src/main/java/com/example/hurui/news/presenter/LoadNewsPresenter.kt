@@ -28,8 +28,8 @@ class LoadNewsPresenter(private val mLoadNewsView: LoadNewsView) : OnLoadNewsLis
         mLoadNewsView.loadNewsError(errorType)
     }
 
-    override fun onLoadWeatherSuccess(retult: WeatherData) {
-        mLoadNewsView.loadWeather(retult)
+    override fun onLoadWeatherSuccess(result: WeatherData) {
+        mLoadNewsView.loadWeather(result)
     }
 
     override fun onLoadWeatherFailed(errorType: Int) {

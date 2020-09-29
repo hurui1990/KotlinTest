@@ -11,29 +11,18 @@ import com.example.hurui.news.utils.Utils
  */
 class SquareImageView : AppCompatImageView {
 
-    private var mWidth : Int? = null
-    private var imageSize : Int? = null
+    constructor(context: Context) : super(context)
 
-    constructor(context: Context) : super(context) {
-        // TODO Auto-generated constructor stub
-    }
+    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        mWidth = Utils.getScreenWidth(context)
-        val divide = context.resources.getDimension(R.dimen.image_view_divide).toInt()
-        imageSize  = (mWidth!! - divide * 3) / 4
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        setMeasuredDimension(getDefaultSize(0,widthMeasureSpec), getDefaultSize(0,heightMeasureSpec))
+        var childWidthSize = measuredWidth
+        val widthMeasureSpec = MeasureSpec.makeMeasureSpec(childWidthSize,MeasureSpec.EXACTLY)
+        val heightMeasureSpec = MeasureSpec.makeMeasureSpec(childWidthSize,MeasureSpec.EXACTLY)
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        //将ImageView设置为正方形
-        setMeasuredDimension(imageSize!!, imageSize!!)
-    }
 
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        setImageDrawable(null)
     }
 }

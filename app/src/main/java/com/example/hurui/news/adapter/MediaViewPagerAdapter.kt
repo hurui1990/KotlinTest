@@ -9,15 +9,10 @@ import android.support.v4.app.FragmentStatePagerAdapter
  */
 class MediaViewPagerAdapter(fragmentManager: FragmentManager,
                             private val mFragments: ArrayList<Fragment>, private val mTitleList : ArrayList<String>) : FragmentStatePagerAdapter(fragmentManager){
-    override fun getItem(position: Int): Fragment {
-        return mFragments[position]
-    }
 
-    override fun getCount(): Int {
-        return mFragments.size
-    }
+    override fun getItem(position: Int): Fragment = mFragments[position]
 
-    override fun getPageTitle(position: Int): CharSequence {
-        return mTitleList[position]
-    }
+    override fun getCount() = mFragments.size
+
+    override fun getPageTitle(position: Int): CharSequence = mTitleList[position]
 }

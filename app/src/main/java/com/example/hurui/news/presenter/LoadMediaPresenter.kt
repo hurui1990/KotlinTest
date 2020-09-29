@@ -17,8 +17,18 @@ class LoadMediaPresenter(private val mLoadMediaListener : LoadMediaView) : OnLoa
         mLoadMediaModel.loadMedia(type, context)
     }
 
-    override fun onLoadSuccess(result: HashMap<String,ArrayList<MediaBean>>) {
-        mLoadMediaListener.loadAllMedia(result)
+    override fun onLoadSuccess(type:Int,result: HashMap<String,ArrayList<MediaBean>>) {
+        when(type){
+            0 -> {
+                mLoadMediaListener.loadAllPictureMedia(result)
+            }
+            1 -> {
+                mLoadMediaListener.loadAllVideoMedia(result)
+            }
+            2 -> {
+                mLoadMediaListener.loadAllMusicMedia(result)
+            }
+        }
     }
 
 }

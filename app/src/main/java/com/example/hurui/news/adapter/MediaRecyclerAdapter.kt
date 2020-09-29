@@ -42,22 +42,25 @@ class MediaRecyclerAdapter(private val mContext : Context) : RecyclerView.Adapte
     }
 
     override fun getItemCount(): Int {
-        return mDateList!!.size
+        return mDateList.size
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item : MediaBean = mDateList!![position]
+        val item : MediaBean = mDateList[position]
         with(holder){
             when(this){
                 is MediaViewHolder -> {
                     val mediaHolder : MediaViewHolder = this
                     mediaHolder.img.tag = item.path
+                    mediaHolder.lieanLayout.visibility = View.VISIBLE
                     if (item.type == Constans.MEDIA_TYPE_IMAGE) {
-                        ImageLoader.build(mContext)!!.loadBitmap(item.path, mediaHolder.img, requestSize, requestSize)
+                        if (item.path == this.img.tag) {
+                            mediaHolder.txt.text = "${item.list.size}张图片"
+                            ImageLoader.build(mContext)!!.loadBitmap(item.path, mediaHolder.img, requestSize, requestSize)
+                        }
                     } else if (item.type == Constans.MEDIA_TYPE_VEDIO) {
                         if (item.path == this.img.tag) {
-                            mediaHolder.lieanLayout.visibility = View.VISIBLE
-                            mediaHolder.txt.text = item.duration
+                            mediaHolder.txt.text = "${item.duration}个视频"
                             mediaHolder.img.setImageBitmap(getVideoThumbnail(item.path, requestSize, requestSize, MediaStore.Images.Thumbnails.MINI_KIND))
                         }
                     }

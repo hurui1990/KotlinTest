@@ -26,13 +26,18 @@ class MediasActivity : BaseActivity(){
 
     override fun initView() {
         super.initView()
-        activity_pic_toolbar.title = "多媒体文件"
-        activity_pic_toolbar.setTitleTextColor(resources.getColor(R.color.white))
-        setSupportActionBar(activity_pic_toolbar)
 
-        activity_pic_tabs.addTab(activity_pic_tabs.newTab().setText(tabTitleList[0]))
-        activity_pic_tabs.addTab(activity_pic_tabs.newTab().setText(tabTitleList[1]))
-        activity_pic_tabs.addTab(activity_pic_tabs.newTab().setText(tabTitleList[2]))
+        activity_pic_toolbar.apply {
+            title = "多媒体文件"
+            setTitleTextColor(resources.getColor(R.color.white))
+            setSupportActionBar(this)
+        }
+
+        activity_pic_tabs.apply {
+            addTab(activity_pic_tabs.newTab().setText(tabTitleList[0]))
+            addTab(activity_pic_tabs.newTab().setText(tabTitleList[1]))
+            addTab(activity_pic_tabs.newTab().setText(tabTitleList[2]))
+        }
 
         if (PermissionUtil.hasPermission(this,permissions)){
             initFragment()

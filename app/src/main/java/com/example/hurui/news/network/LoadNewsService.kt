@@ -11,6 +11,7 @@ import retrofit2.http.Query
  * Created by hurui on 2017/5/26.
  */
 interface LoadNewsService {
+
     @GET("/toutiao/index")
     fun getNewsResult(@Query("type") appcode: String, @Query("key") type: String): Call<ResponseBody>
 
