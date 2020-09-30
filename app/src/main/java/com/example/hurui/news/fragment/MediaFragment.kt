@@ -1,10 +1,8 @@
 package com.example.hurui.news.fragment
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.content.PermissionChecker
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -12,14 +10,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.hurui.news.R
-import com.example.hurui.news.activity.PhotoViewActivity
+import com.example.hurui.news.activity.PictureListActivity
 import com.example.hurui.news.adapter.MediaRecyclerAdapter
 import com.example.hurui.news.bean.MediaBean
 import com.example.hurui.news.presenter.LoadMediaPresenter
 import com.example.hurui.news.utils.Constans
-import com.example.hurui.news.utils.PermissionUtil
 import com.example.hurui.news.view.LoadMediaView
 import com.example.hurui.news.view.MyDivider
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragments_media.*
 
 /**
@@ -114,13 +112,9 @@ class MediaFragment : Fragment(), LoadMediaView, MediaRecyclerAdapter.OnItemClic
 
     override fun onItemClick(view: View, position: Int, type : String) {
         if(type == Constans.MEDIA_TYPE_IMAGE) {
-            val pathList: ArrayList<String> = ArrayList()
-            for (i in 0 until allPicture!!.size) {
-                pathList.add(allPicture[i].path)
-            }
-            val intent = Intent(activity, PhotoViewActivity::class.java)
-            intent.putExtra("position", position)
-            intent.putStringArrayListExtra("list", pathList)
+            val intent = Intent(activity, PictureListActivity::class.java)
+            intent.putExtra("title", allPicture[position].name)
+            intent.putExtra("list", Gson().toJson(allPicture[position].list))
             activity!!.startActivity(intent)
         }else if(type == Constans.MEDIA_TYPE_VEDIO){
             Log.i("==========", allPicture!![position].path)

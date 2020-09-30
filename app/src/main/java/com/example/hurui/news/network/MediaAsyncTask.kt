@@ -67,8 +67,8 @@ class MediaAsyncTask(private val mContext: Context, private val mOnLoadMediaList
                 val album = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.TITLE))
                 //存储对应关系
                 if (allPhotosTemp.containsKey(dirPath)) {
-                    val data : ArrayList<MediaBean>? = allPhotosTemp[dirPath]
-                    data!!.add(MediaBean(Constans.MEDIA_TYPE_IMAGE ,path, displayName, size.toString(), album = album))
+                    val data : ArrayList<MediaBean> = allPhotosTemp[dirPath]!!
+                    data.add(MediaBean(Constans.MEDIA_TYPE_IMAGE ,path, displayName, size.toString(), album = album))
                     continue
                 } else {
                     val data : ArrayList<MediaBean>  = ArrayList()
