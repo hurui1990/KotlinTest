@@ -43,19 +43,19 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
         mLoadNewsPresenter = LoadNewsPresenter(this)
         dataList = ArrayList()
         dataAdapter = RecyclerAdapter()
-        dataAdapter!!.setHasStableIds(true)
-        dataAdapter!!.setData(dataList!!)
+        dataAdapter.setHasStableIds(true)
+        dataAdapter.setData(dataList!!)
 
-        dataAdapter!!.setItemClickListener(this)
+        dataAdapter.setItemClickListener(this)
         needload = true
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.fragment_news, container, false)
+        return inflater.inflate(R.layout.fragment_news, container, false)
     }
 
     override fun onItemClick(view: View, position: Int) {
-        val itemData = dataList!![position]
+        val itemData = dataList[position]
         val intent = Intent(activity, NewsDetailActivity::class.java)
         intent.putExtra("url", itemData.url)
         intent.putExtra("title", itemData.title)
@@ -77,12 +77,12 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
     override fun setLoadNews(result: String) {
         val gson = Gson()
         val resultGson : Result = gson.fromJson(result, Result::class.java)
-        dataList!!.clear()
+        dataList.clear()
         dataList = resultGson.result.data
-        dataAdapter?.setData(dataList!!)
+        dataAdapter?.setData(dataList)
 
         share  = activity!!.getSharedPreferences("result",Context.MODE_PRIVATE)
-        val editor: SharedPreferences.Editor = share!!.edit()
+        val editor: SharedPreferences.Editor = share.edit()
         editor.putString("hurui", result)
         editor.commit()
 
@@ -95,9 +95,9 @@ class NewsFragment : Fragment(), LoadNewsView, RecyclerAdapter.OnItemClickListen
             if(result != null && !TextUtils.isEmpty(result)){
                 val gson = Gson()
                 val resultGson : Result = gson.fromJson(result, Result::class.java)
-                dataList!!.clear()
+                dataList.clear()
                 dataList = resultGson.result.data
-                dataAdapter?.setData(dataList!!)
+                dataAdapter?.setData(dataList)
             }
         }
     }
